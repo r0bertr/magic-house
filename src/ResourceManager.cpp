@@ -1,11 +1,13 @@
 #define STB_IMAGE_IMPLEMENTATION
 #include "lib/stb_image.h"
+#include "lib/glad.h"
 #include "ResourceManager.hpp"
 
 #include <GLFW/glfw3.h>
 
 char *readAll(FILE *file) {
     char *result = new char[4096];
+    result[0] = '\0';
     char curLine[1024];
     while (fgets(curLine, sizeof(curLine), file) != NULL) {
         strcat(result, curLine);

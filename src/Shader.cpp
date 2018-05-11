@@ -1,3 +1,4 @@
+#include "lib/glad.h"
 #include "Shader.hpp"
 
 #include <GLFW/glfw3.h>
