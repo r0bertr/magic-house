@@ -1,2 +1,3 @@
-# Computer-graphics-final-project
-This our CG final project
+# Magic House
+
+A CG Project by OpenGL
