@@ -2,3 +2,5 @@ bin
 build
 .vs
 Debug
+.DS_Store
+**/.DS_Store
