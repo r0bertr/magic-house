@@ -40,6 +40,10 @@ $(SPRITES_BUILD)/%.o: $(SPRITES_SRC)/%.cpp
 
 all: clean $(EXE)
 
+build: $(EXE)
+
+rebuild: clean $(EXE)
+
 clean:
 	@rm -rf $(ROOT_BUILD)
 	@rm -rf $(BIN)
