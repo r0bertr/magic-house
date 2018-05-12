@@ -7,6 +7,7 @@
 ## Members
 
 |成员|Basic|Bonus|
+|---|---|---|
 |[ZhangJiaQiao](https://github.com/ZhangJiaQiao)|Camera Roaming|Skybox, Particle System|
 |[Hinanawi Tenshi](https://github.com/HinanawiTenshi)|Model Import, Mesh Viewing|Gravity System, Collision Detection|
 |[Richard4Yjl](https://github.com/Richard4Yjl)|Shadow Mapping|Anti-Aliasing|
