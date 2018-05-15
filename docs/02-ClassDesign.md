@@ -25,10 +25,15 @@
 
 - Host a texture
 
-### `SpriteRenderer` (Abstract)
+### `Model`
 
-- To render a sprite, its `initRenderData` function must be implemented
+- Host a imported model
+
+### `Renderer` (Abstract)
+
+- To render an object, its `initRenderData` function must be implemented
 
 - Current Renderers:
 
     - `CubeRenderer` Render a cube
+    - `MeshRenderer` Render a mesh of a model
