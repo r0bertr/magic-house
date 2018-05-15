@@ -4,6 +4,10 @@
 #include "ResourceManager.hpp"
 
 #include <GLFW/glfw3.h>
+#include <assimp/Importer.hpp>
+#include <assimp/postprocess.h>
+
+#define BUFFER_LEN 32
 
 char *readAll(FILE *file) {
     char *result = new char[4096];
@@ -26,19 +30,27 @@ ResourceManager *ResourceManager::GetInstance() {
 Camera *ResourceManager::loadCamera(GLfloat pFov, GLfloat pAspect,
     GLfloat pNear, GLfloat pFar, GLfloat posX, GLfloat posY, GLfloat posZ,
     GLfloat frontX, GLfloat frontY, GLfloat frontZ,
-    GLfloat upX, GLfloat upY, GLfloat upZ, GLchar *name) {
+    GLfloat upX, GLfloat upY, GLfloat upZ, const GLchar *name) {
 
-    if (!cameras[name]) {
-        delete cameras[name];
+    GLchar *n = new GLchar[BUFFER_LEN];
+    strcpy(n, name);
+    if (cameras[n]) {
+        return cameras[n];
     }
-    cameras[name] = new Camera(pFov, pAspect, pNear, pFar, posX, posY,
+    cameras[n] = new Camera(pFov, pAspect, pNear, pFar, posX, posY,
         posZ, frontX, frontY, frontZ, upX, upY, upZ);
 
-    return cameras[name];
+    return cameras[n];
 }
 
 Shader *ResourceManager::loadShader(const GLchar *vPath, const GLchar *fPath,
-    const GLchar *gPath, GLchar *name) {
+    const GLchar *gPath, const GLchar *name) {
+
+    GLchar *n = new GLchar[BUFFER_LEN];
+    strcpy(n, name);
+    if (shaders[n]) {
+        return shaders[n];
+    }
 
     GLchar *vCode = NULL, *fCode = NULL, *gCode = NULL;
     FILE *vFile = NULL, *fFile = NULL, *gFile = NULL;
@@ -56,14 +68,14 @@ Shader *ResourceManager::loadShader(const GLchar *vPath, const GLchar *fPath,
     }
 
     GLint success;
-    GLchar infoLog[512];
+    GLchar infoLog[256];
 
     GLuint vShader = glCreateShader(GL_VERTEX_SHADER);
     glShaderSource(vShader, 1, &vCode, NULL);
     glCompileShader(vShader);
     glGetShaderiv(vShader, GL_COMPILE_STATUS, &success);
     if (!success) {
-        glGetShaderInfoLog(vShader, 512, NULL, infoLog);
+        glGetShaderInfoLog(vShader, 256, NULL, infoLog);
         printf("[ERROR]In ResourceManager::loadShader\n%s\n", infoLog);
         return NULL;
     }
@@ -73,7 +85,7 @@ Shader *ResourceManager::loadShader(const GLchar *vPath, const GLchar *fPath,
     glCompileShader(fShader);
     glGetShaderiv(fShader, GL_COMPILE_STATUS, &success);
     if (!success) {
-        glGetShaderInfoLog(fShader, 512, NULL, infoLog);
+        glGetShaderInfoLog(fShader, 256, NULL, infoLog);
         printf("[ERROR]In ResourceManager::loadShader\n%s\n", infoLog);
         return NULL;
     }
@@ -86,25 +98,29 @@ Shader *ResourceManager::loadShader(const GLchar *vPath, const GLchar *fPath,
     glLinkProgram(program);
     glGetProgramiv(program, GL_LINK_STATUS, &success);
     if (!success) {
-        glGetProgramInfoLog(program, 512, NULL, infoLog);
+        glGetProgramInfoLog(program, 256, NULL, infoLog);
         printf("[ERROR]In ResourceManager::loadShader\n%s\n", infoLog);
         return NULL;
     }
 
+    delete []vCode;
+    delete []fCode;
+    // delete []gCode;
     glDeleteShader(vShader);
     glDeleteShader(fShader);
     // glDeleteShader(gShader);
 
-    if (shaders[name] != NULL) {
-        delete shaders[name];
-    }
-    shaders[name] = new Shader(program);
-
-    return shaders[name];
+    shaders[n] = new Shader(program);
+    return shaders[n];
 
 }
 
-Texture *ResourceManager::load2DTexture(const GLchar *srcPath, GLchar *name) {
+Texture *ResourceManager::load2DTexture(const GLchar *srcPath, const GLchar *name) {
+    GLchar *n = new GLchar[BUFFER_LEN];
+    strcpy(n, name);
+    if (textures[n]) {
+        return textures[n];
+    }
 
     stbi_set_flip_vertically_on_load(true);
     GLint width, height, nChannels;
@@ -114,32 +130,57 @@ Texture *ResourceManager::load2DTexture(const GLchar *srcPath, GLchar *name) {
         printf("[ERROR]In ResourceManager::load2DTexture\n");
         return NULL;
     }
+
     if (nChannels == 4)
         colorModel = GL_RGBA;
-    if (!textures[name]) {
-        delete textures[name];
-    }
-    textures[name] = new Texture(GL_TEXTURE_2D, data, colorModel, width, height);
+    textures[n] = new Texture(GL_TEXTURE_2D, data, colorModel, width, height);
     stbi_image_free(data);
-    return textures[name];
+    return textures[n];
 
 }
 
-SpriteRenderer *ResourceManager::loadRenderer(const SpriteType type,
-    Shader *shader, GLchar *name) {
+Renderer *ResourceManager::loadRenderer(const RendererType type, Shader *shader,
+    const GLchar *modelPath, const GLchar *name, Texture *texture) {
     
-    if (!renderers[name])
-        delete renderers[name];
+    GLchar *n = new GLchar[BUFFER_LEN];
+    strcpy(n, name);
+    if (renderers[n])
+        return renderers[n];
     switch (type) {
-    case SPRITE_CUBE:
-        renderers[name] = new CubeRenderer(shader);
+    case RENDERER_CUBE:
+        renderers[n] = new CubeRenderer(shader, texture);
         break;
     default:
         printf("[ERROR]In ResourceManager::loadRenderer\nWrong type\n");
         return NULL;
     }
 
-    return renderers[name];
+    return renderers[n];
+}
+
+Model *ResourceManager::loadModel(const GLchar *path, Shader *shader,
+    const GLchar *name) {
+
+    GLchar *n = new GLchar[BUFFER_LEN];
+    strcpy(n, name);
+    if (models[n]) {
+        return models[n];
+    }
+
+    Assimp::Importer importer;
+    const aiScene *scene = importer.ReadFile(path,
+        aiProcess_Triangulate | aiProcess_FlipUVs);
+
+    if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode) {
+        printf("[ERROR]In ResourceManager::loadModel\n%s\n",
+            importer.GetErrorString());
+        return NULL;
+    }
+
+    std::string str(path);
+    models[n] = new Model(shader, scene,
+        str.substr(0, str.find_last_of('/')).c_str());
+    return models[n];
 }
 
 Shader *ResourceManager::getShader(GLchar *name) {
@@ -150,12 +191,16 @@ Texture *ResourceManager::getTexture(GLchar *name) {
     return textures[name];
 }
 
-SpriteRenderer *ResourceManager::getRenderer(GLchar *name) {
+Renderer *ResourceManager::getRenderer(GLchar *name) {
     return renderers[name];
 }
 
 Camera *ResourceManager::getCamera(GLchar *name) {
     return cameras[name];
+}
+
+Model *ResourceManager::getModel(GLchar *name) {
+    return models[name];
 }
 
 ResourceManager::ResourceManager() {}

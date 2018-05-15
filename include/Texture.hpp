@@ -7,7 +7,7 @@ public:
     Texture(GLenum type, GLubyte *data, GLenum colorModel,
         GLint width, GLint height);
 
-    void bind();
+    void bind(GLuint unit = 0);
 
     GLuint getID() const;
 private:

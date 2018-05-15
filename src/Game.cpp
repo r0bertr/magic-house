@@ -30,13 +30,17 @@ Game::~Game() {
 }
 
 void Game::init() {
-    Shader *spriteShader = resManager->loadShader("res/shaders/sprite.vs", 
+    // Load Shaders
+    Shader *shader = resManager->loadShader("res/shaders/sprite.vs", 
         "res/shaders/sprite.fs", NULL, "sprite");
-    if (spriteShader == NULL) {
-        printf("[ERROR]In Game::init\n");
-        return;
-    }
-    resManager->loadRenderer(SPRITE_CUBE, spriteShader, "cube");
+
+    // Load Renderers
+    resManager->loadRenderer(RENDERER_CUBE, shader, NULL, "cube");
+    
+    // Load Models
+    resManager->loadModel("res/models/Farmhouse/farmhouse_obj.obj", shader, "farmhouse");
+
+    // Load Camera
     resManager->loadCamera(glm::radians(45.f), (float)width / height, .1f, 100.f,
         0.f, 0.f, 5.f, 0.f, 0.f, -1.f, 0.f, 1.f, 0.f, "main");
 }
@@ -63,8 +67,12 @@ void Game::processInput() {
 
 void Game::render() {
     Camera *camera = resManager->getCamera("main");
-    SpriteRenderer *renderer = resManager->getRenderer("cube");
-    renderer->drawSprite(camera->getProjection(), camera->getView());
+    glm::mat4 projection = camera->getProjection();
+    glm::mat4 view = camera->getView();
+    
+    resManager->getModel("farmhouse")->draw(projection, view);
+
+    resManager->getRenderer("cube")->draw(projection, view);
 }
 
 GLFWwindow *Game::getWindow() const {
