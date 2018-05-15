@@ -10,6 +10,8 @@ A CG Project by OpenGL
 
 - `GLM` 0.9.8-5
 
+- `Assimp` 4.1.0
+
 ### Makefile
 
 You can use `make` to build and run.
