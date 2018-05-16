@@ -79,9 +79,9 @@ void MeshRenderer::draw(glm::mat4 projection, glm::mat4 view, glm::vec3 pos,
     enable();
     for (GLuint i = 0; i < textures->size(); i++) {
         std::string textureName("texture");
-        textureName += i;
+        textureName += std::to_string(i);
         textures->at(i)->bind(i);
-        shader->uniform1(textureName.c_str(), textures->at(i)->getID());
+        shader->uniform1(textureName.c_str(), i);
     }
 
     Renderer::draw(projection, view, pos, scale, rotAxis, rotate);
