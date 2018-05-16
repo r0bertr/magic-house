@@ -11,6 +11,7 @@ Texture::Texture(GLenum type, GLubyte *data, GLenum colorModel,
             GL_UNSIGNED_BYTE, data);
     }
     glGenerateMipmap(type);
+    this->type = type;
 }
 
 void Texture::bind(GLuint unit) {
