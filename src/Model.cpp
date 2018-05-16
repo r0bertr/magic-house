@@ -4,7 +4,9 @@ Model::Model(Shader *shader, const aiScene *scene, const GLchar *rootDir) {
     this->shader = shader;
     renderers = new std::vector<MeshRenderer *>;
     this->rootDir = new aiString(rootDir);
+    printf("[INFO]Begin model %s\n", rootDir);
     processNode(scene->mRootNode, scene);
+    printf("[INFO]End model %s\n", rootDir);
 }
 
 Model::~Model() {

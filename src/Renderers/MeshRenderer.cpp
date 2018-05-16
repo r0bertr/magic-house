@@ -60,6 +60,8 @@ void MeshRenderer::processTextures(aiMaterial *material, aiTextureType type) {
         material->GetTexture(type, i, &temp);
         texturePath.Append("/");
         texturePath.Append(temp.C_Str());
+        printf("[INFO]In MeshRenderer::processTextures\n");
+        printf("\tProcessing texture %s\n", texturePath.C_Str());
         textures->push_back(ResourceManager::GetInstance()->load2DTexture(
             texturePath.C_Str(), temp.C_Str()));
     }

@@ -76,7 +76,7 @@ Shader *ResourceManager::loadShader(const GLchar *vPath, const GLchar *fPath,
     glGetShaderiv(vShader, GL_COMPILE_STATUS, &success);
     if (!success) {
         glGetShaderInfoLog(vShader, 256, NULL, infoLog);
-        printf("[ERROR]In ResourceManager::loadShader\n%s\n", infoLog);
+        printf("[ERROR]In ResourceManager::loadShader\n\t%s\n", infoLog);
         return NULL;
     }
 
@@ -86,7 +86,7 @@ Shader *ResourceManager::loadShader(const GLchar *vPath, const GLchar *fPath,
     glGetShaderiv(fShader, GL_COMPILE_STATUS, &success);
     if (!success) {
         glGetShaderInfoLog(fShader, 256, NULL, infoLog);
-        printf("[ERROR]In ResourceManager::loadShader\n%s\n", infoLog);
+        printf("[ERROR]In ResourceManager::loadShader\n\t%s\n", infoLog);
         return NULL;
     }
 
@@ -128,6 +128,7 @@ Texture *ResourceManager::load2DTexture(const GLchar *srcPath, const GLchar *nam
     GLenum colorModel = GL_RGB;
     if (!data) {
         printf("[ERROR]In ResourceManager::load2DTexture\n");
+        printf("\tError loading file\n");
         return NULL;
     }
 
@@ -151,7 +152,8 @@ Renderer *ResourceManager::loadRenderer(const RendererType type, Shader *shader,
         renderers[n] = new CubeRenderer(shader, texture);
         break;
     default:
-        printf("[ERROR]In ResourceManager::loadRenderer\nWrong type\n");
+        printf("[ERROR]In ResourceManager::loadRenderer\n");
+        printf("\tWrong renderer type\n");
         return NULL;
     }
 
@@ -172,7 +174,7 @@ Model *ResourceManager::loadModel(const GLchar *path, Shader *shader,
         aiProcess_Triangulate | aiProcess_FlipUVs);
 
     if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode) {
-        printf("[ERROR]In ResourceManager::loadModel\n%s\n",
+        printf("[ERROR]In ResourceManager::loadModel\n\t%s\n",
             importer.GetErrorString());
         return NULL;
     }
