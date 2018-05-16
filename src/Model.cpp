@@ -8,6 +8,9 @@ Model::Model(Shader *shader, const aiScene *scene, const GLchar *rootDir) {
 }
 
 Model::~Model() {
+    for (GLuint i = 0; i < renderers->size(); i++) {
+        delete renderers->at(i);
+    }
     delete renderers;
 }
 
