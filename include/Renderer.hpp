@@ -6,8 +6,8 @@
 #include "Texture.hpp"
 
 enum RendererType {
-    RENDERER_CUBE,
-    RENDERER_MESH
+    RENDERER_MESH,
+    RENDERER_LAND
 };
 
 class Renderer {

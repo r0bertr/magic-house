@@ -35,5 +35,5 @@
 
 - Current Renderers:
 
-    - `CubeRenderer` Render a cube
     - `MeshRenderer` Render a mesh of a model
+    - `LandRenderer` Render the land

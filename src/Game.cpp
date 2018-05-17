@@ -31,18 +31,25 @@ Game::~Game() {
 
 void Game::init() {
     // Load Shaders
-    Shader *shader = resManager->loadShader("res/shaders/sprite.vs", 
-        "res/shaders/sprite.fs", NULL, "sprite");
+    Shader *meshShader = resManager->loadShader("res/shaders/mesh.vs", 
+        "res/shaders/mesh.fs", NULL, "mesh");
+    Shader *landShader = resManager->loadShader("res/shaders/land.vs",
+        "res/shaders/land.fs", NULL, "land");
+
+    // Load Textures
+    Texture *grass = resManager->load2DTexture("res/images/grass.jpg",
+        "grass");
 
     // Load Renderers
-    resManager->loadRenderer(RENDERER_CUBE, shader, NULL, "cube");
+    resManager->loadRenderer(RENDERER_LAND, landShader, NULL, "land", grass);
     
     // Load Models
-    resManager->loadModel("res/models/Farmhouse/farmhouse_obj.obj", shader, "farmhouse");
+    resManager->loadModel("res/models/Farmhouse/farmhouse_obj.obj",
+        meshShader, "farmhouse");
 
     // Load Camera
     resManager->loadCamera(glm::radians(45.f), (float)width / height, .1f, 100.f,
-        0.f, 0.f, 5.f, 0.f, 0.f, -1.f, 0.f, 1.f, 0.f, "main");
+        0.f, 5.f, 5.f, 0.f, 0.f, -1.f, 0.f, 1.f, 0.f, "main");
 }
 
 void Game::processInput() {
@@ -69,10 +76,14 @@ void Game::render() {
     Camera *camera = resManager->getCamera("main");
     glm::mat4 projection = camera->getProjection();
     glm::mat4 view = camera->getView();
-    
-    resManager->getModel("farmhouse")->draw(projection, view);
 
-    resManager->getRenderer("cube")->draw(projection, view);
+    resManager->getRenderer("land")->draw(projection, view,
+        glm::vec3(0.f), glm::vec3(100.f),
+        glm::vec3(1.f, 0.f, 0.f), 90.f);
+    
+    resManager->getModel("farmhouse")->draw(projection, view,
+        glm::vec3(20.f, 0.f, 0.f), glm::vec3(1.f),
+        glm::vec3(0.f, 1.f, 0.f), 90.f);
 }
 
 GLFWwindow *Game::getWindow() const {

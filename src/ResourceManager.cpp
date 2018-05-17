@@ -147,8 +147,8 @@ Renderer *ResourceManager::loadRenderer(const RendererType type, Shader *shader,
     if (renderers[n])
         return renderers[n];
     switch (type) {
-    case RENDERER_CUBE:
-        renderers[n] = new CubeRenderer(shader, texture);
+    case RENDERER_LAND:
+        renderers[n] = new LandRenderer(shader, texture);
         break;
     default:
         printf("[ERROR]In ResourceManager::loadRenderer\n");
