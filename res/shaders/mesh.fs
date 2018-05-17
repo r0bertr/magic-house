@@ -20,8 +20,6 @@ uniform sampler2D texture13;
 uniform sampler2D texture14;
 uniform sampler2D texture15;
 
-uniform vec3 color;
-
 void main() {
     fragColor = texture(texture0, TexCoords);
 }
