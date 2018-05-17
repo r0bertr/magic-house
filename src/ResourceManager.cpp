@@ -122,7 +122,6 @@ Texture *ResourceManager::load2DTexture(const GLchar *srcPath, const GLchar *nam
         return textures[n];
     }
 
-    stbi_set_flip_vertically_on_load(true);
     GLint width, height, nChannels;
     GLubyte *data = stbi_load(srcPath, &width, &height, &nChannels, 0);
     GLenum colorModel = GL_RGB;
