@@ -3,6 +3,7 @@
 #include "Renderer.hpp"
 
 #include <assimp/scene.h>
+#include <vector>
 
 class MeshRenderer : public Renderer {
 public:

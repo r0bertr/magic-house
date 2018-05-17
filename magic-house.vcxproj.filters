@@ -16,17 +16,14 @@
     <Filter Include="Header Files\lib">
       <UniqueIdentifier>{7429d784-364c-45b4-b439-16aca88d13e1}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Header Files\Sprites">
-      <UniqueIdentifier>{0af0207f-45ad-414d-9fb0-769af9ad89a6}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Resource Files\Shaders">
-      <UniqueIdentifier>{eae1dae9-766e-4e94-b015-10b7a0369128}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Source Files\Sprites">
-      <UniqueIdentifier>{4885f67e-fdd6-4b83-b432-93262e7faa91}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source Files\lib">
       <UniqueIdentifier>{9567aa9f-e889-4394-821c-29abc868f00d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Renderers">
+      <UniqueIdentifier>{0fa6bddb-60fd-4f1f-a8b1-215d5a0582a8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Renderers">
+      <UniqueIdentifier>{8c35bed2-0bc2-497e-a4be-86c4d6bcee87}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -54,17 +51,18 @@
     <ClInclude Include="include\lib\stb_image.h">
       <Filter>Header Files\lib</Filter>
     </ClInclude>
-    <ClInclude Include="include\Sprites\CubeRenderer.hpp">
-      <Filter>Header Files\Sprites</Filter>
+    <ClInclude Include="include\Renderers\LandRenderer.hpp">
+      <Filter>Header Files\Renderers</Filter>
     </ClInclude>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="res\shaders\sprite.fs">
-      <Filter>Resource Files\Shaders</Filter>
-    </None>
-    <None Include="res\shaders\sprite.vs">
-      <Filter>Resource Files\Shaders</Filter>
-    </None>
+    <ClInclude Include="include\Renderers\MeshRenderer.hpp">
+      <Filter>Header Files\Renderers</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Model.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Renderer.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\Camera.cpp">
@@ -82,17 +80,23 @@
     <ClCompile Include="src\Shader.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\SpriteRenderer.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="src\Texture.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="src\lib\glad.cpp">
       <Filter>Source Files\lib</Filter>
     </ClCompile>
-    <ClCompile Include="src\Sprites\CubeRenderer.cpp">
-      <Filter>Source Files\Sprites</Filter>
+    <ClCompile Include="src\Renderers\LandRenderer.cpp">
+      <Filter>Source Files\Renderers</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Renderers\MeshRenderer.cpp">
+      <Filter>Source Files\Renderers</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Model.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Renderer.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

@@ -2,5 +2,7 @@ bin
 build
 .vs
 Debug
+x64
+x86
 .DS_Store
 **/.DS_Store

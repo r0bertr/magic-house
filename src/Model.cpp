@@ -1,3 +1,4 @@
+#include "lib/glad.h"
 #include "Model.hpp"
 
 Model::Model(Shader *shader, const aiScene *scene, const GLchar *rootDir) {
