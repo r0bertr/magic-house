@@ -3,6 +3,8 @@
 
 #include <GLFW/glfw3.h>
 
+const GLfloat PI = 3.1415926;
+
 const GLuint WIDTH = 800;
 const GLuint HEIGHT = 600;
 
@@ -32,10 +34,10 @@ void mouseCallback(GLFWwindow *window, double xpos, double ypos) {
     yaw += xoffset;
     pitch += yoffset;
 
-    if (pitch > 89.0f)
-        pitch = 89.0f;
-    if (pitch < -89.0f)
-        pitch = -89.0f;
+    if (pitch > PI / 2 - 0.01f)
+        pitch = PI / 2 - 0.01f;
+    if (pitch < -PI / 2 + 0.01f)
+        pitch = -PI / 2 + 0.01f;
 
     ResourceManager::GetInstance()->getCamera("main")->rotate(pitch, yaw);
 }
