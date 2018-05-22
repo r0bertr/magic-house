@@ -60,14 +60,6 @@ void Game::processInput() {
         camera->moveLeft(.1f);
     if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
         camera->moveRight(.1f);
-    if (glfwGetKey(window, GLFW_KEY_J) == GLFW_PRESS)
-        camera->rotateLeft(.05f);
-    if (glfwGetKey(window, GLFW_KEY_L) == GLFW_PRESS)
-        camera->rotateRight(.05f);
-    if (glfwGetKey(window, GLFW_KEY_I) == GLFW_PRESS)
-        camera->rotateUp(.05f);
-    if (glfwGetKey(window, GLFW_KEY_K) == GLFW_PRESS)
-        camera->rotateDown(.05f);
 }
 
 void Game::render() {
