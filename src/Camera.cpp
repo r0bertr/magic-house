@@ -2,10 +2,10 @@
 
 #include <glm/gtc/matrix_transform.hpp>
 
-Camera::Camera(float pFov, float pAspect, float pNear, float pFar,
-        float posX, float posY, float posZ,
-        float frontX, float frontY, float frontZ,
-        float upX, float upY, float upZ) {
+Camera::Camera(GLfloat pFov, GLfloat pAspect, GLfloat pNear, GLfloat pFar,
+        GLfloat posX, GLfloat posY, GLfloat posZ,
+        GLfloat frontX, GLfloat frontY, GLfloat frontZ,
+        GLfloat upX, GLfloat upY, GLfloat upZ) {
 
     this->pFov = pFov;
     this->pAspect = pAspect;
@@ -24,45 +24,61 @@ glm::mat4 Camera::getProjection() const {
     return glm::perspective(pFov, pAspect, pNear, pFar);
 }
 
-void Camera::moveForward(const float &distance) {
+void Camera::moveForward(const GLfloat &distance) {
     pos += distance * front;
 }
 
-void Camera::moveBack(const float &distance) {
+void Camera::moveBack(const GLfloat &distance) {
     pos -= distance * front;
 }
 
-void Camera::moveLeft(const float &distance) {
+void Camera::moveLeft(const GLfloat &distance) {
     pos -= distance * right;
 }
 
-void Camera::moveRight(const float &distance) {
+void Camera::moveRight(const GLfloat &distance) {
     pos += distance * right;
 }
 
-void Camera::rotateLeft(const float &quantity) {
+void Camera::moveForward2D(const GLfloat &distance) {
+    pos += distance * glm::vec3(front.x, 0.f, front.z);
+}
+
+void Camera::moveBack2D(const GLfloat &distance) {
+    pos -= distance * glm::vec3(front.x, 0.f, front.z);
+}
+
+void Camera::moveLeft2D(const GLfloat &distance) {
+    pos -= distance * glm::vec3(right.x, 0.f, right.z);
+}
+
+void Camera::moveRight2D(const GLfloat &distance) {
+    pos += distance * glm::vec3(right.x, 0.f, right.z);
+}
+
+void Camera::rotateLeft(const GLfloat &quantity) {
     yaw -= quantity;
     rotate(pitch, yaw);
 }
 
-void Camera::rotateRight(const float &quantity) {
+void Camera::rotateRight(const GLfloat &quantity) {
     yaw += quantity;
     rotate(pitch, yaw);
 }
 
-void Camera::rotateUp(const float &quantity) {
+void Camera::rotateUp(const GLfloat &quantity) {
     pitch += quantity;
     pitch = fmin(pitch, 3.14 / 2);
     rotate(pitch, yaw);
 }
 
-void Camera::rotateDown(const float &quantity) {
+void Camera::rotateDown(const GLfloat &quantity) {
     pitch -= quantity;
     pitch = fmax(pitch, -3.14 / 2);
     rotate(pitch, yaw);
 }
 
-void Camera::rotate(const float pitch, const float yaw) {
+void Camera::rotate(const GLfloat pitch, const GLfloat yaw) {
     front.x = cos(pitch) * cos(yaw);
     front.y = sin(pitch);
     front.z = cos(pitch) * sin(yaw);

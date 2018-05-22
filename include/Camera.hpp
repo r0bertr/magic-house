@@ -23,6 +23,11 @@ public:
     void moveRight(const GLfloat &distance);
     void moveLeft(const GLfloat &distance);
 
+    void moveForward2D(const GLfloat &distance);
+    void moveBack2D(const GLfloat &distance);
+    void moveRight2D(const GLfloat &distance);
+    void moveLeft2D(const GLfloat &distance);
+
     void rotateLeft(const GLfloat &quantity);
     void rotateRight(const GLfloat &quantity);
     void rotateUp(const GLfloat &quantity);
