@@ -57,13 +57,13 @@ void Game::processInput() {
     float moveSpeed = 20.f * (curTime - lastTime);
     lastTime = curTime;
     if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
-        camera->moveForward(moveSpeed);
+        camera->moveForward2D(moveSpeed);
     if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
-        camera->moveBack(moveSpeed);
+        camera->moveBack2D(moveSpeed);
     if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
-        camera->moveLeft(moveSpeed);
+        camera->moveLeft2D(moveSpeed);
     if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
-        camera->moveRight(moveSpeed);
+        camera->moveRight2D(moveSpeed);
 }
 
 void Game::render() {

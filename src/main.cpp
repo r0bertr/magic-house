@@ -24,11 +24,10 @@ void mouseCallback(GLFWwindow *window, double xpos, double ypos) {
     lastY = ypos;
 
     float curTime = (float)glfwGetTime();
-    float sensitivity = .5f * (curTime - lastTime);
+    float sensitivity = .2f * (curTime - lastTime);
     xoffset *= sensitivity;
     yoffset *= sensitivity;
     lastTime = curTime;
-    printf("%.2f\n", lastTime);
 
     yaw += xoffset;
     pitch += yoffset;
