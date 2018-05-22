@@ -51,15 +51,19 @@ void Game::init() {
 }
 
 void Game::processInput() {
+    static float lastTime = 0.f;
     Camera *camera = resManager->getCamera("main");
+    float curTime = (float)glfwGetTime();
+    float moveSpeed = 20.f * (curTime - lastTime);
+    lastTime = curTime;
     if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
-        camera->moveForward(1.f);
+        camera->moveForward(moveSpeed);
     if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
-        camera->moveBack(1.f);
+        camera->moveBack(moveSpeed);
     if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
-        camera->moveLeft(1.f);
+        camera->moveLeft(moveSpeed);
     if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
-        camera->moveRight(1.f);
+        camera->moveRight(moveSpeed);
 }
 
 void Game::render() {

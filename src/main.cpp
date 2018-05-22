@@ -10,6 +10,7 @@ void mouseCallback(GLFWwindow *window, double xpos, double ypos) {
     static bool firstMouse = true;
     static float lastX = 0.f, lastY = 0.f;
     static float yaw = -90.f, pitch = 0.f;
+    static float lastTime = 0.f;
 
     if (firstMouse) {
         lastX = xpos;
@@ -22,9 +23,12 @@ void mouseCallback(GLFWwindow *window, double xpos, double ypos) {
     lastX = xpos;
     lastY = ypos;
 
-    float sensitivity = .01f;
+    float curTime = (float)glfwGetTime();
+    float sensitivity = .5f * (curTime - lastTime);
     xoffset *= sensitivity;
     yoffset *= sensitivity;
+    lastTime = curTime;
+    printf("%.2f\n", lastTime);
 
     yaw += xoffset;
     pitch += yoffset;
