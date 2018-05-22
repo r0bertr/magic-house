@@ -31,21 +31,19 @@ Game::~Game() {
 
 void Game::init() {
     // Load Shaders
-    Shader *meshShader = resManager->loadShader("res/shaders/mesh.vs", 
+    Shader *shader = resManager->loadShader("res/shaders/mesh.vs", 
         "res/shaders/mesh.fs", NULL, "mesh");
-    Shader *landShader = resManager->loadShader("res/shaders/land.vs",
-        "res/shaders/land.fs", NULL, "land");
 
     // Load Textures
     Texture *grass = resManager->load2DTexture("res/images/grass.jpg",
         "grass");
 
     // Load Renderers
-    resManager->loadRenderer(RENDERER_LAND, landShader, NULL, "land", grass);
+    resManager->loadRenderer(RENDERER_LAND, shader, NULL, "land", grass);
     
     // Load Models
     resManager->loadModel("res/models/Farmhouse/farmhouse_obj.obj",
-        meshShader, "farmhouse");
+        shader, "farmhouse");
 
     // Load Camera
     resManager->loadCamera(glm::radians(45.f), (float)width / height, .1f, 100.f,
@@ -78,7 +76,7 @@ void Game::render() {
     glm::mat4 view = camera->getView();
 
     resManager->getRenderer("land")->draw(projection, view,
-        glm::vec3(0.f), glm::vec3(100.f),
+        glm::vec3(0.f), glm::vec3(1000.f),
         glm::vec3(1.f, 0.f, 0.f), 90.f);
     
     resManager->getModel("farmhouse")->draw(projection, view,

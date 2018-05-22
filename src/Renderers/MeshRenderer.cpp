@@ -19,9 +19,6 @@ MeshRenderer::MeshRenderer(Shader *shader, const aiMesh *mesh,
         vertices->push_back(mesh->mVertices[i].x);
         vertices->push_back(mesh->mVertices[i].y);
         vertices->push_back(mesh->mVertices[i].z);
-        vertices->push_back(mesh->mNormals[i].x);
-        vertices->push_back(mesh->mNormals[i].y);
-        vertices->push_back(mesh->mNormals[i].z);
         if (mesh->mTextureCoords[0]) {
             vertices->push_back(mesh->mTextureCoords[0][i].x);
             vertices->push_back(mesh->mTextureCoords[0][i].y);
@@ -29,6 +26,9 @@ MeshRenderer::MeshRenderer(Shader *shader, const aiMesh *mesh,
             vertices->push_back(0.f);
             vertices->push_back(0.f);
         }
+        vertices->push_back(mesh->mNormals[i].x);
+        vertices->push_back(mesh->mNormals[i].y);
+        vertices->push_back(mesh->mNormals[i].z);
     }
 
     for (GLuint i = 0; i < mesh->mNumFaces; i++) {
@@ -96,10 +96,10 @@ void MeshRenderer::initRenderData() {
     glBindVertexArray(VAO);
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(GLfloat), NULL);
     glEnableVertexAttribArray(0);
-    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(GLfloat),
+    glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(GLfloat),
         (void *)(3 * sizeof(GLfloat)));
     glEnableVertexAttribArray(1);
-    glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(GLfloat),
+    glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(GLfloat),
         (void *)(6 * sizeof(GLfloat)));
     glEnableVertexAttribArray(2);
     glGenBuffers(1, &EBO);
