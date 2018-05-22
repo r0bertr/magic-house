@@ -46,20 +46,20 @@ void Game::init() {
         shader, "farmhouse");
 
     // Load Camera
-    resManager->loadCamera(glm::radians(45.f), (float)width / height, .1f, 100.f,
+    resManager->loadCamera(glm::radians(45.f), (float)width / height, .1f, 500.f,
         0.f, 5.f, 5.f, 0.f, 0.f, -1.f, 0.f, 1.f, 0.f, "main");
 }
 
 void Game::processInput() {
     Camera *camera = resManager->getCamera("main");
     if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
-        camera->moveForward(.1f);
+        camera->moveForward(1.f);
     if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
-        camera->moveBack(.1f);
+        camera->moveBack(1.f);
     if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
-        camera->moveLeft(.1f);
+        camera->moveLeft(1.f);
     if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
-        camera->moveRight(.1f);
+        camera->moveRight(1.f);
 }
 
 void Game::render() {
