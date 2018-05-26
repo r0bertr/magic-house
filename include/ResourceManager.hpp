@@ -11,7 +11,8 @@
 
 struct MapCMP {
     bool operator()(const GLchar *keyX, const GLchar *keyY) const {
-        return strcmp(keyX, keyY);
+        std::string x(keyX), y(keyY);
+        return x < y;
     }
 };
 
