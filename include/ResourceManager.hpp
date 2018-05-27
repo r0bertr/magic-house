@@ -6,6 +6,7 @@
 #include "Camera.hpp"
 #include "Model.hpp"
 #include "Renderers/LandRenderer.hpp"
+#include "Renderers/SkyboxRenderer.hpp"
 
 #include <map>
 

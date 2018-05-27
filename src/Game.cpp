@@ -34,12 +34,17 @@ void Game::init() {
     Shader *shader = resManager->loadShader("res/shaders/mesh.vs", 
         "res/shaders/mesh.fs", NULL, "mesh");
 
+    Shader *skyboxShader = resManager->loadShader("res/shaders/skybox.vs",
+        "res/shaders/skybox.fs", NULL, "skybox");
+
     // Load Textures
     Texture *grass = resManager->load2DTexture("res/images/grass.jpg",
         "grass");
 
     // Load Renderers
     resManager->loadRenderer(RENDERER_LAND, shader, NULL, "land", grass);
+
+    resManager->loadRenderer(RENDERER_SKYBOX, skyboxShader, NULL, "skybox", NULL);
     
     // Load Models
     resManager->loadModel("res/models/Farmhouse/farmhouse_obj.obj",
@@ -56,6 +61,8 @@ void Game::processInput() {
     float curTime = (float)glfwGetTime();
     float moveSpeed = 20.f * (curTime - lastTime);
     lastTime = curTime;
+    if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
+        glfwSetWindowShouldClose(window, true);
     if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
         camera->moveForward2D(moveSpeed);
     if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
@@ -78,6 +85,10 @@ void Game::render() {
     resManager->getModel("farmhouse")->draw(projection, view,
         glm::vec3(20.f, 0.f, 0.f), glm::vec3(1.f),
         glm::vec3(0.f, 1.f, 0.f), 90.f);
+
+    resManager->getRenderer("skybox")->draw(projection, view,
+        glm::vec3(1.0f), glm::vec3(1.0f),
+        glm::vec3(1.0f));
 }
 
 GLFWwindow *Game::getWindow() const {

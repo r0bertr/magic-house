@@ -7,7 +7,8 @@
 
 enum RendererType {
     RENDERER_MESH,
-    RENDERER_LAND
+    RENDERER_LAND,
+    RENDERER_SKYBOX,
 };
 
 class Renderer {
