@@ -5,4 +5,5 @@ Debug
 x64
 x86
 .DS_Store
+.vscode
 **/.DS_Store
