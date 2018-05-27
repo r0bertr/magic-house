@@ -150,6 +150,9 @@ Renderer *ResourceManager::loadRenderer(const RendererType type, Shader *shader,
     case RENDERER_LAND:
         renderers[n] = new LandRenderer(shader, texture);
         break;
+    case RENDERER_SKYBOX:
+        renderers[n] = new SkyboxRenderer(shader);
+        break;
     default:
         printf("[ERROR]In ResourceManager::loadRenderer\n");
         printf("\tWrong renderer type\n");
