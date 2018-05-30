@@ -139,8 +139,39 @@ Texture *ResourceManager::load2DTexture(const GLchar *srcPath, const GLchar *nam
 
 }
 
+Texture *ResourceManager::loadBoxTexture(const GLchar *srcPath[6],
+    const GLchar *name) {
+    GLchar *n = new GLchar[BUFFER_LEN];
+    strcpy(n, name);
+    if (textures[n]) {
+        return textures[n];
+    }
+
+    GLint width[6], height[6], nChannels[6];
+    GLenum colorModels[6];
+    GLubyte *data[6];
+    for (GLuint i = 0; i < 6; i++) {
+        data[i] = stbi_load(srcPath[i], &width[i], &height[i], &nChannels[i], 0);
+        if (!data) {
+            printf("[ERROR]In ResourceManager::loadBoxTexture\n");
+            printf("\tError loading file\n");
+            return NULL;
+        }
+        if (nChannels[i] == 3)
+            colorModels[i] = GL_RGB;
+        else
+            colorModels[i] = GL_RGBA;
+    }
+
+    textures[n] = new Texture(GL_TEXTURE_CUBE_MAP, data, colorModels,
+        width, height);
+    for (GLuint i = 0; i < 6; i++)
+        stbi_image_free(data[i]);
+    return textures[n];
+}
+
 Renderer *ResourceManager::loadRenderer(const RendererType type, Shader *shader,
-    const GLchar *modelPath, const GLchar *name, Texture *texture) {
+    const GLchar *name, Texture *texture) {
     
     GLchar *n = new GLchar[BUFFER_LEN];
     strcpy(n, name);
@@ -151,7 +182,7 @@ Renderer *ResourceManager::loadRenderer(const RendererType type, Shader *shader,
         renderers[n] = new LandRenderer(shader, texture);
         break;
     case RENDERER_SKYBOX:
-        renderers[n] = new SkyboxRenderer(shader);
+        renderers[n] = new SkyboxRenderer(shader, texture);
         break;
     default:
         printf("[ERROR]In ResourceManager::loadRenderer\n");

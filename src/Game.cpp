@@ -31,24 +31,32 @@ Game::~Game() {
 
 void Game::init() {
     // Load Shaders
-    // Shader *shader = resManager->loadShader("res/shaders/mesh.vs", 
-    //     "res/shaders/mesh.fs", NULL, "mesh");
-
+    Shader *shader = resManager->loadShader("res/shaders/mesh.vs", 
+        "res/shaders/mesh.fs", NULL, "mesh");
     Shader *skyboxShader = resManager->loadShader("res/shaders/skybox.vs",
         "res/shaders/skybox.fs", NULL, "skybox");
 
     // Load Textures
-    // Texture *grass = resManager->load2DTexture("res/images/grass.jpg",
-    //     "grass");
+    Texture *grass = resManager->load2DTexture("res/images/grass.jpg",
+        "grass");
+    const GLchar *faces[6] = {
+        "res/images/skybox/right.jpg",
+        "res/images/skybox/left.jpg",
+        "res/images/skybox/top.jpg",
+        "res/images/skybox/bottom.jpg",
+        "res/images/skybox/front.jpg",
+        "res/images/skybox/back.jpg"
+    };
+    Texture *skyboxTexture = resManager->loadBoxTexture(faces, "skybox");
 
     // Load Renderers
-    // resManager->loadRenderer(RENDERER_LAND, shader, NULL, "land", grass);
-
-    resManager->loadRenderer(RENDERER_SKYBOX, skyboxShader, NULL, "skybox", NULL);
+    resManager->loadRenderer(RENDERER_LAND, shader, "land", grass);
+    resManager->loadRenderer(RENDERER_SKYBOX, skyboxShader,
+        "skybox", skyboxTexture);
     
     // Load Models
-    // resManager->loadModel("res/models/Farmhouse/farmhouse_obj.obj",
-    //     shader, "farmhouse");
+    resManager->loadModel("res/models/Farmhouse/farmhouse_obj.obj",
+        shader, "farmhouse");
 
     // Load Camera
     resManager->loadCamera(glm::radians(45.f), (float)width / height, .1f, 500.f,
@@ -77,15 +85,16 @@ void Game::render() {
     Camera *camera = resManager->getCamera("main");
     glm::mat4 projection = camera->getProjection();
     glm::mat4 view = camera->getView();
-    // resManager->getRenderer("land")->draw(projection, view,
-    //     glm::vec3(0.f), glm::vec3(1000.f),
-    //     glm::vec3(1.f, 0.f, 0.f), 90.f);
+    resManager->getRenderer("land")->draw(projection, view,
+        glm::vec3(0.f), glm::vec3(1000.f),
+        glm::vec3(1.f, 0.f, 0.f), 90.f);
     
-    // resManager->getModel("farmhouse")->draw(projection, view,
-    //     glm::vec3(20.f, 0.f, 0.f), glm::vec3(1.f),
-    //     glm::vec3(0.f, 1.f, 0.f), 90.f);
+    resManager->getModel("farmhouse")->draw(projection, view,
+        glm::vec3(20.f, 0.f, 0.f), glm::vec3(1.f),
+        glm::vec3(0.f, 1.f, 0.f), 90.f);
 
-    resManager->getRenderer("skybox")->draw(projection, view);
+    resManager->getRenderer("skybox")->draw(projection, view,
+        glm::vec3(0.f, 0.f, 0.f), glm::vec3(1000.f));
 }
 
 GLFWwindow *Game::getWindow() const {

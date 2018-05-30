@@ -6,11 +6,27 @@ Texture::Texture(GLenum type, GLubyte *data, GLenum colorModel,
     glGenTextures(1, &id);
     glActiveTexture(GL_TEXTURE0);
     glBindTexture(type, id);
-    if (type == GL_TEXTURE_2D) {
-        glTexImage2D(type, 0, colorModel, width, height, 0, colorModel,
-            GL_UNSIGNED_BYTE, data);
-    }
+    glTexImage2D(type, 0, colorModel, width, height, 0, colorModel,
+        GL_UNSIGNED_BYTE, data);
     glGenerateMipmap(type);
+    this->type = type;
+}
+
+Texture::Texture(GLenum type, GLubyte *data[6], GLenum colorModel[6],
+    GLint width[6], GLint height[6]) {
+    glGenTextures(1, &id);
+    glActiveTexture(GL_TEXTURE0);
+    glBindTexture(type, id);
+    for (GLuint i = 0; i < 6; i++) {
+        glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, colorModel[i],
+            width[i], height[i], 0, colorModel[i], GL_UNSIGNED_BYTE, data[i]);
+    }
+
+    glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+    glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+    glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
     this->type = type;
 }
 

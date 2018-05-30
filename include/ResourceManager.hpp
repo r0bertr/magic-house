@@ -24,8 +24,9 @@ public:
     Shader *loadShader(const GLchar *vPath, const GLchar *fPath,
         const GLchar *aPath, const GLchar *name);
     Texture *load2DTexture(const GLchar *srcPath, const GLchar *name);
+    Texture *loadBoxTexture(const GLchar *srcPath[6], const GLchar *name);
     Renderer *loadRenderer(const RendererType type, Shader *shader,
-        const GLchar *modelPath, const GLchar *name, Texture *texture = NULL);
+        const GLchar *name, Texture *texture = NULL);
     Camera *loadCamera(GLfloat pFov, GLfloat pAspect, GLfloat pNear, GLfloat pFar,
         GLfloat posX, GLfloat posY, GLfloat posZ,
         GLfloat frontX, GLfloat frontY, GLfloat frontZ,
