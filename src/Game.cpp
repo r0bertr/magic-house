@@ -44,8 +44,8 @@ void Game::init() {
         "res/images/skybox/left.jpg",
         "res/images/skybox/top.jpg",
         "res/images/skybox/bottom.jpg",
-        "res/images/skybox/front.jpg",
-        "res/images/skybox/back.jpg"
+        "res/images/skybox/back.jpg",
+        "res/images/skybox/front.jpg"
     };
     Texture *skyboxTexture = resManager->loadBoxTexture(faces, "skybox");
 
