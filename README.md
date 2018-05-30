@@ -32,14 +32,6 @@ Other `make` commands are:
 
 - `rebuild` clean and build
 
-### Visual Studio (Beta)
-
-Current version is only well tested in the cutting-edge version of Visual Studio 2017. Problems may occurred under various versions of Windows and Visual Studios.
-
-Open `magic-house.sln` by Visual Studio and it may load the project.
-
-You need to make sure that `GLFW` and `GLM` are **SYSTEM** libraries. (which means `#include <...>` but not `$include "..."`) 
-
 ## For Contributors
 
 You **SHOULDN'T** commit a change on source codes only in order to make it compatible with your OpenGL enviroment.
