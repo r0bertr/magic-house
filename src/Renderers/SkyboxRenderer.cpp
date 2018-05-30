@@ -42,7 +42,7 @@ unsigned int SkyboxRenderer::loadCubeMap(string *faces)
 
 void SkyboxRenderer::initRenderData()
 {
-    float skyboxVertices[] = {
+    float vertices[] = {
         // positions          
         -1.0f,  1.0f, -1.0f,
         -1.0f, -1.0f, -1.0f,
@@ -91,7 +91,7 @@ void SkyboxRenderer::initRenderData()
     glGenBuffers(1, &VBO);
     glBindVertexArray(VAO);
     glBindBuffer(GL_ARRAY_BUFFER, VBO);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(skyboxVertices), &skyboxVertices, GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), &vertices, GL_STATIC_DRAW);
     glEnableVertexAttribArray(0);
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
 
@@ -105,20 +105,17 @@ void SkyboxRenderer::initRenderData()
         "res/images/skybox/back.jpg"
     };
     cubemapTexture = loadCubeMap(faces);
+    shader->use();
+    shader->uniform1("skybox", 0);
+    printf("Cube map = %d\n", cubemapTexture);
 }
 
 void SkyboxRenderer::draw(glm::mat4 projection, glm::mat4 view,
     glm::vec3 pos, glm::vec3 scale, glm::vec3 rotAxis, GLfloat rotate)
 {
-    glDepthFunc(GL_LEQUAL);  // change depth function so depth test passes when values are equal to depth buffer's content
-    shader->use();
-    shader->uniformM4("view", view);
-    shader->uniformM4("projection", projection);
-    // skybox cube
-    glBindVertexArray(VAO);
+    glDepthFunc(GL_LEQUAL);
     glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_CUBE_MAP, cubemapTexture);
-    glDrawArrays(GL_TRIANGLES, 0, 36);
-    glBindVertexArray(0);
+    Renderer::draw(projection, view, pos, scale, rotAxis, rotate);
     glDepthFunc(GL_LESS); // set depth function back to default
 }
