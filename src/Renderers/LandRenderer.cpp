@@ -41,5 +41,5 @@ void LandRenderer::initRenderData() {
         (void *)(3 * sizeof(GLfloat)));
     glEnableVertexAttribArray(0);
     glEnableVertexAttribArray(1);
-    count = 6;
+    numVertices = 6;
 }

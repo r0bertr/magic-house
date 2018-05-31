@@ -6,7 +6,7 @@
 
 Renderer::Renderer(Shader *shader) {
     this->shader = shader;
-    count = 0;
+    numVertices = 0;
     VBO = 0;
     VAO = 0;
     EBO = 0;
@@ -35,9 +35,9 @@ void Renderer::draw(glm::mat4 projection, glm::mat4 view,
     shader->uniformM4("projection", projection);
 
     if (EBO)
-        glDrawElements(GL_TRIANGLES, count, GL_UNSIGNED_INT, NULL);
+        glDrawElements(GL_TRIANGLES, numVertices, GL_UNSIGNED_INT, NULL);
     else
-        glDrawArrays(GL_TRIANGLES, 0, count);
+        glDrawArrays(GL_TRIANGLES, 0, numVertices);
 }
 
 void Renderer::enable() {

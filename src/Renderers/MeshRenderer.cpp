@@ -106,5 +106,5 @@ void MeshRenderer::initRenderData() {
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices->size() * sizeof(GLuint),
         indices->data(), GL_STATIC_DRAW);
-    count = indices->size();
+    numVertices = indices->size();
 }

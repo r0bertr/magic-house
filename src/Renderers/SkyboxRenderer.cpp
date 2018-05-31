@@ -55,7 +55,7 @@ void SkyboxRenderer::initRenderData()
         -1.0f, -1.0f,  1.0f,
          1.0f, -1.0f,  1.0f
     };
-    count = 36;
+    numVertices = 36;
     glGenVertexArrays(1, &VAO);
     glGenBuffers(1, &VBO);
     glBindVertexArray(VAO);
