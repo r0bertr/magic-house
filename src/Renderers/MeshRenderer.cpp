@@ -83,6 +83,7 @@ void MeshRenderer::draw(glm::mat4 projection, glm::mat4 view, glm::vec3 pos,
         textures->at(i)->bind(i);
         shader->uniform1(textureName.c_str(), i);
     }
+    shader->uniform4("color", glm::vec4(1.f));
 
     Renderer::draw(projection, view, pos, scale, rotAxis, rotate);
 }

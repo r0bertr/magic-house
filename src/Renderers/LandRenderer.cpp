@@ -16,6 +16,7 @@ void LandRenderer::draw(glm::mat4 projection, glm::mat4 view,
     
     texture->bind(0);
     shader->uniform1("texture0", 0);
+    shader->uniform4("color", glm::vec4(1.f));
 
     Renderer::draw(projection, view, pos, scale, rotAxis, rotate);
 }
