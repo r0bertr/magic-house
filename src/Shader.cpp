@@ -42,6 +42,19 @@ void Shader::uniform3(const char *name, const glm::vec3 vec) {
     glUniform3fv(glGetUniformLocation(id, name), 1, glm::value_ptr(vec));
 }
 
+void Shader::uniform4(const char *name, const GLfloat x, const GLfloat y,
+    const GLfloat z, const GLfloat w) {
+    glUniform4f(glGetUniformLocation(id, name), x, y, z, w);
+}
+
+void Shader::uniform4(const char *name, const GLfloat vec[4]) {
+    glUniform4fv(glGetUniformLocation(id, name), 1, vec);
+}
+
+void Shader::uniform4(const char *name, const glm::vec4 vec) {
+    glUniform4fv(glGetUniformLocation(id, name), 1, glm::value_ptr(vec));
+}
+
 void Shader::uniformM4(const char *name, const glm::mat4 mat) {
     GLint loc = glGetUniformLocation(id, name);
     glUniformMatrix4fv(loc, 1, GL_FALSE, glm::value_ptr(mat));
