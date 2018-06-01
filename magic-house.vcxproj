@@ -70,7 +70,8 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <IncludePath>include;$(IncludePath)</IncludePath>
+    <IncludePath>E:\大三\大三下\计算机图形\project\final_proj\magic-house\include;E:\大三\大三下\计算机图形\GLFW3\include;D:\Software\Assimp\assimp\include;$(IncludePath)</IncludePath>
+    <LibraryPath>D:\Software\Assimp\assimp\lib\Debug;E:\大三\大三下\计算机图形\GLFW3\lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <ReferencePath>$(ReferencePath)</ReferencePath>
@@ -85,7 +86,7 @@
       <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>glfw3.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>opengl32.lib;glfw3.lib;assimp-vc140-mt.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -95,6 +96,9 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
     </ClCompile>
+    <Link>
+      <AdditionalDependencies>OPENGL32.lib;glfw3.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
@@ -131,9 +135,9 @@
     <ClInclude Include="include\Renderer.hpp" />
     <ClInclude Include="include\Renderers\LandRenderer.hpp" />
     <ClInclude Include="include\Renderers\MeshRenderer.hpp" />
+    <ClInclude Include="include\Renderers\SkyboxRenderer.hpp" />
     <ClInclude Include="include\ResourceManager.hpp" />
     <ClInclude Include="include\Shader.hpp" />
-    <ClInclude Include="include\SpriteRenderer.hpp" />
     <ClInclude Include="include\Texture.hpp" />
   </ItemGroup>
   <ItemGroup>
@@ -145,6 +149,7 @@
     <ClCompile Include="src\Renderer.cpp" />
     <ClCompile Include="src\Renderers\LandRenderer.cpp" />
     <ClCompile Include="src\Renderers\MeshRenderer.cpp" />
+    <ClCompile Include="src\Renderers\SkyboxRenderer.cpp" />
     <ClCompile Include="src\ResourceManager.cpp" />
     <ClCompile Include="src\Shader.cpp" />
     <ClCompile Include="src\Texture.cpp" />
