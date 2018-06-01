@@ -48,11 +48,15 @@ void Game::init() {
         "res/images/skybox/front.jpg"
     };
     Texture *skyboxTexture = resManager->loadBoxTexture(faces, "skybox");
+    Texture *smokeTexture = resManager->load2DTexture("res/images/smoke.png",
+        "smoke");
 
     // Load Renderers
     resManager->loadRenderer(RENDERER_LAND, shader, "land", grass);
     resManager->loadRenderer(RENDERER_SKYBOX, skyboxShader,
         "skybox", skyboxTexture);
+    resManager->loadParticleRenderer(shader, smokeTexture,
+        "res/configs/particle_fire.json", "particle_fire");
     
     // Load Models
     resManager->loadModel("res/models/Farmhouse/farmhouse_obj.obj",
@@ -85,6 +89,7 @@ void Game::render() {
     Camera *camera = resManager->getCamera("main");
     glm::mat4 projection = camera->getProjection();
     glm::mat4 view = camera->getView();
+
     resManager->getRenderer("land")->draw(projection, view,
         glm::vec3(0.f), glm::vec3(1000.f),
         glm::vec3(1.f, 0.f, 0.f), 90.f);
@@ -92,6 +97,8 @@ void Game::render() {
     resManager->getModel("farmhouse")->draw(projection, view,
         glm::vec3(20.f, 0.f, 0.f), glm::vec3(1.f),
         glm::vec3(0.f, 1.f, 0.f), 90.f);
+
+    resManager->getRenderer("particle_fire")->draw(projection, view);
 
     resManager->getRenderer("skybox")->draw(projection, view,
         glm::vec3(0.f, 0.f, 0.f), glm::vec3(1000.f));

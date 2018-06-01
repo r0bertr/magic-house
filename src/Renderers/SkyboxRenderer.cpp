@@ -67,6 +67,7 @@ void SkyboxRenderer::initRenderData()
 
 void SkyboxRenderer::draw(glm::mat4 projection, glm::mat4 view,
     glm::vec3 pos, glm::vec3 scale, glm::vec3 rotAxis, GLfloat rotate) {
+    enable();
     glDepthFunc(GL_LEQUAL);
     texture->bind();
     shader->uniform1("skybox", 0);

@@ -14,7 +14,8 @@ LandRenderer::~LandRenderer() {}
 void LandRenderer::draw(glm::mat4 projection, glm::mat4 view,
     glm::vec3 pos, glm::vec3 scale, glm::vec3 rotAxis, GLfloat rotate) {
     
-    texture->bind(0);
+    enable();
+    texture->bind();
     shader->uniform1("texture0", 0);
     shader->uniform4("color", glm::vec4(1.f));
 

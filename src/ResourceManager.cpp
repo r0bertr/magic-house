@@ -139,6 +139,21 @@ Texture *ResourceManager::load2DTexture(const GLchar *srcPath, const GLchar *nam
 
 }
 
+Renderer *ResourceManager::loadParticleRenderer(Shader *shader,
+    Texture *texture, const GLchar *config, const GLchar *name) {
+
+    GLchar *n = new GLchar[BUFFER_LEN];
+    strcpy(n, name);
+    if (renderers[n]) {
+        return renderers[n];
+    }
+
+    Renderer *renderer = new ParticleRenderer(shader, texture, config);
+    renderers[n] = renderer;
+    return renderer;
+
+}
+
 Texture *ResourceManager::loadBoxTexture(const GLchar *srcPath[6],
     const GLchar *name) {
     GLchar *n = new GLchar[BUFFER_LEN];
