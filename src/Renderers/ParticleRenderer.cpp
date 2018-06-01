@@ -104,6 +104,13 @@ Particle::Particle(ParticleShape shape,
 
 }
 
+Particle::~Particle() {
+
+    glDeleteBuffers(1, &VBO);
+    glDeleteVertexArrays(1, &VAO);
+
+}
+
 void Particle::bind() {
 
     glBindBuffer(GL_ARRAY_BUFFER, VBO);
@@ -179,6 +186,7 @@ ParticleRenderer::ParticleRenderer(Shader *shader, Texture *texture,
     randOpacity = (GLfloat)cJSON_GetObjectItem(parameters, "randOpacity")->valuedouble;
     randLife = (GLuint)cJSON_GetObjectItem(parameters, "randLife")->valueint;
     delete []buf;
+    cJSON_Delete(parameters);
 
     initRenderData();
 

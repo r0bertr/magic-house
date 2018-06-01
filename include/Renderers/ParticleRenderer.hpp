@@ -19,6 +19,7 @@ public:
         glm::vec3 position, glm::vec3 scale, glm::vec3 direction,
         glm::vec3 color, GLfloat rotate,
         GLfloat speed, GLfloat opacity, GLuint life);
+    ~Particle();
 
     void bind();
     void move();
