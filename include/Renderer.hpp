@@ -24,7 +24,7 @@ public:
 
 protected:
     Shader *shader;
-    GLint count;
+    GLuint numVertices;
     GLuint VBO, VAO, EBO;
 
     virtual void initRenderData() = 0;

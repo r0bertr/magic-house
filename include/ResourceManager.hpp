@@ -7,6 +7,7 @@
 #include "Model.hpp"
 #include "Renderers/LandRenderer.hpp"
 #include "Renderers/SkyboxRenderer.hpp"
+#include "Renderers/ParticleRenderer.hpp"
 
 #include <map>
 
@@ -27,6 +28,8 @@ public:
     Texture *loadBoxTexture(const GLchar *srcPath[6], const GLchar *name);
     Renderer *loadRenderer(const RendererType type, Shader *shader,
         const GLchar *name, Texture *texture = NULL);
+    Renderer *loadParticleRenderer(Shader *shader, Texture *texture,
+        const GLchar *config, const GLchar *name);
     Camera *loadCamera(GLfloat pFov, GLfloat pAspect, GLfloat pNear, GLfloat pFar,
         GLfloat posX, GLfloat posY, GLfloat posZ,
         GLfloat frontX, GLfloat frontY, GLfloat frontZ,

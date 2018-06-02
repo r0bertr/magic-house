@@ -83,6 +83,7 @@ void MeshRenderer::draw(glm::mat4 projection, glm::mat4 view, glm::vec3 pos,
         textures->at(i)->bind(i);
         shader->uniform1(textureName.c_str(), i);
     }
+    shader->uniform4("color", glm::vec4(1.f));
 
     Renderer::draw(projection, view, pos, scale, rotAxis, rotate);
 }
@@ -106,5 +107,5 @@ void MeshRenderer::initRenderData() {
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices->size() * sizeof(GLuint),
         indices->data(), GL_STATIC_DRAW);
-    count = indices->size();
+    numVertices = indices->size();
 }
