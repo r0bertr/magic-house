@@ -42,12 +42,18 @@ void mouseCallback(GLFWwindow *window, double xpos, double ypos) {
     ResourceManager::GetInstance()->getCamera("main")->rotate(pitch, yaw);
 }
 
+void framebuffer_size_callback(GLFWwindow* window, int width, int height)
+{
+    glViewport(0, 0, width, height);
+}
+
 int main() {
     Game game(WIDTH, HEIGHT);
     game.init();
 
     glfwSetInputMode(game.getWindow(), GLFW_CURSOR, GLFW_CURSOR_DISABLED);
     glfwSetCursorPosCallback(game.getWindow(), mouseCallback);
+    glfwSetFramebufferSizeCallback(game.getWindow(), framebuffer_size_callback);
 
     // Main Loop
     while (!glfwWindowShouldClose(game.getWindow())) {

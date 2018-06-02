@@ -6,6 +6,8 @@ class Texture {
 public:
     Texture(GLenum type, GLubyte *data, GLenum colorModel,
         GLint width, GLint height);
+    Texture(GLenum type, GLubyte *data[6], GLenum colorModel[6],
+        GLint width[6], GLint height[6]);
 
     void bind(GLuint unit = 0);
 
