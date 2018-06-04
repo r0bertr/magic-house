@@ -26,6 +26,10 @@ void LandRenderer::draw(glm::mat4 projection, glm::mat4 view,
 	shader->uniform3("dirLight.diffuse", 0.6f, 0.6f, 0.6f);
 	shader->uniform3("dirLight.specular", 0.5f, 0.5f, 0.5f);
 
+	// material properties
+	shader->uniform3("material.specular", 0.1f, 0.1f, 0.1f);
+	shader->uniform1("material.shininess", 32.0f);
+
     Renderer::draw(projection, view, pos, scale, rotAxis, rotate);
 }
 

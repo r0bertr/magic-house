@@ -4,6 +4,11 @@ in vec3 normal;
 in vec3 fragPos;
 out vec4 fragColor;
 
+struct Material {
+    vec3 specular;    
+    float shininess;
+};
+
 struct DirLight {
     vec3 direction;
     vec3 ambient;
@@ -30,6 +35,7 @@ uniform sampler2D texture15;
 
 uniform vec3 viewPos;
 uniform DirLight dirLight;
+uniform Material material;
 
 vec3 CalcDirLight(DirLight light, vec3 normal, vec3 viewDir);
 
@@ -49,10 +55,10 @@ vec3 CalcDirLight(DirLight light, vec3 normal, vec3 viewDir)
     float diff = max(dot(normal, lightDir), 0.0);
     // specular shading
     vec3 reflectDir = reflect(-lightDir, normal);
-    float spec = pow(max(dot(viewDir, reflectDir), 0.0), 32);
+    float spec = pow(max(dot(viewDir, reflectDir), 0.0), material.shininess);
     // combine results
     vec3 ambient = light.ambient * vec3(texture(texture0, texCoords));
     vec3 diffuse = light.diffuse * diff * vec3(texture(texture0, texCoords));
-    vec3 specular = light.specular * spec * vec3(texture(texture0, texCoords)); // needed texture1 for specular
+    vec3 specular = light.specular * spec * material.specular; // needed texture1 for specular
     return (ambient + diffuse + specular);
 }
