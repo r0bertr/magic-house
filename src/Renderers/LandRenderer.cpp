@@ -22,8 +22,8 @@ void LandRenderer::draw(glm::mat4 projection, glm::mat4 view,
 
 	// directional light
 	shader->uniform3("dirLight.direction", -0.2f, -1.0f, -0.3f);
-	shader->uniform3("dirLight.ambient", 0.2f, 0.2f, 0.2f);
-	shader->uniform3("dirLight.diffuse", 0.5f, 0.5f, 0.5f);
+	shader->uniform3("dirLight.ambient", 0.6f, 0.6f, 0.6f);
+	shader->uniform3("dirLight.diffuse", 0.6f, 0.6f, 0.6f);
 	shader->uniform3("dirLight.specular", 0.5f, 0.5f, 0.5f);
 
     Renderer::draw(projection, view, pos, scale, rotAxis, rotate);
