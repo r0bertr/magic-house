@@ -12,12 +12,19 @@ LandRenderer::LandRenderer(Shader *shader,
 LandRenderer::~LandRenderer() {}
 
 void LandRenderer::draw(glm::mat4 projection, glm::mat4 view,
-    glm::vec3 pos, glm::vec3 scale, glm::vec3 rotAxis, GLfloat rotate) {
+    glm::vec3 pos, glm::vec3 scale, glm::vec3 rotAxis, GLfloat rotate, glm::vec3 viewPos) {
     
     enable();
     texture->bind();
     shader->uniform1("texture0", 0);
-    shader->uniform4("color", glm::vec4(1.f));
+    // shader->uniform4("color", glm::vec4(1.f));
+	shader->uniform3("viewPos", viewPos);
+
+	// directional light
+	shader->uniform3("dirLight.direction", -0.2f, -1.0f, -0.3f);
+	shader->uniform3("dirLight.ambient", 0.2f, 0.2f, 0.2f);
+	shader->uniform3("dirLight.diffuse", 0.5f, 0.5f, 0.5f);
+	shader->uniform3("dirLight.specular", 0.5f, 0.5f, 0.5f);
 
     Renderer::draw(projection, view, pos, scale, rotAxis, rotate);
 }

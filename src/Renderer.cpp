@@ -22,7 +22,7 @@ Renderer::~Renderer() {
 }
 
 void Renderer::draw(glm::mat4 projection, glm::mat4 view,
-    glm::vec3 pos, glm::vec3 scale, glm::vec3 rotAxis, GLfloat rotate) {
+    glm::vec3 pos, glm::vec3 scale, glm::vec3 rotAxis, GLfloat rotate, glm::vec3 viewPos) {
     
     enable();
     glm::mat4 model(1.f);

@@ -74,7 +74,7 @@ MeshRenderer::~MeshRenderer() {
 }
 
 void MeshRenderer::draw(glm::mat4 projection, glm::mat4 view, glm::vec3 pos,
-    glm::vec3 scale, glm::vec3 rotAxis, GLfloat rotate) {
+    glm::vec3 scale, glm::vec3 rotAxis, GLfloat rotate, glm::vec3 viewPos) {
     
     enable();
     for (GLuint i = 0; i < textures->size(); i++) {
@@ -83,7 +83,14 @@ void MeshRenderer::draw(glm::mat4 projection, glm::mat4 view, glm::vec3 pos,
         textures->at(i)->bind(i);
         shader->uniform1(textureName.c_str(), i);
     }
-    shader->uniform4("color", glm::vec4(1.f));
+
+	shader->uniform3("viewPos", viewPos);
+	
+	// directional light
+	shader->uniform3("dirLight.direction", -0.2f, -1.0f, -0.3f);
+	shader->uniform3("dirLight.ambient", 0.2f, 0.2f, 0.2f);
+	shader->uniform3("dirLight.diffuse", 0.5f, 0.5f, 0.5f);
+	shader->uniform3("dirLight.specular", 0.5f, 0.5f, 0.5f);
 
     Renderer::draw(projection, view, pos, scale, rotAxis, rotate);
 }

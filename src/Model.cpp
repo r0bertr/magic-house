@@ -18,9 +18,9 @@ Model::~Model() {
 }
 
 void Model::draw(glm::mat4 projection, glm::mat4 view, glm::vec3 pos,
-    glm::vec3 scale, glm::vec3 rotAxis, GLfloat rotate) {
+    glm::vec3 scale, glm::vec3 rotAxis, GLfloat rotate, glm::vec3 viewPos) {
     for (GLuint i = 0; i < renderers->size(); i++) {
-        renderers->at(i)->draw(projection, view, pos, scale, rotAxis, rotate);
+        renderers->at(i)->draw(projection, view, pos, scale, rotAxis, rotate, viewPos);
     }
 }
 

@@ -1,10 +1,18 @@
 #version 330 core
 in vec2 texCoords;
 in vec3 normal;
+in vec3 fragPos;
 out vec4 fragColor;
 
-uniform sampler2D texture0;
-uniform sampler2D texture1;
+struct DirLight {
+    vec3 direction;
+    vec3 ambient;
+    vec3 diffuse;
+    vec3 specular;
+};
+
+uniform sampler2D texture0; // diffuse map
+uniform sampler2D texture1; // specular map
 uniform sampler2D texture2;
 uniform sampler2D texture3;
 uniform sampler2D texture4;
@@ -20,11 +28,31 @@ uniform sampler2D texture13;
 uniform sampler2D texture14;
 uniform sampler2D texture15;
 
-uniform vec4 color;
+uniform vec3 viewPos;
+uniform DirLight dirLight;
+
+vec3 CalcDirLight(DirLight light, vec3 normal, vec3 viewDir);
 
 void main() {
-    vec4 textureColor1 = texture(texture0, texCoords);
-    if (textureColor1.a < 0.1f)
-        discard;
-    fragColor = textureColor1 * color;
+	vec3 norm = normalize(normal);
+    vec3 viewDir = normalize(viewPos - fragPos);
+
+	vec3 result = CalcDirLight(dirLight, norm, viewDir);
+	fragColor = vec4(result, 1.0);
+}
+
+// calculates the color when using a directional light.
+vec3 CalcDirLight(DirLight light, vec3 normal, vec3 viewDir)
+{
+    vec3 lightDir = normalize(-light.direction);
+    // diffuse shading
+    float diff = max(dot(normal, lightDir), 0.0);
+    // specular shading
+    vec3 reflectDir = reflect(-lightDir, normal);
+    float spec = pow(max(dot(viewDir, reflectDir), 0.0), 32);
+    // combine results
+    vec3 ambient = light.ambient * vec3(texture(texture0, texCoords));
+    vec3 diffuse = light.diffuse * diff * vec3(texture(texture0, texCoords));
+    vec3 specular = light.specular * spec * vec3(texture(texture0, texCoords)); // needed texture1 for specular
+    return (ambient + diffuse + specular);
 }
