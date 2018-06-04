@@ -24,13 +24,13 @@ void LandRenderer::draw(glm::mat4 projection, glm::mat4 view,
 
 void LandRenderer::initRenderData() {
     GLfloat data[] = {
-        -.5f,  .5f, 0.f, 0.f, 1.f,
-         .5f,  .5f, 0.f, 1.f, 1.f,
-         .5f, -.5f, 0.f, 1.f, 0.f,
+        -.5f,  .5f, 0.f, 0.f, 100.f,
+         .5f,  .5f, 0.f, 100.f, 100.f,
+         .5f, -.5f, 0.f, 100.f, 0.f,
 
-        -.5f,  .5f, 0.f, 0.f, 1.f,
+        -.5f,  .5f, 0.f, 0.f, 100.f,
         -.5f, -.5f, 0.f, 0.f, 0.f,
-         .5f, -.5f, 0.f, 1.f, 0.f,
+         .5f, -.5f, 0.f, 100.f, 0.f,
     };
 
     glGenBuffers(1, &VBO);
