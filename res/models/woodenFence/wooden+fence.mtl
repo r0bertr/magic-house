@@ -1,0 +1,28 @@
+# Blender MTL File: 'палки.blend'
+# Material Count: 2
+
+newmtl Материал.001
+Ns 29.411765
+Ka 1.000000 1.000000 1.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 1.000000
+illum 1
+map_Kd wooden fence_occlusion.png
+map_Bump wooden fence_normals.png
+map_Ks wooden fence_cavity.png
+
+newmtl Материал.001_Без_имени
+Ns 29.411765
+Ka 1.000000 1.000000 1.000000
+Kd 0.640000 0.640000 0.640000
+Ks 0.000000 0.000000 0.000000
+Ke 0.000000 0.000000 0.000000
+Ni 1.000000
+d 1.000000
+illum 1
+map_Bump wooden fence_normals.png
+map_Kd wooden fence_occlusion.png
+map_Ks wooden fence_cavity.png

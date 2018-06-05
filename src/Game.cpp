@@ -57,7 +57,7 @@ void Game::init() {
     // Load Lights
     Light *light = resManager->loadLight("light", LIGHT_DIRECT,
         glm::vec3(0.f, 5.f, 0.f), glm::vec3(1.f), .4f, 1.f, .5f,
-        glm::vec3(0.f, 1.0f, 0.f));
+        glm::vec3(-0.2f, -1.0f, -0.3f));
 
     // Load Renderers
     Texture *buffer[16] = { NULL };
@@ -72,6 +72,13 @@ void Game::init() {
     // Load Models
     resManager->loadModel("res/models/Farmhouse/farmhouse_obj.obj",
         shader, light, "farmhouse");
+
+	resManager->loadModel("res/models/tree/tree1.obj",
+		shader, light, "tree");
+	
+	resManager->loadModel("res/models/woodenFence/wooden+fence.obj",
+		shader, light, "woodenfence");
+
 
     // Load Camera
     resManager->loadCamera(glm::radians(45.f), (float)width / height, .1f, 500.f,
@@ -109,6 +116,14 @@ void Game::render() {
     resManager->getModel("farmhouse")->draw(projection, view, viewPos,
         glm::vec3(20.f, 0.f, 0.f), glm::vec3(1.f),
         glm::vec3(0.f, 1.f, 0.f), 90.f);
+
+	resManager->getModel("tree")->draw(projection, view, viewPos,
+		glm::vec3(-30.f, 0.f, 0.f), glm::vec3(1.f),
+		glm::vec3(0.f, 1.f, 0.f), 90.f);
+
+	resManager->getModel("woodenfence")->draw(projection, view, viewPos,
+		glm::vec3(-50.f, 0.f, 0.f), glm::vec3(1.f),
+		glm::vec3(0.f, 1.f, 0.f), 90.f);
 
     resManager->getRenderer("particle_fire")->draw(projection,
 		view, viewPos, glm::vec3(0.f), glm::vec3(1.f), glm::vec3(1.f),
