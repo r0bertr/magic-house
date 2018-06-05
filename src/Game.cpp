@@ -56,8 +56,8 @@ void Game::init() {
 
     // Load Lights
     Light *light = resManager->loadLight("light", LIGHT_DIRECT,
-        glm::vec3(0.f, 1.f, 0.f), glm::vec3(1.f), 10.5, 10.5, 1.5,
-        glm::vec3(-0.2f, -1.0f, -0.3f));
+        glm::vec3(0.f, 5.f, 0.f), glm::vec3(1.f), .4f, 1.f, .5f,
+        glm::vec3(0.f, 1.0f, 0.f));
 
     // Load Renderers
     Texture *buffer[16] = { NULL };

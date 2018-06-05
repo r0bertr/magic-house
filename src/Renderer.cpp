@@ -65,10 +65,11 @@ void Renderer::draw(
 
     if (light) {
         glm::vec3 lightColor = light->getColor();
-        shader->uniform3("dirLight.direction", light->getDirection());
-        shader->uniform3("dirLight.ambient", light->getAmbient() * lightColor);
-        shader->uniform3("dirLight.diffuse", light->getDiffuse() * lightColor);
-        shader->uniform3("dirLight.specular", light->getSpecular() * lightColor);
+        shader->uniform3("light.position", light->getPosition());
+        shader->uniform3("light.direction", light->getDirection());
+        shader->uniform3("light.ambient", light->getAmbient() * lightColor);
+        shader->uniform3("light.diffuse", light->getDiffuse() * lightColor);
+        shader->uniform3("light.specular", light->getSpecular() * lightColor);
     }
 
     if (EBO)

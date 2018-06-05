@@ -252,13 +252,15 @@ Light *ResourceManager::loadLight(const GLchar *name,
     GLchar *n = new GLchar[BUFFER_LEN];
     strcpy(n, name);
     if (lights[n]) {
-        return lights[n];
+        Light *light = lights[n];
         delete []n;
+        return light;
     }
 
     lights[n] = new Light(type, position, color, direction,
         ambient, diffuse, specular);
 
+    return lights[n];
 }
 
 Shader *ResourceManager::getShader(GLchar *name) {

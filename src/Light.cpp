@@ -1,5 +1,7 @@
 #include "Light.hpp"
 
+#include <cstdio>
+
 Light::Light(
     LightType type,
     glm::vec3 position,
@@ -15,7 +17,13 @@ Light::Light(
     direction(direction),
     ambient(ambient),
     diffuse(diffuse),
-    specular(specular) {}
+    specular(specular) {
+
+    if (type == LIGHT_POINT) {
+        direction = glm::vec3(0.f);
+    }
+
+}
 
 Light::~Light() {}
 
