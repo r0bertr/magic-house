@@ -5,6 +5,7 @@
 #include "Texture.hpp"
 #include "Camera.hpp"
 #include "Model.hpp"
+#include "Light.hpp"
 #include "Renderers/LandRenderer.hpp"
 #include "Renderers/SkyboxRenderer.hpp"
 #include "Renderers/ParticleRenderer.hpp"
@@ -24,17 +25,26 @@ public:
 
     Shader *loadShader(const GLchar *vPath, const GLchar *fPath,
         const GLchar *aPath, const GLchar *name);
+
     Texture *load2DTexture(const GLchar *srcPath, const GLchar *name);
     Texture *loadBoxTexture(const GLchar *srcPath[6], const GLchar *name);
+
     Renderer *loadRenderer(const RendererType type, Shader *shader,
-        const GLchar *name, Texture *texture = NULL);
+        const GLchar *name, Texture **textures = NULL, Light *light = NULL);
     Renderer *loadParticleRenderer(Shader *shader, Texture *texture,
-        const GLchar *config, const GLchar *name);
+        const GLchar *config, const GLchar *name, Light *light = NULL);
+
     Camera *loadCamera(GLfloat pFov, GLfloat pAspect, GLfloat pNear, GLfloat pFar,
         GLfloat posX, GLfloat posY, GLfloat posZ,
         GLfloat frontX, GLfloat frontY, GLfloat frontZ,
         GLfloat upX, GLfloat upY, GLfloat upZ, const GLchar *name);
-    Model *loadModel(const GLchar *path, Shader *shader, const GLchar *name);
+
+    Model *loadModel(const GLchar *path, Shader *shader, Light *light, const GLchar *name);
+
+    Light *loadLight(const GLchar *name, 
+        LightType type, glm::vec3 position, glm::vec3 color,
+        GLfloat ambient, GLfloat diffuse, GLfloat specular,
+        glm::vec3 direction = glm::vec3(0.f));
 
     Shader *getShader(GLchar *name);
     Texture *getTexture(GLchar *name);
@@ -47,6 +57,7 @@ private:
     std::map<GLchar*, Renderer*, MapCMP> renderers;
     std::map<GLchar*, Camera*, MapCMP> cameras;
     std::map<GLchar*, Model*, MapCMP> models;
+    std::map<GLchar*, Light*, MapCMP> lights;
 
     ResourceManager();
 };

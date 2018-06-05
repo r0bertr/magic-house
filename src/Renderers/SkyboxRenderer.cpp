@@ -3,9 +3,8 @@
 #include "lib/stb_image.h"
 using namespace std;
 
-SkyboxRenderer::SkyboxRenderer(Shader *shader,
-    Texture *texture) : Renderer(shader) {
-    this->texture = texture;
+SkyboxRenderer::SkyboxRenderer(Shader *shader, Texture **textures,
+    Light *light) : Renderer(shader, textures, light) {
     initRenderData();
 }
 
@@ -65,12 +64,17 @@ void SkyboxRenderer::initRenderData()
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), NULL);
 }
 
-void SkyboxRenderer::draw(glm::mat4 projection, glm::mat4 view,
-    glm::vec3 pos, glm::vec3 scale, glm::vec3 rotAxis, GLfloat rotate, glm::vec3 viewPos) {
+void SkyboxRenderer::draw(
+        glm::mat4 projection,
+        glm::mat4 view,
+        glm::vec3 viewPos,
+        glm::vec3 pos,
+        glm::vec3 scale,
+        glm::vec3 rotAxis,
+        GLfloat rotate
+    ) {
     enable();
     glDepthFunc(GL_LEQUAL);
-    texture->bind();
-    shader->uniform1("skybox", 0);
-    Renderer::draw(projection, view, pos, scale, rotAxis, rotate);
+    Renderer::draw(projection, view, viewPos, pos, scale, rotAxis, rotate);
     glDepthFunc(GL_LESS); // set depth function back to default
 }

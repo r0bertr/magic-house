@@ -45,17 +45,23 @@ private:
 
 class ParticleRenderer : public Renderer {
 public:
-    ParticleRenderer(Shader *shader, Texture *texture, const GLchar *config);
+    ParticleRenderer(Shader *shader, const GLchar *config, 
+    Texture **textures = NULL, Light *light = NULL);
     ~ParticleRenderer();
 
-    void draw(glm::mat4 projection, glm::mat4 view,
-        glm::vec3 pos = glm::vec3(0.f), glm::vec3 scale = glm::vec3(1.f),
-        glm::vec3 rotAxis = glm::vec3(1.f), GLfloat rotate = 0.f, glm::vec3 viewPos = glm::vec3(0.f));
+    void draw(
+        glm::mat4 projection,
+        glm::mat4 view,
+        glm::vec3 viewPos,
+        glm::vec3 pos = glm::vec3(0.f),
+        glm::vec3 scale = glm::vec3(1.f),
+        glm::vec3 rotAxis = glm::vec3(1.f),
+        GLfloat rotate = 0.f
+    );
     
     void enable();
 
 private:
-    Texture *texture;
     std::vector<Particle *> *particles;
     ParticleEmitterType type;
     ParticleShape shape;

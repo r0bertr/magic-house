@@ -36,6 +36,7 @@ Camera *ResourceManager::loadCamera(GLfloat pFov, GLfloat pAspect,
     strcpy(n, name);
     if (cameras[n]) {
         return cameras[n];
+        delete []n;
     }
     cameras[n] = new Camera(pFov, pAspect, pNear, pFar, posX, posY,
         posZ, frontX, frontY, frontZ, upX, upY, upZ);
@@ -50,6 +51,7 @@ Shader *ResourceManager::loadShader(const GLchar *vPath, const GLchar *fPath,
     strcpy(n, name);
     if (shaders[n]) {
         return shaders[n];
+        delete []n;
     }
 
     GLchar *vCode = NULL, *fCode = NULL, *gCode = NULL;
@@ -120,6 +122,7 @@ Texture *ResourceManager::load2DTexture(const GLchar *srcPath, const GLchar *nam
     strcpy(n, name);
     if (textures[n]) {
         return textures[n];
+        delete []n;
     }
 
     GLint width, height, nChannels;
@@ -140,15 +143,19 @@ Texture *ResourceManager::load2DTexture(const GLchar *srcPath, const GLchar *nam
 }
 
 Renderer *ResourceManager::loadParticleRenderer(Shader *shader,
-    Texture *texture, const GLchar *config, const GLchar *name) {
+    Texture *texture, const GLchar *config, const GLchar *name,
+    Light *light) {
 
     GLchar *n = new GLchar[BUFFER_LEN];
     strcpy(n, name);
     if (renderers[n]) {
         return renderers[n];
+        delete []n;
     }
 
-    Renderer *renderer = new ParticleRenderer(shader, texture, config);
+    Texture *textures[16] = {NULL};
+    textures[0] = texture;
+    Renderer *renderer = new ParticleRenderer(shader, config, textures, light);
     renderers[n] = renderer;
     return renderer;
 
@@ -160,6 +167,7 @@ Texture *ResourceManager::loadBoxTexture(const GLchar *srcPath[6],
     strcpy(n, name);
     if (textures[n]) {
         return textures[n];
+        delete []n;
     }
 
     GLint width[6], height[6], nChannels[6];
@@ -186,18 +194,20 @@ Texture *ResourceManager::loadBoxTexture(const GLchar *srcPath[6],
 }
 
 Renderer *ResourceManager::loadRenderer(const RendererType type, Shader *shader,
-    const GLchar *name, Texture *texture) {
+    const GLchar *name, Texture **textures, Light *light) {
     
     GLchar *n = new GLchar[BUFFER_LEN];
     strcpy(n, name);
-    if (renderers[n])
+    if (renderers[n]) {
         return renderers[n];
+        delete []n;
+    }
     switch (type) {
     case RENDERER_LAND:
-        renderers[n] = new LandRenderer(shader, texture);
+        renderers[n] = new LandRenderer(shader, textures, light);
         break;
     case RENDERER_SKYBOX:
-        renderers[n] = new SkyboxRenderer(shader, texture);
+        renderers[n] = new SkyboxRenderer(shader, textures, light);
         break;
     default:
         printf("[ERROR]In ResourceManager::loadRenderer\n");
@@ -209,12 +219,13 @@ Renderer *ResourceManager::loadRenderer(const RendererType type, Shader *shader,
 }
 
 Model *ResourceManager::loadModel(const GLchar *path, Shader *shader,
-    const GLchar *name) {
+    Light *light, const GLchar *name) {
 
     GLchar *n = new GLchar[BUFFER_LEN];
     strcpy(n, name);
     if (models[n]) {
         return models[n];
+        delete []n;
     }
 
     Assimp::Importer importer;
@@ -229,8 +240,25 @@ Model *ResourceManager::loadModel(const GLchar *path, Shader *shader,
 
     std::string str(path);
     models[n] = new Model(shader, scene,
-        str.substr(0, str.find_last_of('/')).c_str());
+        str.substr(0, str.find_last_of('/')).c_str(), light);
     return models[n];
+}
+
+Light *ResourceManager::loadLight(const GLchar *name, 
+    LightType type, glm::vec3 position, glm::vec3 color,
+    GLfloat ambient, GLfloat diffuse, GLfloat specular,
+    glm::vec3 direction) {
+
+    GLchar *n = new GLchar[BUFFER_LEN];
+    strcpy(n, name);
+    if (lights[n]) {
+        return lights[n];
+        delete []n;
+    }
+
+    lights[n] = new Light(type, position, color, direction,
+        ambient, diffuse, specular);
+
 }
 
 Shader *ResourceManager::getShader(GLchar *name) {

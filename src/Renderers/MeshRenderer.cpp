@@ -9,11 +9,15 @@
 #include <glm/gtc/matrix_transform.hpp>
 
 MeshRenderer::MeshRenderer(Shader *shader, const aiMesh *mesh,
-    const aiScene *scene, const GLchar *rootDir) : Renderer(shader) {
+    const aiScene *scene, const GLchar *rootDir, Light *light) :
+    Renderer(shader, NULL, light) {
     vertices = new std::vector<GLfloat>;
     indices = new std::vector<GLuint>;
-    textures = new std::vector<Texture *>;
     strcpy(this->rootDir, rootDir);
+
+    for (GLuint i = 0; i < 16; i++) {
+        textures[i] = NULL;
+    }
 
     for (GLuint i = 0; i < mesh->mNumVertices; i++) {
         vertices->push_back(mesh->mVertices[i].x);
@@ -55,48 +59,28 @@ MeshRenderer::MeshRenderer(Shader *shader, const aiMesh *mesh,
 }
 
 void MeshRenderer::processTextures(aiMaterial *material, aiTextureType type) {
-    for (GLuint i = 0; i < material->GetTextureCount(type); i++) {
-        aiString texturePath(rootDir), temp;
-        material->GetTexture(type, i, &temp);
-        texturePath.Append("/");
-        texturePath.Append(temp.C_Str());
-        printf("[INFO]In MeshRenderer::processTextures\n");
-        printf("\tProcessing texture %s\n", texturePath.C_Str());
-        textures->push_back(ResourceManager::GetInstance()->load2DTexture(
-            texturePath.C_Str(), temp.C_Str()));
+    GLint slot = 0;
+    if (type == aiTextureType_DIFFUSE) {
+        slot = 0;
+    } else if (type == aiTextureType_SPECULAR) {
+        slot = 1;
+    } else if (type == aiTextureType_SHININESS) {
+        slot = 2;
     }
+
+    aiString texturePath(rootDir), temp;
+    material->GetTexture(type, 0, &temp);
+    texturePath.Append("/");
+    texturePath.Append(temp.C_Str());
+    printf("[INFO]In MeshRenderer::processTextures\n");
+    printf("\tProcessing texture %s\n", texturePath.C_Str());
+    textures[slot] = ResourceManager::GetInstance()->load2DTexture(
+        texturePath.C_Str(), temp.C_Str());
 }
 
 MeshRenderer::~MeshRenderer() {
     delete vertices;
     delete indices;
-    delete textures;
-}
-
-void MeshRenderer::draw(glm::mat4 projection, glm::mat4 view, glm::vec3 pos,
-    glm::vec3 scale, glm::vec3 rotAxis, GLfloat rotate, glm::vec3 viewPos) {
-    
-    enable();
-    for (GLuint i = 0; i < textures->size(); i++) {
-        std::string textureName("texture");
-        textureName += std::to_string(i);
-        textures->at(i)->bind(i);
-        shader->uniform1(textureName.c_str(), i);
-    }
-
-	shader->uniform3("viewPos", viewPos);
-	
-	// directional light
-	shader->uniform3("dirLight.direction", -0.2f, -1.0f, -0.3f);
-	shader->uniform3("dirLight.ambient", 0.6f, 0.6f, 0.6f);
-	shader->uniform3("dirLight.diffuse", 0.6f, 0.6f, 0.6f);
-	shader->uniform3("dirLight.specular", 0.5f, 0.5f, 0.5f);
-
-	// material properties
-	shader->uniform3("material.specular", 0.2f, 0.2f, 0.2f);
-	shader->uniform1("material.shininess", 32.0f);
-
-    Renderer::draw(projection, view, pos, scale, rotAxis, rotate);
 }
 
 void MeshRenderer::initRenderData() {
@@ -112,7 +96,7 @@ void MeshRenderer::initRenderData() {
         (void *)(3 * sizeof(GLfloat)));
     glEnableVertexAttribArray(1);
     glVertexAttribPointer(2, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(GLfloat),
-        (void *)(6 * sizeof(GLfloat)));
+        (void *)(5 * sizeof(GLfloat)));
     glEnableVertexAttribArray(2);
     glGenBuffers(1, &EBO);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);

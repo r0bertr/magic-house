@@ -149,8 +149,9 @@ GLfloat Particle::getOpacity() const {
     return opacity;
 }
 
-ParticleRenderer::ParticleRenderer(Shader *shader, Texture *texture,
-    const GLchar *config) : texture(texture), Renderer(shader) {
+ParticleRenderer::ParticleRenderer(Shader *shader, const GLchar *config, 
+    Texture **textures, Light *light) :
+    Renderer(shader, textures, light) {
 
     FILE *configFile = fopen(config, "r");
     if (!configFile) {
@@ -215,15 +216,23 @@ void ParticleRenderer::initRenderData() {
 void ParticleRenderer::enable() {
 
     shader->use();
-    texture->bind();
+    textures[0]->bind();
 
 }
 
-void ParticleRenderer::draw(glm::mat4 projection, glm::mat4 view,
-    glm::vec3 pos, glm::vec3 scale, glm::vec3 rotAxis, GLfloat rotate, glm::vec3 viewPos) {
+void ParticleRenderer::draw(
+        glm::mat4 projection,
+        glm::mat4 view,
+        glm::vec3 viewPos,
+        glm::vec3 pos,
+        glm::vec3 scale,
+        glm::vec3 rotAxis,
+        GLfloat rotate
+    ) {
 
-    enable();
+    enable();    
     for (GLuint i = 0; i < particles->size(); i++) {
+        
         Particle *particle = particles->at(i);
         shader->uniformM4("projection", projection);
         shader->uniformM4("view", view);

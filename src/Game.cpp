@@ -54,16 +54,24 @@ void Game::init() {
     Texture *smokeTexture = resManager->load2DTexture("res/images/smoke.png",
         "smoke");
 
+    // Load Lights
+    Light *light = resManager->loadLight("light", LIGHT_DIRECT,
+        glm::vec3(0.f, 1.f, 0.f), glm::vec3(1.f), 10.5, 10.5, 1.5,
+        glm::vec3(-0.2f, -1.0f, -0.3f));
+
     // Load Renderers
-    resManager->loadRenderer(RENDERER_LAND, shader, "land", grass);
+    Texture *buffer[16] = { NULL };
+    buffer[0] = grass;
+    resManager->loadRenderer(RENDERER_LAND, shader, "land", buffer, light);
+    buffer[0] = skyboxTexture;
     resManager->loadRenderer(RENDERER_SKYBOX, skyboxShader,
-        "skybox", skyboxTexture);
+        "skybox", buffer);
     resManager->loadParticleRenderer(particleShader, smokeTexture,
         "res/configs/particle_fire.json", "particle_fire");
     
     // Load Models
     resManager->loadModel("res/models/Farmhouse/farmhouse_obj.obj",
-        shader, "farmhouse");
+        shader, light, "farmhouse");
 
     // Load Camera
     resManager->loadCamera(glm::radians(45.f), (float)width / height, .1f, 500.f,
@@ -92,20 +100,21 @@ void Game::render() {
     Camera *camera = resManager->getCamera("main");
     glm::mat4 projection = camera->getProjection();
     glm::mat4 view = camera->getView();
+    glm::vec3 viewPos = camera->getPos();
 
-    resManager->getRenderer("land")->draw(projection, view,
+    resManager->getRenderer("land")->draw(projection, view, viewPos,
         glm::vec3(0.f), glm::vec3(1000.f),
-        glm::vec3(1.f, 0.f, 0.f), 90.f, camera->getPos());
-    
-    resManager->getModel("farmhouse")->draw(projection, view,
+        glm::vec3(1.f, 0.f, 0.f), 90.f);
+
+    resManager->getModel("farmhouse")->draw(projection, view, viewPos,
         glm::vec3(20.f, 0.f, 0.f), glm::vec3(1.f),
-        glm::vec3(0.f, 1.f, 0.f), 90.f, camera->getPos());
+        glm::vec3(0.f, 1.f, 0.f), 90.f);
 
     resManager->getRenderer("particle_fire")->draw(projection,
-		view, glm::vec3(0.f), glm::vec3(1.f), glm::vec3(1.f),
-		0.f, camera->getPos());
+		view, viewPos, glm::vec3(0.f), glm::vec3(1.f), glm::vec3(1.f),
+		0.f);
 
-    resManager->getRenderer("skybox")->draw(projection, view,
+    resManager->getRenderer("skybox")->draw(projection, view, viewPos,
         glm::vec3(0.f, 0.f, 0.f), glm::vec3(1000.f));
 }
 

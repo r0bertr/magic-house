@@ -1,8 +1,10 @@
 #include "lib/glad.h"
 #include "Model.hpp"
 
-Model::Model(Shader *shader, const aiScene *scene, const GLchar *rootDir) {
+Model::Model(Shader *shader, const aiScene *scene, const GLchar *rootDir,
+    Light *light) {
     this->shader = shader;
+    this->light = light;
     renderers = new std::vector<MeshRenderer *>;
     this->rootDir = new aiString(rootDir);
     printf("[INFO]Begin model %s\n", rootDir);
@@ -17,10 +19,12 @@ Model::~Model() {
     delete renderers;
 }
 
-void Model::draw(glm::mat4 projection, glm::mat4 view, glm::vec3 pos,
-    glm::vec3 scale, glm::vec3 rotAxis, GLfloat rotate, glm::vec3 viewPos) {
+void Model::draw(glm::mat4 projection, glm::mat4 view,
+    glm::vec3 viewPos, glm::vec3 pos, glm::vec3 scale,
+    glm::vec3 rotAxis, GLfloat rotate) {
     for (GLuint i = 0; i < renderers->size(); i++) {
-        renderers->at(i)->draw(projection, view, pos, scale, rotAxis, rotate, viewPos);
+        renderers->at(i)->draw(projection, view, viewPos, pos, scale, 
+            rotAxis, rotate);
     }
 }
 
@@ -36,5 +40,5 @@ void Model::processNode(const aiNode *node, const aiScene *scene) {
 
 void Model::processMesh(const aiMesh *mesh, const aiScene *scene) {
     renderers->push_back(new MeshRenderer(shader, mesh, scene,
-        rootDir->C_Str()));
+        rootDir->C_Str(), light));
 }
