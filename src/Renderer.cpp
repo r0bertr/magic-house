@@ -81,7 +81,5 @@ void Renderer::draw(
 void Renderer::enable() {
     shader->use();
     glBindBuffer(GL_ARRAY_BUFFER, VBO);
-    if (EBO)
-        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
     glBindVertexArray(VAO);
 }
