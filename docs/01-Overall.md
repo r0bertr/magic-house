@@ -4,6 +4,12 @@
 
 ![](assets/sketch.png)
 
+## 参考
+
+[Steam 上的 House Flipper](https://store.steampowered.com/app/613100/House_Flipper/)
+
+![](assets/house_flipper.jpg)
+
 ## Members
 
 |成员|Basic|Bonus|
