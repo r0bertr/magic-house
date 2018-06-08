@@ -53,6 +53,7 @@ GLfloat Light::getSpecular() const {
     return specular;
 }
 
+// house position as center
 void Light::rotate(glm::vec3 center) {
 	float time = glfwGetTime();
 	float maxR = 500.f;

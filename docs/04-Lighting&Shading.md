@@ -32,3 +32,10 @@ uniform sampler2D texture2;  // shininess
 ### Phong光照模型
 
 当前使用Phong光照模型和冯氏着色Phong Shading。
+
+### 模拟白天黑夜
+- 太阳按照椭圆轨迹变化：太阳模型和相应的变化
+- 光照方向变化
+- 天空盒使用两个进行切换，通过apha进行控制
+草图...
+![light_change.jpg](./assets/light_change.jpg)
