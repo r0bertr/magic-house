@@ -63,15 +63,16 @@ void Light::rotate(glm::vec3 center) {
 	position.y = minR * sin(2 * M_PI*time / period);
 	position.z = maxR * cos(2 * M_PI*time / period);
 
+	direction = center - position;
+
 	if (position.y >= 0) {
 		diffuse = 0.7*sin(2 * M_PI*time / period) + 0.3f;
 		specular = 0.7*sin(2 * M_PI*time / period) + 0.3f;
-		direction = center - position;
 		color = glm::vec3(0.7*sin(2 * M_PI*time / period) + 0.3f);
 	}
 	else {
-		diffuse = 0.f;
-		specular = 0.f;
+		diffuse = 0.2*sin(2 * M_PI*time / period) + 0.3f;
+		specular = 0.2*sin(2 * M_PI*time / period) + 0.3f;
 		color = glm::vec3(0.2*sin(2 * M_PI*time / period) + 0.3f);
 	}
 }
