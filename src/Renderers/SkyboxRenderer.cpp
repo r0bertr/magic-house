@@ -76,6 +76,7 @@ void SkyboxRenderer::draw(
     ) {
     enable();
     glDepthFunc(GL_LEQUAL);
+	shader->uniform1("alpha", alpha);
     Renderer::draw(projection, view, viewPos, pos, scale, rotAxis, rotate, color);
     glDepthFunc(GL_LESS); // set depth function back to default
 }

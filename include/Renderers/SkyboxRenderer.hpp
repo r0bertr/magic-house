@@ -23,6 +23,9 @@ public:
         glm::vec4 color = glm::vec4(1.f)
     );
 
+	void setAlpha(float _alpha) { alpha = _alpha; }
+
 private:
     void initRenderData();
+	float alpha;
 };

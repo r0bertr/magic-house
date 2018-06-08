@@ -54,10 +54,11 @@ GLfloat Light::getSpecular() const {
 }
 
 // house position as center
-void Light::rotate(glm::vec3 center) {
+float Light::rotate(glm::vec3 center) {
 	float time = glfwGetTime();
 	float maxR = 500.f;
 	float minR = 350.f;
+	float alpha;
 	int period = 30; // 30seconds
 
 	position.x = center.x;
@@ -76,5 +77,8 @@ void Light::rotate(glm::vec3 center) {
 		specular = 0.2*sin(2 * M_PI*time / period) + 0.3f;
 		color = glm::vec3(0.2*sin(2 * M_PI*time / period) + 0.3f);
 	}
+	
+	alpha = 0.5*sin(2 * M_PI*time / period) + 0.5f;
+	return alpha;
 }
 

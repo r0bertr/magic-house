@@ -64,6 +64,7 @@ void Game::init() {
     Texture *skyboxTexture = resManager->loadBoxTexture(faces, "skybox");
     Texture *smokeTexture = resManager->load2DTexture("res/images/smoke.png",
         "smoke");
+	Texture *nightSkyboxTexture = resManager->loadBoxTexture(nightFaces, "nightSkybox");
 
     // Load Lights
     Light *light = resManager->loadLight("light", LIGHT_DIRECT,
@@ -79,6 +80,9 @@ void Game::init() {
         "skybox", buffer);
     resManager->loadParticleRenderer(particleShader, smokeTexture,
         "res/configs/particle_fire.json", "particle_fire");
+	buffer[0] = nightSkyboxTexture;
+	resManager->loadRenderer(RENDERER_SKYBOX, skyboxShader,
+		"nightSkybox", buffer);
     
     // Load Models
     resManager->loadModel("res/models/Farmhouse/farmhouse_obj.obj",
@@ -125,7 +129,20 @@ void Game::render() {
     glm::mat4 view = camera->getView();
     glm::vec3 viewPos = camera->getPos();
     camera->jumpCheck();
-	light->rotate(glm::vec3(7.f, 0.f, -43.f));
+
+	float dayAlpha = light->rotate(glm::vec3(7.f, 0.f, -43.f));
+	float nightAlpha = 1 - dayAlpha;
+	Renderer* b = resManager->getRenderer("skybox");
+	SkyboxRenderer* d = dynamic_cast<SkyboxRenderer*>(b);
+	if (d != NULL) {
+		d->setAlpha(dayAlpha);
+	}
+
+	b = resManager->getRenderer("nightSkybox");
+	d = dynamic_cast<SkyboxRenderer*>(b);
+	if (d != NULL) {
+		d->setAlpha(nightAlpha);
+	}
 
     resManager->getRenderer("land")->draw(projection, view, viewPos,
         glm::vec3(0.f), glm::vec3(1000.f),
@@ -172,6 +189,9 @@ void Game::render() {
 
     resManager->getRenderer("skybox")->draw(projection, view, viewPos,
         glm::vec3(0.f, -100.f, 0.f), glm::vec3(500.f));
+
+	resManager->getRenderer("nightSkybox")->draw(projection, view, viewPos,
+		glm::vec3(0.f, -100.f, 0.f), glm::vec3(500.f));
 
 	//resManager->getModel("sun")->draw(projection, view, viewPos,
 		//glm::vec3(30.f, -5.f, -35.f), glm::vec3(1.f));
