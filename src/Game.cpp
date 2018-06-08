@@ -68,7 +68,7 @@ void Game::init() {
     // Load Lights
     Light *light = resManager->loadLight("light", LIGHT_DIRECT,
         glm::vec3(0.f, 5.f, 0.f), glm::vec3(1.f), .4f, 1.f, .5f,
-        glm::vec3(-0.2f, -1.0f, -0.3f));
+        glm::vec3(0.f, 0.f, 1.f));
 
     // Load Renderers
     Texture *buffer[16] = { NULL };
@@ -120,11 +120,12 @@ void Game::processInput() {
 
 void Game::render() {
     Camera *camera = resManager->getCamera("main");
-	//Light *light = resManager->getLight("light");
+	Light *light = resManager->getLight("light");
     glm::mat4 projection = camera->getProjection();
     glm::mat4 view = camera->getView();
     glm::vec3 viewPos = camera->getPos();
     camera->jumpCheck();
+	light->rotate(glm::vec3(7.f, 0.f, -43.f));
 
     resManager->getRenderer("land")->draw(projection, view, viewPos,
         glm::vec3(0.f), glm::vec3(1000.f),

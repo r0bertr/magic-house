@@ -1,6 +1,8 @@
+#define _USE_MATH_DEFINES
 #include "Light.hpp"
 
 #include <cstdio>
+#include <math.h>
 
 Light::Light(
     LightType type,
@@ -50,3 +52,27 @@ GLfloat Light::getDiffuse() const {
 GLfloat Light::getSpecular() const {
     return specular;
 }
+
+void Light::rotate(glm::vec3 center) {
+	float time = glfwGetTime();
+	float maxR = 500.f;
+	float minR = 350.f;
+	int period = 30; // 30seconds
+
+	position.x = center.x;
+	position.y = minR * sin(2 * M_PI*time / period);
+	position.z = maxR * cos(2 * M_PI*time / period);
+
+	if (position.y >= 0) {
+		diffuse = 0.7*sin(2 * M_PI*time / period) + 0.3f;
+		specular = 0.7*sin(2 * M_PI*time / period) + 0.3f;
+		direction = center - position;
+		color = glm::vec3(0.7*sin(2 * M_PI*time / period) + 0.3f);
+	}
+	else {
+		diffuse = 0.f;
+		specular = 0.f;
+		color = glm::vec3(0.2*sin(2 * M_PI*time / period) + 0.3f);
+	}
+}
+

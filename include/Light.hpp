@@ -28,6 +28,8 @@ public:
     GLfloat getAmbient() const;
     GLfloat getDiffuse() const;
     GLfloat getSpecular() const;
+	void rotate(glm::vec3 center);
+
 private:
     LightType type;
     glm::vec3 position;
