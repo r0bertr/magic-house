@@ -51,6 +51,7 @@ public:
     Renderer *getRenderer(GLchar *name);
     Camera *getCamera(GLchar *name);
     Model *getModel(GLchar *name);
+	Light *getLight(GLchar *name);
 private:
     std::map<GLchar*, Shader*, MapCMP> shaders;
     std::map<GLchar*, Texture*, MapCMP> textures;

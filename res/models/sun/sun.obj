@@ -1,0 +1,5 @@
+# Blender v2.70 (sub 0) OBJ File: 'sun.blend'
+# www.blender.org
+mtllib sun.mtl
+o Plane
+v -4.008441 0.000000 -1.762585

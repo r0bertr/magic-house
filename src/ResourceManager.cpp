@@ -279,6 +279,10 @@ Camera *ResourceManager::getCamera(GLchar *name) {
     return cameras[name];
 }
 
+Light *ResourceManager::getLight(GLchar *name) {
+	return lights[name];
+}
+
 Model *ResourceManager::getModel(GLchar *name) {
     return models[name];
 }

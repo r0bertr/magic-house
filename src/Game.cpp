@@ -42,6 +42,7 @@ void Game::init() {
     // Load Textures
     Texture *grass = resManager->load2DTexture("res/images/grass.jpg",
         "grass");
+	// Day Skybox
     const GLchar *faces[6] = {
         "res/images/skybox/right.jpg",
         "res/images/skybox/left.jpg",
@@ -50,6 +51,16 @@ void Game::init() {
         "res/images/skybox/back.jpg",
         "res/images/skybox/front.jpg"
     };
+	// Night Skybox
+	const GLchar *nightFaces[6] = {
+		"res/images/nightSky/Spacebox2/right.png",
+		"res/images/nightSky/Spacebox2/left.png",
+		"res/images/nightSky/Spacebox2/top.png",
+		"res/images/nightSky/Spacebox2/bottom.png",
+		"res/images/nightSky/Spacebox2/back.png",
+		"res/images/nightSky/Spacebox2/front.png"
+	};
+
     Texture *skyboxTexture = resManager->loadBoxTexture(faces, "skybox");
     Texture *smokeTexture = resManager->load2DTexture("res/images/smoke.png",
         "smoke");
@@ -79,6 +90,8 @@ void Game::init() {
 	resManager->loadModel("res/models/fence/Fence_White.obj",
 		shader, light, "woodenfence");
 
+	resManager->loadModel("res/models/sun/sun.obj",
+		shader, light, "sun");
 
     // Load Camera
     resManager->loadCamera(glm::radians(45.f), (float)width / height, .1f, 500.f,
@@ -107,6 +120,7 @@ void Game::processInput() {
 
 void Game::render() {
     Camera *camera = resManager->getCamera("main");
+	//Light *light = resManager->getLight("light");
     glm::mat4 projection = camera->getProjection();
     glm::mat4 view = camera->getView();
     glm::vec3 viewPos = camera->getPos();
@@ -157,6 +171,9 @@ void Game::render() {
 
     resManager->getRenderer("skybox")->draw(projection, view, viewPos,
         glm::vec3(0.f, -100.f, 0.f), glm::vec3(500.f));
+
+	//resManager->getModel("sun")->draw(projection, view, viewPos,
+		//glm::vec3(30.f, -5.f, -35.f), glm::vec3(1.f));
 }
 
 GLFWwindow *Game::getWindow() const {

@@ -1,0 +1,7 @@
+newmtl surburbanTextured
+Kd 0.00 0.00 0.00
+Ka 0.00 0.00 0.00
+Tf 1.00 1.00 1.00
+map_Kd edi2diff.jpg
+map_bump edi2nbum.jpg
+map_Ks edi2spec.jpg
