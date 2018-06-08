@@ -18,6 +18,7 @@ Camera::Camera(GLfloat pFov, GLfloat pAspect, GLfloat pNear, GLfloat pFar,
 
     pitch = asin(front.y);
     yaw = atan(front.z / front.x);
+    jumping = false;
 }
 
 glm::mat4 Camera::getProjection() const {
@@ -83,6 +84,24 @@ void Camera::rotate(const GLfloat pitch, const GLfloat yaw) {
     front.y = sin(pitch);
     front.z = cos(pitch) * sin(yaw);
     right = glm::normalize(glm::cross(front, up));
+}
+
+void Camera::jump() {
+    jumping = true;
+}
+
+void Camera::jumpCheck() {
+    static double y = 0;
+    float height = 0.7f;
+    float velocity = 0.15f;
+    if (jumping) {
+        pos = glm::vec3(pos.x, height * (float)sin(y) + pos.y, pos.z);
+        y += velocity;
+        if (y > 6.28f) {
+            y = 0;
+            jumping = false;
+        }
+    }
 }
 
 glm::vec3 Camera::getPos() const {

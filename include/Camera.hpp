@@ -11,6 +11,7 @@ private:
     glm::vec3 front;
     glm::vec3 right;
     glm::vec3 up;
+    bool jumping;
 
 public:
     Camera(GLfloat pFov, GLfloat pAspect, GLfloat pNear, GLfloat pFar,
@@ -34,6 +35,9 @@ public:
     void rotateDown(const GLfloat &quantity);
 
     void rotate(const GLfloat pitch, const GLfloat yaw);
+
+    void jump();
+    void jumpCheck();
 
     glm::vec3 getPos() const;
     glm::mat4 getView() const;

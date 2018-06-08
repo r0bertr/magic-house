@@ -101,6 +101,8 @@ void Game::processInput() {
         camera->moveLeft2D(moveSpeed);
     if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
         camera->moveRight2D(moveSpeed);
+    if (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS)
+        camera->jump();
 }
 
 void Game::render() {
@@ -108,6 +110,7 @@ void Game::render() {
     glm::mat4 projection = camera->getProjection();
     glm::mat4 view = camera->getView();
     glm::vec3 viewPos = camera->getPos();
+    camera->jumpCheck();
 
     resManager->getRenderer("land")->draw(projection, view, viewPos,
         glm::vec3(0.f), glm::vec3(1000.f),
