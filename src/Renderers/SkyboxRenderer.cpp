@@ -71,10 +71,11 @@ void SkyboxRenderer::draw(
         glm::vec3 pos,
         glm::vec3 scale,
         glm::vec3 rotAxis,
-        GLfloat rotate
+        GLfloat rotate,
+        glm::vec4 color
     ) {
     enable();
     glDepthFunc(GL_LEQUAL);
-    Renderer::draw(projection, view, viewPos, pos, scale, rotAxis, rotate);
+    Renderer::draw(projection, view, viewPos, pos, scale, rotAxis, rotate, color);
     glDepthFunc(GL_LESS); // set depth function back to default
 }

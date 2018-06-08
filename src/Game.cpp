@@ -76,13 +76,13 @@ void Game::init() {
 	resManager->loadModel("res/models/tree/tree1.obj",
 		shader, light, "tree");
 	
-	resManager->loadModel("res/models/woodenFence/wooden+fence.obj",
+	resManager->loadModel("res/models/fence/Fence_White.obj",
 		shader, light, "woodenfence");
 
 
     // Load Camera
     resManager->loadCamera(glm::radians(45.f), (float)width / height, .1f, 500.f,
-        0.f, 5.f, 5.f, 0.f, 0.f, -1.f, 0.f, 1.f, 0.f, "main");
+        0.f, 5.f, 0.f, 0.f, 0.f, -1.f, 0.f, 1.f, 0.f, "main");
 }
 
 void Game::processInput() {
@@ -114,23 +114,46 @@ void Game::render() {
         glm::vec3(1.f, 0.f, 0.f), 90.f);
 
     resManager->getModel("farmhouse")->draw(projection, view, viewPos,
-        glm::vec3(20.f, 0.f, 0.f), glm::vec3(1.f),
-        glm::vec3(0.f, 1.f, 0.f), 90.f);
+        glm::vec3(7.f, 0.f, -43.f), glm::vec3(.8f),
+        glm::vec3(0.f, 1.f, 0.f), 180.f);
 
 	resManager->getModel("tree")->draw(projection, view, viewPos,
-		glm::vec3(-30.f, 0.f, 0.f), glm::vec3(1.f),
+		glm::vec3(30.f, -2.f, -35.f), glm::vec3(1.f));
+
+    resManager->getModel("woodenfence")->draw(projection, view, viewPos,
+		glm::vec3(0, 0.f, -20.f), glm::vec3(0.25f, 0.15f, 0.25f),
 		glm::vec3(0.f, 1.f, 0.f), 90.f);
 
-	resManager->getModel("woodenfence")->draw(projection, view, viewPos,
-		glm::vec3(-50.f, 0.f, 0.f), glm::vec3(1.f),
+    resManager->getModel("woodenfence")->draw(projection, view, viewPos,
+		glm::vec3(30.f, 0.f, -20.f), glm::vec3(0.25f, 0.15f, 0.25f),
 		glm::vec3(0.f, 1.f, 0.f), 90.f);
 
-    resManager->getRenderer("particle_fire")->draw(projection,
-		view, viewPos, glm::vec3(0.f), glm::vec3(1.f), glm::vec3(1.f),
-		0.f);
+    resManager->getModel("woodenfence")->draw(projection, view, viewPos,
+		glm::vec3(0.f, 0.f, -68.f), glm::vec3(0.25f, 0.15f, 0.25f),
+		glm::vec3(0.f, 1.f, 0.f), 90.f);
+
+    resManager->getModel("woodenfence")->draw(projection, view, viewPos,
+		glm::vec3(30.f, 0.f, -68.f), glm::vec3(0.25f, 0.15f, 0.25f),
+		glm::vec3(0.f, 1.f, 0.f), 90.f);
+
+    resManager->getModel("woodenfence")->draw(projection, view, viewPos,
+		glm::vec3(-13.f, 0.f, -33.f), glm::vec3(0.25f, 0.15f, 0.25f),
+		glm::vec3(0.f, 1.f, 0.f), 0.f);
+
+    resManager->getModel("woodenfence")->draw(projection, view, viewPos,
+		glm::vec3(-13.f, 0.f, -57.f), glm::vec3(0.25f, 0.15f, 0.25f),
+		glm::vec3(0.f, 1.f, 0.f), 0.f);
+
+    resManager->getModel("woodenfence")->draw(projection, view, viewPos,
+		glm::vec3(41.f, 0.f, -33.f), glm::vec3(0.25f, 0.15f, 0.25f),
+		glm::vec3(0.f, 1.f, 0.f), 0.f);
+
+    resManager->getModel("woodenfence")->draw(projection, view, viewPos,
+		glm::vec3(41.f, 0.f, -57.f), glm::vec3(0.25f, 0.15f, 0.25f),
+		glm::vec3(0.f, 1.f, 0.f), 0.f);
 
     resManager->getRenderer("skybox")->draw(projection, view, viewPos,
-        glm::vec3(0.f, 0.f, 0.f), glm::vec3(1000.f));
+        glm::vec3(0.f, -100.f, 0.f), glm::vec3(500.f));
 }
 
 GLFWwindow *Game::getWindow() const {

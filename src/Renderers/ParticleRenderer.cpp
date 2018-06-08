@@ -227,7 +227,8 @@ void ParticleRenderer::draw(
         glm::vec3 pos,
         glm::vec3 scale,
         glm::vec3 rotAxis,
-        GLfloat rotate
+        GLfloat rotate,
+        glm::vec4 color
     ) {
 
     enable();    

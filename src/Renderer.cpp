@@ -39,7 +39,8 @@ void Renderer::draw(
         glm::vec3 pos,
         glm::vec3 scale,
         glm::vec3 rotAxis,
-        GLfloat rotate
+        GLfloat rotate,
+        glm::vec4 color
     ) {
 
     enable();
@@ -53,15 +54,19 @@ void Renderer::draw(
     shader->uniformM4("view", view);
     shader->uniformM4("projection", projection);
     shader->uniform3("viewPos", viewPos);
+    shader->uniform4("color", color);
 
+    bool hasTexture = false;
     for (GLuint i = 0; i < 16; i++) {
         if (textures[i]) {
+            hasTexture = true;
             textures[i]->bind(i);
             std::string texName("texture");
             texName += std::to_string(i);
             shader->uniform1(texName.c_str(), i);
         }
     }
+    shader->uniform1("hasTexture", hasTexture);
 
     if (light) {
         glm::vec3 lightColor = light->getColor();

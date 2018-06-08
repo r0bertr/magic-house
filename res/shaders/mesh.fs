@@ -12,6 +12,7 @@ struct Light {
     vec3 specular;
 };
 
+uniform bool hasTexture;
 uniform sampler2D texture0;  // diffuse
 uniform sampler2D texture1;  // specular
 uniform sampler2D texture2;  // shininess
@@ -50,5 +51,10 @@ vec3 CalcDirLight(vec3 normal, vec3 viewDir)
     vec3 ambient = light.ambient;
     vec3 diffuse = light.diffuse * diff;
     vec3 specular = light.specular * spec;
-    return (ambient + diffuse + specular) * texture(texture0, texCoords).rgb;
+    if (hasTexture) {
+        return (ambient + diffuse + specular) * 
+            texture(texture0, texCoords).rgb * color.xyz;
+    } else {
+        return (ambient + diffuse + specular) * color.xyz;
+    }
 }
