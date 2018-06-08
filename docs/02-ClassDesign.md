@@ -37,3 +37,9 @@
 
     - `MeshRenderer` Render a mesh of a model
     - `LandRenderer` Render the land
+    - `ParticleRenderer` Render a particle emitter
+    - `SkyboxRenderer` Render the skybox
+
+### `Light`
+
+- Host a light source
