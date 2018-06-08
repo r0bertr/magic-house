@@ -37,5 +37,5 @@ uniform sampler2D texture2;  // shininess
 - 太阳按照椭圆轨迹变化：太阳模型和相应的变化
 - 光照方向变化
 - 天空盒使用两个进行切换，通过apha进行控制
-草图...
+草图说明...
 ![light_change.jpg](./assets/light_change.jpg)
