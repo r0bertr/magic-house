@@ -44,7 +44,7 @@ void Renderer::draw(
     ) {
 
     enable();
-	glEnable(GL_FRAMEBUFFER_SRGB);
+	// glEnable(GL_FRAMEBUFFER_SRGB);
 
     glm::mat4 model(1.f);
     model = glm::translate(model, pos);
