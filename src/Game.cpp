@@ -139,20 +139,6 @@ void Game::render() {
     glm::vec3 viewPos = camera->getPos();
     camera->jumpCheck();
 
-	float dayAlpha = light->rotate(glm::vec3(7.f, 0.f, -43.f));
-	float nightAlpha = 1 - dayAlpha;
-	Renderer* b = resManager->getRenderer("skybox");
-	SkyboxRenderer* d = dynamic_cast<SkyboxRenderer*>(b);
-	if (d != NULL) {
-		d->setAlpha(dayAlpha);
-	}
-
-	b = resManager->getRenderer("nightSkybox");
-	d = dynamic_cast<SkyboxRenderer*>(b);
-	if (d != NULL) {
-		d->setAlpha(nightAlpha);
-	}
-
     resManager->getRenderer("land")->draw(projection, view, viewPos,
         glm::vec3(0.f), glm::vec3(1000.f),
         glm::vec3(1.f, 0.f, 0.f), 90.f);
@@ -196,11 +182,16 @@ void Game::render() {
 		glm::vec3(41.f, 0.f, -57.f), glm::vec3(0.25f, 0.15f, 0.25f),
 		glm::vec3(0.f, 1.f, 0.f), 0.f);
 
+
+    float dayAlpha = light->rotate(glm::vec3(7.f, 0.f, -43.f));
+	float nightAlpha = 1 - dayAlpha;
     resManager->getRenderer("skybox")->draw(projection, view, viewPos,
-        glm::vec3(0.f, -100.f, 0.f), glm::vec3(500.f));
+        glm::vec3(0.f, -100.f, 0.f), glm::vec3(500.f),
+        glm::vec3(1.f), 0.f, glm::vec4(1.f, 1.f, 1.f, dayAlpha));
 
 	resManager->getRenderer("nightSkybox")->draw(projection, view, viewPos,
-		glm::vec3(0.f, -100.f, 0.f), glm::vec3(500.f));
+		glm::vec3(0.f, -100.f, 0.f), glm::vec3(500.f),
+        glm::vec3(1.f), 0.f, glm::vec4(1.f, 1.f, 1.f, nightAlpha));
 
 	//resManager->getModel("sun")->draw(projection, view, viewPos,
 		//glm::vec3(30.f, -5.f, -35.f), glm::vec3(1.f));
