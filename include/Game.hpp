@@ -18,5 +18,6 @@ public:
 private:
     GLFWwindow *window;
     GLuint width, height;
+	GLuint depthMapFBO;
     ResourceManager *resManager;
 };
