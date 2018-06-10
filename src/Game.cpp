@@ -37,7 +37,8 @@ void Game::init() {
         "res/shaders/skybox.fs", NULL, "skybox");
 	Shader *particleShader = resManager->loadShader("res/shaders/particle.vs",
 		"res/shaders/particle.fs", NULL, "particle");
-
+	Shader *depthShader = resManager->loadShader("res/shaders/depth.vs",
+		"res/shaders/depth.fs", NULL, "depth");
 
     // Load Textures
     Texture *grass = resManager->load2DTexture("res/images/grass.jpg",
@@ -65,6 +66,14 @@ void Game::init() {
     Texture *smokeTexture = resManager->load2DTexture("res/images/smoke.png",
         "smoke");
 	Texture *nightSkyboxTexture = resManager->loadBoxTexture(nightFaces, "nightSkybox");
+	Texture *depthMap = resManager->loadDepthTexture(1024, 1024, "depth");
+
+	glGenFramebuffers(1, &depthMapFBO);
+	glBindFramebuffer(GL_FRAMEBUFFER, depthMapFBO);
+	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, depthMap->getID(), 0);
+	glDrawBuffer(GL_NONE);
+	glReadBuffer(GL_NONE);
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
     // Load Lights
     Light *light = resManager->loadLight("light", LIGHT_DIRECT,
@@ -73,14 +82,14 @@ void Game::init() {
 
     // Load Renderers
     Texture *buffer[16] = { NULL };
-    buffer[0] = grass;
+	buffer[0] = grass; buffer[3] = depthMap;
     resManager->loadRenderer(RENDERER_LAND, shader, "land", buffer, light);
-    buffer[0] = skyboxTexture;
+	buffer[0] = skyboxTexture; buffer[3] = NULL;
     resManager->loadRenderer(RENDERER_SKYBOX, skyboxShader,
         "skybox", buffer);
     resManager->loadParticleRenderer(particleShader, smokeTexture,
         "res/configs/particle_fire.json", "particle_fire");
-	buffer[0] = nightSkyboxTexture;
+	buffer[0] = nightSkyboxTexture; buffer[3] = NULL;
 	resManager->loadRenderer(RENDERER_SKYBOX, skyboxShader,
 		"nightSkybox", buffer);
     
@@ -94,7 +103,7 @@ void Game::init() {
 	resManager->loadModel("res/models/fence/Fence_White.obj",
 		shader, light, "woodenfence");
 
-	resManager->loadModel("res/models/sun.obj",
+	resManager->loadModel("res/models/sun/sun.obj",
 		shader, light, "sun");
 
     // Load Camera
@@ -194,7 +203,7 @@ void Game::render() {
 		glm::vec3(0.f, -100.f, 0.f), glm::vec3(500.f));
 
 	//resManager->getModel("sun")->draw(projection, view, viewPos,
-		//glm::vec3(30.f, 0.f, -15.f), glm::vec3(1.f));
+		//glm::vec3(30.f, -5.f, -35.f), glm::vec3(1.f));
 }
 
 GLFWwindow *Game::getWindow() const {

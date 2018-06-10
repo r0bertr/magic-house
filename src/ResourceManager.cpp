@@ -142,6 +142,17 @@ Texture *ResourceManager::load2DTexture(const GLchar *srcPath, const GLchar *nam
 
 }
 
+Texture *ResourceManager::loadDepthTexture(const int SHADOW_WIDTH, const int SHADOW_HEIGHT, const GLchar *name) {
+	GLchar *n = new GLchar[BUFFER_LEN];
+	strcpy(n, name);
+	if (textures[n]) {
+		return textures[n];
+		delete[]n;
+	}
+	textures[n] = new Texture(GL_TEXTURE_2D, SHADOW_WIDTH, SHADOW_HEIGHT);
+	return textures[n];
+
+}
 Renderer *ResourceManager::loadParticleRenderer(Shader *shader,
     Texture *texture, const GLchar *config, const GLchar *name,
     Light *light) {
