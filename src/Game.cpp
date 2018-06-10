@@ -94,7 +94,7 @@ void Game::init() {
 	resManager->loadModel("res/models/fence/Fence_White.obj",
 		shader, light, "woodenfence");
 
-	resManager->loadModel("res/models/sun/sun.obj",
+	resManager->loadModel("res/models/sun.obj",
 		shader, light, "sun");
 
     // Load Camera
@@ -194,7 +194,7 @@ void Game::render() {
 		glm::vec3(0.f, -100.f, 0.f), glm::vec3(500.f));
 
 	//resManager->getModel("sun")->draw(projection, view, viewPos,
-		//glm::vec3(30.f, -5.f, -35.f), glm::vec3(1.f));
+		//glm::vec3(30.f, 0.f, -15.f), glm::vec3(1.f));
 }
 
 GLFWwindow *Game::getWindow() const {
