@@ -1,6 +1,8 @@
 #pragma once
 
 #include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
 
 #include "Shader.hpp"
 #include "Texture.hpp"
@@ -16,6 +18,7 @@ class Renderer {
 public:
     Renderer(Shader *shader, Texture **textures = NULL, Light *light = NULL);
     ~Renderer();
+	void setRenderer(Shader *new_shader);
 
     virtual void draw(
         glm::mat4 projection,

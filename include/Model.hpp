@@ -4,6 +4,8 @@
 #include "Shader.hpp"
 
 #include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
 #include <assimp/scene.h>
 #include <GLFW/glfw3.h>
 #include <vector>
@@ -13,6 +15,7 @@ public:
     Model(Shader *shader, const aiScene *scene, const GLchar *rootDir,
         Light *light);
     ~Model();
+	void setModel(Shader *new_shader);
 
     void draw(
         glm::mat4 projection,

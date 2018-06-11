@@ -3,6 +3,8 @@
 #include <GLFW/glfw3.h>
 
 #include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
 
 enum LightType {
     LIGHT_POINT,
@@ -16,6 +18,7 @@ public:
         glm::vec3 position,
         glm::vec3 color,
         glm::vec3 direction,
+		glm::mat4 projection,
         GLfloat ambient,
         GLfloat diffuse,
         GLfloat specular
@@ -25,6 +28,7 @@ public:
     glm::vec3 getPosition() const;
     glm::vec3 getColor() const;
     glm::vec3 getDirection() const;
+	glm::mat4 getProjection() const;
     GLfloat getAmbient() const;
     GLfloat getDiffuse() const;
     GLfloat getSpecular() const;
@@ -35,6 +39,7 @@ private:
     glm::vec3 position;
     glm::vec3 color;
     glm::vec3 direction;
+	glm::mat4 projection;
     GLfloat ambient;
     GLfloat diffuse;
     GLfloat specular;
