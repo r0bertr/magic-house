@@ -229,6 +229,23 @@ Renderer *ResourceManager::loadRenderer(const RendererType type, Shader *shader,
     return renderers[n];
 }
 
+void ResourceManager::setRenderer(const GLchar *name, const GLchar *newShaderName) {
+	GLchar *n = new GLchar[BUFFER_LEN];
+	strcpy(n, name);
+	if (!renderers[n]) {
+		printf("This Renderer does not exist!");
+		return;
+	}
+	GLchar *m = new GLchar[BUFFER_LEN];
+	strcpy(m, newShaderName);
+	if (!shaders[m]) {
+		printf("This Shader has not loaded!");
+		return;
+	}
+	renderers[n]->setRenderer(shaders[m]);
+	return;
+}
+
 Model *ResourceManager::loadModel(const GLchar *path, Shader *shader,
     Light *light, const GLchar *name) {
 
@@ -255,8 +272,26 @@ Model *ResourceManager::loadModel(const GLchar *path, Shader *shader,
     return models[n];
 }
 
+void ResourceManager::setModel(const GLchar *name, const GLchar *newShaderName) {
+
+	GLchar *n = new GLchar[BUFFER_LEN];
+	strcpy(n, name);
+	if (!models[n]) {
+		printf("This Model does not exist!");
+		return;
+	}
+	GLchar *m = new GLchar[BUFFER_LEN];
+	strcpy(m, newShaderName);
+	if (!shaders[m]) {
+		printf("This Shader has not loaded!");
+		return;
+	}
+	models[n]->setModel(shaders[m]);
+	return;
+}
+
 Light *ResourceManager::loadLight(const GLchar *name, 
-    LightType type, glm::vec3 position, glm::vec3 color,
+    LightType type, glm::vec3 position, glm::vec3 color, glm::mat4 projection,
     GLfloat ambient, GLfloat diffuse, GLfloat specular,
     glm::vec3 direction) {
 
@@ -268,7 +303,7 @@ Light *ResourceManager::loadLight(const GLchar *name,
         return light;
     }
 
-    lights[n] = new Light(type, position, color, direction,
+    lights[n] = new Light(type, position, color, direction, projection,
         ambient, diffuse, specular);
 
     return lights[n];
