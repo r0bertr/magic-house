@@ -20,8 +20,12 @@ private:
     GLFWwindow *window;
     GLuint width, height;
 	GLuint depthMapFBO;
+	GLuint hdrFBO;
+	GLuint colorBuffer;
     ResourceManager *resManager;
     CollisionDetector *collisionDetector;
 
     void renderObjects(Camera *camera, Shader *shader = NULL);
+	void initFramebuffer();
+	void renderQuad();
 };

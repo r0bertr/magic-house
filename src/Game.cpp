@@ -6,6 +6,8 @@
 
 const GLuint SHADOW_WIDTH = 2048;
 const GLuint SHADOW_HEIGHT = 2048;
+bool hdr = true;
+float exposure = 1.0f;
 
 Game::Game(GLuint width, GLuint height) {
     glfwInit();
@@ -34,6 +36,30 @@ Game::~Game() {
     glfwTerminate();
 }
 
+void Game::initFramebuffer() {
+	// configure floating point framebuffer
+	// ------------------------------------
+	glGenFramebuffers(1, &hdrFBO);
+	// create floating point color buffer
+	glGenTextures(1, &colorBuffer);
+	glBindTexture(GL_TEXTURE_2D, colorBuffer);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA16F, SHADOW_WIDTH, SHADOW_HEIGHT, 0, GL_RGBA, GL_FLOAT, NULL);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	// create depth buffer (renderbuffer)
+	GLuint rboDepth;
+	glGenRenderbuffers(1, &rboDepth);
+	glBindRenderbuffer(GL_RENDERBUFFER, rboDepth);
+	glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT, SHADOW_WIDTH, SHADOW_HEIGHT);
+	// attach buffers
+	glBindFramebuffer(GL_FRAMEBUFFER, hdrFBO);
+	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, colorBuffer, 0);
+	glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, rboDepth);
+	if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
+		std::cout << "Framebuffer not complete!" << std::endl;
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+}
+
 void Game::init() {
     // Load Shaders
     Shader *shader = resManager->loadShader("res/shaders/mesh.vs", 
@@ -44,6 +70,8 @@ void Game::init() {
 		"res/shaders/particle.fs", NULL, "particle");
 	Shader *depthShader = resManager->loadShader("res/shaders/depth.vs",
 		"res/shaders/depth.fs", NULL, "depth");
+	Shader *hdrShader = resManager->loadShader("res/shaders/hdr.vs",
+		"res/shaders/hdr.fs", NULL, "hdr");
 
     // Load Textures
     Texture *grass = resManager->load2DTexture("res/images/grass.jpg",
@@ -72,6 +100,11 @@ void Game::init() {
         "smoke", true);
 	Texture *nightSkyboxTexture = resManager->loadBoxTexture(nightFaces, "nightSkybox", true);
 	Texture *depthMap = resManager->loadDepthTexture(SHADOW_WIDTH, SHADOW_HEIGHT, "depth");
+
+	// HDR framebuffer and shader configuration
+	initFramebuffer();
+	hdrShader->use();
+	hdrShader->uniform1("hdrBuffer", 0);
 
 	glGenFramebuffers(1, &depthMapFBO);
 	glBindFramebuffer(GL_FRAMEBUFFER, depthMapFBO);
@@ -207,6 +240,37 @@ void Game::renderObjects(Camera *camera, Shader *shader) {
 
 }
 
+// renderQuad() renders a 1x1 XY quad in NDC
+// -----------------------------------------
+unsigned int quadVAO = 0;
+unsigned int quadVBO;
+void Game::renderQuad()
+{
+	if (quadVAO == 0)
+	{
+		float quadVertices[] = {
+			// positions        // texture Coords
+			-1.0f,  1.0f, 0.0f, 0.0f, 1.0f,
+			-1.0f, -1.0f, 0.0f, 0.0f, 0.0f,
+			1.0f,  1.0f, 0.0f, 1.0f, 1.0f,
+			1.0f, -1.0f, 0.0f, 1.0f, 0.0f,
+		};
+		// setup plane VAO
+		glGenVertexArrays(1, &quadVAO);
+		glGenBuffers(1, &quadVBO);
+		glBindVertexArray(quadVAO);
+		glBindBuffer(GL_ARRAY_BUFFER, quadVBO);
+		glBufferData(GL_ARRAY_BUFFER, sizeof(quadVertices), &quadVertices, GL_STATIC_DRAW);
+		glEnableVertexAttribArray(0);
+		glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0);
+		glEnableVertexAttribArray(1);
+		glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float)));
+	}
+	glBindVertexArray(quadVAO);
+	glDrawArrays(GL_TRIANGLE_STRIP, 0, 4);
+	glBindVertexArray(0);
+}
+
 void Game::render() {
     Camera *camera = resManager->getCamera("main");
 	Light *light = resManager->getLight("light");
@@ -219,28 +283,49 @@ void Game::render() {
         camera->undoMove();
     }
 
-    glViewport(0, 0, SHADOW_WIDTH, SHADOW_HEIGHT);
-	glBindFramebuffer(GL_FRAMEBUFFER, depthMapFBO);
-	glClear(GL_DEPTH_BUFFER_BIT);
-
-	renderObjects(camera, resManager->getShader("depth"));
-
-	glBindFramebuffer(GL_FRAMEBUFFER, 0);
-	glViewport(0, 0, width, height);
+	glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-	renderObjects(camera, resManager->getShader("mesh"));
+	// 1. render scene into floating point framebuffer
+	// -----------------------------------------------
+	glBindFramebuffer(GL_FRAMEBUFFER, hdrFBO);
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-    float dayAlpha = light->rotate(glm::vec3(7.f, 0.f, -43.f));
+		glViewport(0, 0, SHADOW_WIDTH, SHADOW_HEIGHT);
+		glBindFramebuffer(GL_FRAMEBUFFER, depthMapFBO);
+		glClear(GL_DEPTH_BUFFER_BIT);
 
-    resManager->getRenderer("skybox")->draw(projection, view, viewPos,
-        glm::vec3(0.f, -100.f, 0.f), glm::vec3(500.f),
-        glm::vec3(1.f), 0.f, glm::vec4(1.f, 1.f, 1.f, dayAlpha));
+		renderObjects(camera, resManager->getShader("depth"));
 
-	resManager->getRenderer("nightSkybox")->draw(projection, view, viewPos,
-		glm::vec3(0.f, -100.f, 0.f), glm::vec3(500.f),
-        glm::vec3(1.f), 0.f, glm::vec4(1.f, 1.f, 1.f, 1 - dayAlpha));
+		glBindFramebuffer(GL_FRAMEBUFFER, 0);
+		glViewport(0, 0, width, height);
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
+		renderObjects(camera, resManager->getShader("mesh"));
+
+		float dayAlpha = light->rotate(glm::vec3(7.f, 0.f, -43.f));
+
+		resManager->getRenderer("skybox")->draw(projection, view, viewPos,
+			glm::vec3(0.f, -100.f, 0.f), glm::vec3(500.f),
+			glm::vec3(1.f), 0.f, glm::vec4(1.f, 1.f, 1.f, dayAlpha));
+
+		resManager->getRenderer("nightSkybox")->draw(projection, view, viewPos,
+			glm::vec3(0.f, -100.f, 0.f), glm::vec3(500.f),
+			glm::vec3(1.f), 0.f, glm::vec4(1.f, 1.f, 1.f, 1 - dayAlpha));
+	
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+
+	// 2. now render floating point color buffer to 2D quad and tonemap HDR colors to default framebuffer's (clamped) color range
+	// --------------------------------------------------------------------------------------------------------------------------
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	resManager->getShader("hdr")->use();
+	glActiveTexture(GL_TEXTURE0);
+	glBindTexture(GL_TEXTURE_2D, colorBuffer);
+	resManager->getShader("hdr")->uniform1("hdr", hdr);
+	resManager->getShader("hdr")->uniform1("exposure", exposure);
+	renderQuad();
+
+	std::cout << "hdr: " << (hdr ? "on" : "off") << "| exposure: " << exposure << std::endl;
 }
 
 GLFWwindow *Game::getWindow() const {
