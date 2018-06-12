@@ -19,11 +19,6 @@ Model::~Model() {
     delete renderers;
 }
 
-void Model::setModel(Shader *new_shader) {
-	shader = new_shader;
-	return;
-}
-
 void Model::draw(glm::mat4 projection, glm::mat4 view,
     glm::vec3 viewPos, glm::vec3 pos, glm::vec3 scale,
     glm::vec3 rotAxis, GLfloat rotate) {
@@ -46,4 +41,21 @@ void Model::processNode(const aiNode *node, const aiScene *scene) {
 void Model::processMesh(const aiMesh *mesh, const aiScene *scene) {
     renderers->push_back(new MeshRenderer(shader, mesh, scene,
         rootDir->C_Str(), light));
+}
+
+void Model::setTexture(GLuint index, Texture *texture) {
+
+    for (GLuint i = 0; i < renderers->size(); i++) {
+        renderers->at(i)->setTexture(index, texture);
+    }
+
+}
+
+void Model::setShader(Shader *shader) {
+
+    this->shader = shader;
+    for (GLuint i = 0; i < renderers->size(); i++) {
+        renderers->at(i)->setShader(shader);
+    }
+
 }

@@ -32,11 +32,6 @@ Renderer::~Renderer() {
         glDeleteVertexArrays(1, &VAO);
 }
 
-void Renderer::setRenderer(Shader *new_shader) {
-	shader = new_shader;
-	return;
-}
-
 void Renderer::draw(
         glm::mat4 projection,
         glm::mat4 view,
@@ -62,17 +57,15 @@ void Renderer::draw(
     shader->uniform3("viewPos", viewPos);
     shader->uniform4("color", color);
 
-    bool hasTexture = false;
     for (GLuint i = 0; i < 16; i++) {
         if (textures[i]) {
-            hasTexture = true;
             textures[i]->bind(i);
             std::string texName("texture");
             texName += std::to_string(i);
             shader->uniform1(texName.c_str(), i);
         }
     }
-    shader->uniform1("hasTexture", hasTexture);
+    shader->uniform1("hasTexture", textures[0] != NULL);
 
     if (light) {
         glm::vec3 lightColor = light->getColor();
@@ -81,7 +74,8 @@ void Renderer::draw(
         shader->uniform3("light.ambient", light->getAmbient() * lightColor);
         shader->uniform3("light.diffuse", light->getDiffuse() * lightColor);
         shader->uniform3("light.specular", light->getSpecular() * lightColor);
-		lightView = glm::lookAt(light->getPosition(), glm::vec3(0.0f), glm::vec3(0.0, 1.0, 0.0));
+		lightView = glm::lookAt(light->getPosition(), glm::vec3(0.f),
+            glm::vec3(0.0, 1.0, 0.0));
 		lightSpaceMatrix = light->getProjection() * lightView;
 		shader->uniformM4("lightSpaceMatrix", lightSpaceMatrix);
     }
@@ -89,6 +83,18 @@ void Renderer::draw(
         glDrawElements(GL_TRIANGLES, numVertices, GL_UNSIGNED_INT, NULL);
     else
         glDrawArrays(GL_TRIANGLES, 0, numVertices);
+}
+
+void Renderer::setShader(Shader *shader) {
+    
+    this->shader = shader;
+
+}
+
+void Renderer::setTexture(GLuint index, Texture *texture) {
+
+    this->textures[index] = texture;
+
 }
 
 void Renderer::enable() {

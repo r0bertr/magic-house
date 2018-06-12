@@ -15,7 +15,6 @@ public:
     Model(Shader *shader, const aiScene *scene, const GLchar *rootDir,
         Light *light);
     ~Model();
-	void setModel(Shader *new_shader);
 
     void draw(
         glm::mat4 projection,
@@ -26,6 +25,10 @@ public:
         glm::vec3 rotAxis = glm::vec3(1.f),
         GLfloat rotate = 0.f
     );
+
+    void setShader(Shader *shader);
+    
+    void setTexture(GLuint index, Texture *texture);
 
 private:
     std::vector<MeshRenderer*> *renderers;

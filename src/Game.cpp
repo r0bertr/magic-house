@@ -4,7 +4,10 @@
 #include <cstdio>
 #include <GLFW/glfw3.h>
 
-Game::Game(GLuint width, GLuint height, GLuint SHADOW_WIDTH, GLuint SHADOW_HEIGHT) {
+const GLuint SHADOW_WIDTH = 1024;
+const GLuint SHADOW_HEIGHT = 1024;
+
+Game::Game(GLuint width, GLuint height) {
     glfwInit();
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
@@ -22,8 +25,6 @@ Game::Game(GLuint width, GLuint height, GLuint SHADOW_WIDTH, GLuint SHADOW_HEIGH
 
     this->width = width;
     this->height = height;
-	this->SHADOW_WIDTH = SHADOW_WIDTH;
-	this->SHADOW_HEIGHT = SHADOW_HEIGHT;
     resManager = ResourceManager::GetInstance();
 }
 
@@ -72,15 +73,17 @@ void Game::init() {
 
 	glGenFramebuffers(1, &depthMapFBO);
 	glBindFramebuffer(GL_FRAMEBUFFER, depthMapFBO);
-	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, depthMap->getID(), 0);
+	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D,
+        depthMap->getID(), 0);
 	glDrawBuffer(GL_NONE);
 	glReadBuffer(GL_NONE);
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
     // Load Lights
-    Light *light = resManager->loadLight("light", LIGHT_DIRECT,
-        glm::vec3(0.f, 5.f, 0.f), glm::vec3(1.f), glm::ortho(-10.0f, 10.0f, -10.0f, 10.0f, 1.0f, 7.5f),
-		.4f, 1.f, .5f, glm::vec3(0.f, 0.f, 1.f));
+    Light *light = resManager->loadLight("light", LIGHT_POINT,
+        glm::vec3(0.f, 35.f, 50.f), glm::vec3(1.f), 
+        glm::ortho(-50.0f, 50.0f, -50.0f, 50.0f, .1f, 1000.f),
+		.4f, 1.f, .5f, glm::vec3(0.f, 0.f, 0.f));
     // Load Renderers
     Texture *buffer[16] = { NULL };
 	buffer[0] = grass; buffer[3] = depthMap;
@@ -97,15 +100,18 @@ void Game::init() {
     // Load Models
     resManager->loadModel("res/models/Farmhouse/farmhouse_obj.obj",
         shader, light, "farmhouse");
+    resManager->getModel("farmhouse")->setTexture(3, depthMap);
 
 	resManager->loadModel("res/models/tree/tree1.obj",
 		shader, light, "tree");
+    resManager->getModel("tree")->setTexture(3, depthMap);
 	
 	resManager->loadModel("res/models/fence/Fence_White.obj",
 		shader, light, "woodenfence");
+    resManager->getModel("woodenfence")->setTexture(3, depthMap);
 
-	resManager->loadModel("res/models/sun/sun.obj",
-		shader, light, "sun");
+	// resManager->loadModel("res/models/sun/sun.obj",
+	// 	shader, light, "sun");
 
     // Load Camera
     resManager->loadCamera(glm::radians(45.f), (float)width / height, .1f, 500.f,
@@ -132,6 +138,65 @@ void Game::processInput() {
         camera->jump();
 }
 
+void Game::renderObjects(Camera *camera, Shader *shader) {
+	
+	glm::mat4 projection = camera->getProjection();
+	glm::mat4 view = camera->getView();
+	glm::vec3 viewPos = camera->getPos();
+
+    if (shader)
+        resManager->getRenderer("land")->setShader(shader);
+    resManager->getRenderer("land")->draw(projection, view, viewPos,
+		glm::vec3(0.f), glm::vec3(1000.f),
+		glm::vec3(1.f, 0.f, 0.f), 90.f);
+
+	if (shader)
+		resManager->getModel("farmhouse")->setShader(shader);
+	resManager->getModel("farmhouse")->draw(projection, view, viewPos,
+        glm::vec3(7.f, 0.f, -43.f), glm::vec3(.8f),
+        glm::vec3(0.f, 1.f, 0.f), 180.f);
+
+	if (shader)
+		resManager->getModel("tree")->setShader(shader);
+	resManager->getModel("tree")->draw(projection, view, viewPos,
+		glm::vec3(30.f, -2.f, -35.f), glm::vec3(1.f));
+
+	if (shader)
+		resManager->getModel("woodenfence")->setShader(shader);
+    resManager->getModel("woodenfence")->draw(projection, view, viewPos,
+		glm::vec3(0, 0.f, -20.f), glm::vec3(0.25f, 0.15f, 0.25f),
+		glm::vec3(0.f, 1.f, 0.f), 90.f);
+
+    resManager->getModel("woodenfence")->draw(projection, view, viewPos,
+		glm::vec3(30.f, 0.f, -20.f), glm::vec3(0.25f, 0.15f, 0.25f),
+		glm::vec3(0.f, 1.f, 0.f), 90.f);
+
+    resManager->getModel("woodenfence")->draw(projection, view, viewPos,
+		glm::vec3(0.f, 0.f, -68.f), glm::vec3(0.25f, 0.15f, 0.25f),
+		glm::vec3(0.f, 1.f, 0.f), 90.f);
+
+    resManager->getModel("woodenfence")->draw(projection, view, viewPos,
+		glm::vec3(30.f, 0.f, -68.f), glm::vec3(0.25f, 0.15f, 0.25f),
+		glm::vec3(0.f, 1.f, 0.f), 90.f);
+
+    resManager->getModel("woodenfence")->draw(projection, view, viewPos,
+		glm::vec3(-13.f, 0.f, -33.f), glm::vec3(0.25f, 0.15f, 0.25f),
+		glm::vec3(0.f, 1.f, 0.f), 0.f);
+
+    resManager->getModel("woodenfence")->draw(projection, view, viewPos,
+		glm::vec3(-13.f, 0.f, -57.f), glm::vec3(0.25f, 0.15f, 0.25f),
+		glm::vec3(0.f, 1.f, 0.f), 0.f);
+
+    resManager->getModel("woodenfence")->draw(projection, view, viewPos,
+		glm::vec3(41.f, 0.f, -33.f), glm::vec3(0.25f, 0.15f, 0.25f),
+		glm::vec3(0.f, 1.f, 0.f), 0.f);
+
+    resManager->getModel("woodenfence")->draw(projection, view, viewPos,
+		glm::vec3(41.f, 0.f, -57.f), glm::vec3(0.25f, 0.15f, 0.25f),
+		glm::vec3(0.f, 1.f, 0.f), 0.f);
+
+}
+
 void Game::render() {
     Camera *camera = resManager->getCamera("main");
 	Light *light = resManager->getLight("light");
@@ -140,117 +205,29 @@ void Game::render() {
     glm::vec3 viewPos = camera->getPos();
     camera->jumpCheck();
 
-	glViewport(0, 0, SHADOW_WIDTH, SHADOW_HEIGHT);
+    glViewport(0, 0, SHADOW_WIDTH, SHADOW_HEIGHT);
 	glBindFramebuffer(GL_FRAMEBUFFER, depthMapFBO);
 	glClear(GL_DEPTH_BUFFER_BIT);
-	resManager->setRenderer("land", "depth");
-	resManager->setModel("farmhouse", "depth");
-	resManager->setModel("tree", "depth");
-	resManager->setModel("woodenfence", "depth");
+    glCullFace(GL_FRONT);
 
-    resManager->getRenderer("land")->draw(projection, view, viewPos,
-        glm::vec3(0.f), glm::vec3(1000.f),
-        glm::vec3(1.f, 0.f, 0.f), 90.f);
+	renderObjects(camera, resManager->getShader("depth"));
 
-    resManager->getModel("farmhouse")->draw(projection, view, viewPos,
-        glm::vec3(7.f, 0.f, -43.f), glm::vec3(.8f),
-        glm::vec3(0.f, 1.f, 0.f), 180.f);
-
-	resManager->getModel("tree")->draw(projection, view, viewPos,
-		glm::vec3(30.f, -2.f, -35.f), glm::vec3(1.f));
-
-    resManager->getModel("woodenfence")->draw(projection, view, viewPos,
-		glm::vec3(0, 0.f, -20.f), glm::vec3(0.25f, 0.15f, 0.25f),
-		glm::vec3(0.f, 1.f, 0.f), 90.f);
-
-    resManager->getModel("woodenfence")->draw(projection, view, viewPos,
-		glm::vec3(30.f, 0.f, -20.f), glm::vec3(0.25f, 0.15f, 0.25f),
-		glm::vec3(0.f, 1.f, 0.f), 90.f);
-
-    resManager->getModel("woodenfence")->draw(projection, view, viewPos,
-		glm::vec3(0.f, 0.f, -68.f), glm::vec3(0.25f, 0.15f, 0.25f),
-		glm::vec3(0.f, 1.f, 0.f), 90.f);
-
-    resManager->getModel("woodenfence")->draw(projection, view, viewPos,
-		glm::vec3(30.f, 0.f, -68.f), glm::vec3(0.25f, 0.15f, 0.25f),
-		glm::vec3(0.f, 1.f, 0.f), 90.f);
-
-    resManager->getModel("woodenfence")->draw(projection, view, viewPos,
-		glm::vec3(-13.f, 0.f, -33.f), glm::vec3(0.25f, 0.15f, 0.25f),
-		glm::vec3(0.f, 1.f, 0.f), 0.f);
-
-    resManager->getModel("woodenfence")->draw(projection, view, viewPos,
-		glm::vec3(-13.f, 0.f, -57.f), glm::vec3(0.25f, 0.15f, 0.25f),
-		glm::vec3(0.f, 1.f, 0.f), 0.f);
-
-    resManager->getModel("woodenfence")->draw(projection, view, viewPos,
-		glm::vec3(41.f, 0.f, -33.f), glm::vec3(0.25f, 0.15f, 0.25f),
-		glm::vec3(0.f, 1.f, 0.f), 0.f);
-
-    resManager->getModel("woodenfence")->draw(projection, view, viewPos,
-		glm::vec3(41.f, 0.f, -57.f), glm::vec3(0.25f, 0.15f, 0.25f),
-		glm::vec3(0.f, 1.f, 0.f), 0.f);
+    glCullFace(GL_BACK);
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
-
-	glViewport(0, 0, width, height);
+	glViewport(0, 0, width * 2, height * 2);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-	resManager->setRenderer("land", "mesh");
-	resManager->setModel("farmhouse", "mesh");
-	resManager->setModel("tree", "mesh");
-	resManager->setModel("woodenfence", "mesh");
 
-	resManager->getRenderer("land")->draw(projection, view, viewPos,
-		glm::vec3(0.f), glm::vec3(1000.f),
-		glm::vec3(1.f, 0.f, 0.f), 90.f);
+	renderObjects(camera, resManager->getShader("mesh"));
 
-	resManager->getModel("farmhouse")->draw(projection, view, viewPos,
-		glm::vec3(7.f, 0.f, -43.f), glm::vec3(.8f),
-		glm::vec3(0.f, 1.f, 0.f), 180.f);
-
-	resManager->getModel("tree")->draw(projection, view, viewPos,
-		glm::vec3(30.f, -2.f, -35.f), glm::vec3(1.f));
-
-	resManager->getModel("woodenfence")->draw(projection, view, viewPos,
-		glm::vec3(0, 0.f, -20.f), glm::vec3(0.25f, 0.15f, 0.25f),
-		glm::vec3(0.f, 1.f, 0.f), 90.f);
-
-	resManager->getModel("woodenfence")->draw(projection, view, viewPos,
-		glm::vec3(30.f, 0.f, -20.f), glm::vec3(0.25f, 0.15f, 0.25f),
-		glm::vec3(0.f, 1.f, 0.f), 90.f);
-
-	resManager->getModel("woodenfence")->draw(projection, view, viewPos,
-		glm::vec3(0.f, 0.f, -68.f), glm::vec3(0.25f, 0.15f, 0.25f),
-		glm::vec3(0.f, 1.f, 0.f), 90.f);
-
-	resManager->getModel("woodenfence")->draw(projection, view, viewPos,
-		glm::vec3(30.f, 0.f, -68.f), glm::vec3(0.25f, 0.15f, 0.25f),
-		glm::vec3(0.f, 1.f, 0.f), 90.f);
-
-	resManager->getModel("woodenfence")->draw(projection, view, viewPos,
-		glm::vec3(-13.f, 0.f, -33.f), glm::vec3(0.25f, 0.15f, 0.25f),
-		glm::vec3(0.f, 1.f, 0.f), 0.f);
-
-	resManager->getModel("woodenfence")->draw(projection, view, viewPos,
-		glm::vec3(-13.f, 0.f, -57.f), glm::vec3(0.25f, 0.15f, 0.25f),
-		glm::vec3(0.f, 1.f, 0.f), 0.f);
-
-	resManager->getModel("woodenfence")->draw(projection, view, viewPos,
-		glm::vec3(41.f, 0.f, -33.f), glm::vec3(0.25f, 0.15f, 0.25f),
-		glm::vec3(0.f, 1.f, 0.f), 0.f);
-
-	resManager->getModel("woodenfence")->draw(projection, view, viewPos,
-		glm::vec3(41.f, 0.f, -57.f), glm::vec3(0.25f, 0.15f, 0.25f),
-		glm::vec3(0.f, 1.f, 0.f), 0.f);
-
-    float dayAlpha = light->rotate(glm::vec3(7.f, 0.f, -43.f));
-	float nightAlpha = 1 - dayAlpha;
+    // float dayAlpha = light->rotate(glm::vec3(7.f, 0.f, -43.f));
+	// float nightAlpha = 1 - dayAlpha;
     resManager->getRenderer("skybox")->draw(projection, view, viewPos,
         glm::vec3(0.f, -100.f, 0.f), glm::vec3(500.f),
-        glm::vec3(1.f), 0.f, glm::vec4(1.f, 1.f, 1.f, dayAlpha));
+        glm::vec3(1.f), 0.f, glm::vec4(1.f, 1.f, 1.f, 1.f));
 
-	resManager->getRenderer("nightSkybox")->draw(projection, view, viewPos,
-		glm::vec3(0.f, -100.f, 0.f), glm::vec3(500.f),
-        glm::vec3(1.f), 0.f, glm::vec4(1.f, 1.f, 1.f, nightAlpha));
+	// resManager->getRenderer("nightSkybox")->draw(projection, view, viewPos,
+	// 	glm::vec3(0.f, -100.f, 0.f), glm::vec3(500.f),
+    //     glm::vec3(1.f), 0.f, glm::vec4(1.f, 1.f, 1.f, nightAlpha));
 
 	//resManager->getModel("sun")->draw(projection, view, viewPos,
 		//glm::vec3(30.f, -5.f, -35.f), glm::vec3(1.f));

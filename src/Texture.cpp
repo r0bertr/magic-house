@@ -16,7 +16,8 @@ Texture::Texture(GLenum type, GLint SHADOW_WIDTH, GLint SHADOW_HEIGHT) {
 	glGenTextures(1, &id);
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(type, id);
-	glTexImage2D(type, 0, GL_DEPTH_COMPONENT, SHADOW_WIDTH, SHADOW_HEIGHT, 0, GL_DEPTH_COMPONENT, GL_FLOAT, NULL);
+	glTexImage2D(type, 0, GL_DEPTH_COMPONENT, SHADOW_WIDTH, SHADOW_HEIGHT,
+        0, GL_DEPTH_COMPONENT, GL_FLOAT, NULL);
 	glTexParameteri(type, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 	glTexParameteri(type, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 	glTexParameteri(type, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_BORDER);

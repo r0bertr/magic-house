@@ -7,8 +7,6 @@ const GLfloat PI = 3.1415926;
 
 const GLuint WIDTH = 800;
 const GLuint HEIGHT = 600;
-const GLuint SHADOW_WIDTH = 1024;
-const GLuint SHADOW_HEIGHT = 1024;
 
 void mouseCallback(GLFWwindow *window, double xpos, double ypos) {
     static bool firstMouse = true;
@@ -50,7 +48,7 @@ void framebuffer_size_callback(GLFWwindow* window, int width, int height)
 }
 
 int main() {
-    Game game(WIDTH, HEIGHT, SHADOW_WIDTH, SHADOW_HEIGHT);
+    Game game(WIDTH, HEIGHT);
     game.init();
 
     glfwSetInputMode(game.getWindow(), GLFW_CURSOR, GLFW_CURSOR_DISABLED);

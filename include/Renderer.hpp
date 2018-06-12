@@ -18,7 +18,6 @@ class Renderer {
 public:
     Renderer(Shader *shader, Texture **textures = NULL, Light *light = NULL);
     ~Renderer();
-	void setRenderer(Shader *new_shader);
 
     virtual void draw(
         glm::mat4 projection,
@@ -32,6 +31,9 @@ public:
     );
 
     virtual void enable();
+
+    virtual void setShader(Shader *shader);
+    virtual void setTexture(GLuint index, Texture *texture);
 
 protected:
     Shader *shader;

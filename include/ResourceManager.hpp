@@ -32,10 +32,8 @@ public:
 
     Renderer *loadRenderer(const RendererType type, Shader *shader,
         const GLchar *name, Texture **textures = NULL, Light *light = NULL); 
-	void setRenderer(const GLchar *name, const GLchar *newShaderName = NULL);
     Renderer *loadParticleRenderer(Shader *shader, Texture *texture,
         const GLchar *config, const GLchar *name, Light *light = NULL);
-	void setModel(const GLchar *name, const GLchar *newShaderName = NULL);
 
     Camera *loadCamera(GLfloat pFov, GLfloat pAspect, GLfloat pNear, GLfloat pFar,
         GLfloat posX, GLfloat posY, GLfloat posZ,

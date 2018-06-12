@@ -6,7 +6,7 @@
 
 class Game {
 public:
-    Game(GLuint width, GLuint height, GLuint SHADOW_WIDTH, GLuint SHADOW_HEIGHT);
+    Game(GLuint width, GLuint height);
     ~Game();
 
     void init();
@@ -18,7 +18,8 @@ public:
 private:
     GLFWwindow *window;
     GLuint width, height;
-	GLuint SHADOW_WIDTH, SHADOW_HEIGHT;
 	GLuint depthMapFBO;
     ResourceManager *resManager;
+
+    void renderObjects(Camera *camera, Shader *shader = NULL);
 };
