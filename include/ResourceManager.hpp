@@ -27,7 +27,7 @@ public:
         const GLchar *aPath, const GLchar *name);
 
     Texture *load2DTexture(const GLchar *srcPath, const GLchar *name);
-    Texture *loadBoxTexture(const GLchar *srcPath[6], const GLchar *name);
+    Texture *loadBoxTexture(const GLchar *srcPath[6], const GLchar *name, bool gammaCorrection);
 	Texture *loadDepthTexture(const int SHADOW_WIDTH, const int SHADOW_HEIGHT, const GLchar *name);
 
     Renderer *loadRenderer(const RendererType type, Shader *shader,

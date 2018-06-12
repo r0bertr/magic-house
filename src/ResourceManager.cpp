@@ -173,7 +173,7 @@ Renderer *ResourceManager::loadParticleRenderer(Shader *shader,
 }
 
 Texture *ResourceManager::loadBoxTexture(const GLchar *srcPath[6],
-    const GLchar *name) {
+    const GLchar *name, bool gammaCorrection) {
     GLchar *n = new GLchar[BUFFER_LEN];
     strcpy(n, name);
     if (textures[n]) {
@@ -182,7 +182,8 @@ Texture *ResourceManager::loadBoxTexture(const GLchar *srcPath[6],
     }
 
     GLint width[6], height[6], nChannels[6];
-    GLenum colorModels[6];
+    GLenum internalFormats[6];
+	GLenum dataFormats[6];
     GLubyte *data[6];
     for (GLuint i = 0; i < 6; i++) {
         data[i] = stbi_load(srcPath[i], &width[i], &height[i], &nChannels[i], 0);
@@ -191,13 +192,17 @@ Texture *ResourceManager::loadBoxTexture(const GLchar *srcPath[6],
             printf("\tError loading file\n");
             return NULL;
         }
-        if (nChannels[i] == 3)
-            colorModels[i] = GL_RGB;
-        else
-            colorModels[i] = GL_RGBA;
+		if (nChannels[i] == 3) {
+			internalFormats[i] = gammaCorrection ? GL_SRGB : GL_RGB;
+			dataFormats[i] = GL_RGB;
+		}
+		else {
+			internalFormats[i] = gammaCorrection ? GL_SRGB_ALPHA : GL_RGBA;
+            dataFormats[i] = GL_RGBA;
+		}
     }
 
-    textures[n] = new Texture(GL_TEXTURE_CUBE_MAP, data, colorModels,
+    textures[n] = new Texture(GL_TEXTURE_CUBE_MAP, data, internalFormats, dataFormats,
         width, height);
     for (GLuint i = 0; i < 6; i++)
         stbi_image_free(data[i]);

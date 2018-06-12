@@ -27,14 +27,14 @@ Texture::Texture(GLenum type, GLint SHADOW_WIDTH, GLint SHADOW_HEIGHT) {
 	this->type = type;
 }
 
-Texture::Texture(GLenum type, GLubyte *data[6], GLenum colorModel[6],
-    GLint width[6], GLint height[6]) {
+Texture::Texture(GLenum type, GLubyte *data[6], GLenum internalFormats[6],
+	GLenum dataFormats[6], GLint width[6], GLint height[6]) {
     glGenTextures(1, &id);
     glActiveTexture(GL_TEXTURE0);
     glBindTexture(type, id);
     for (GLuint i = 0; i < 6; i++) {
-        glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, colorModel[i],
-            width[i], height[i], 0, colorModel[i], GL_UNSIGNED_BYTE, data[i]);
+        glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 0, internalFormats[i],
+            width[i], height[i], 0, dataFormats[i], GL_UNSIGNED_BYTE, data[i]);
     }
 
     glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_LINEAR);

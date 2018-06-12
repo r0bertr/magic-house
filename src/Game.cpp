@@ -65,10 +65,10 @@ void Game::init() {
 		"res/images/nightSky/Spacebox2/front.png"
 	};
 
-    Texture *skyboxTexture = resManager->loadBoxTexture(faces, "skybox");
+    Texture *skyboxTexture = resManager->loadBoxTexture(faces, "skybox", true);
     Texture *smokeTexture = resManager->load2DTexture("res/images/smoke.png",
         "smoke");
-	Texture *nightSkyboxTexture = resManager->loadBoxTexture(nightFaces, "nightSkybox");
+	Texture *nightSkyboxTexture = resManager->loadBoxTexture(nightFaces, "nightSkybox", true);
 	Texture *depthMap = resManager->loadDepthTexture(SHADOW_WIDTH, SHADOW_HEIGHT, "depth");
 
 	glGenFramebuffers(1, &depthMapFBO);
@@ -219,15 +219,15 @@ void Game::render() {
 
 	renderObjects(camera, resManager->getShader("mesh"));
 
-    // float dayAlpha = light->rotate(glm::vec3(7.f, 0.f, -43.f));
-	// float nightAlpha = 1 - dayAlpha;
+    float dayAlpha = light->rotate(glm::vec3(7.f, 0.f, -43.f));
+	float nightAlpha = 1 - dayAlpha;
     resManager->getRenderer("skybox")->draw(projection, view, viewPos,
         glm::vec3(0.f, -100.f, 0.f), glm::vec3(500.f),
-        glm::vec3(1.f), 0.f, glm::vec4(1.f, 1.f, 1.f, 1.f));
+        glm::vec3(1.f), 0.f, glm::vec4(1.f, 1.f, 1.f, dayAlpha));
 
-	// resManager->getRenderer("nightSkybox")->draw(projection, view, viewPos,
-	// 	glm::vec3(0.f, -100.f, 0.f), glm::vec3(500.f),
-    //     glm::vec3(1.f), 0.f, glm::vec4(1.f, 1.f, 1.f, nightAlpha));
+	resManager->getRenderer("nightSkybox")->draw(projection, view, viewPos,
+		glm::vec3(0.f, -100.f, 0.f), glm::vec3(500.f),
+        glm::vec3(1.f), 0.f, glm::vec4(1.f, 1.f, 1.f, nightAlpha));
 
 	//resManager->getModel("sun")->draw(projection, view, viewPos,
 		//glm::vec3(30.f, -5.f, -35.f), glm::vec3(1.f));
