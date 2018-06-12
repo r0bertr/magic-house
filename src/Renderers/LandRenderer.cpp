@@ -12,13 +12,13 @@ LandRenderer::~LandRenderer() {}
 
 void LandRenderer::initRenderData() {
     GLfloat data[] = {
-        -.5f,  .5f, 0.f, 0.f, 100.f, 0.f, 1.f, 0.f,
-         .5f,  .5f, 0.f, 100.f, 100.f, 0.f, 1.f, 0.f,
-         .5f, -.5f, 0.f, 100.f, 0.f, 0.f, 1.f, 0.f,
+        -.5f,  .5f, 0.f, 0.f, 100.f, 0.f, 0.f, -1.f,
+         .5f,  .5f, 0.f, 100.f, 100.f, 0.f, 0.f, -1.f,
+         .5f, -.5f, 0.f, 100.f, 0.f, 0.f, 0.f, -1.f,
 
-        -.5f,  .5f, 0.f, 0.f, 100.f, 0.f, 1.f, 0.f,
-        -.5f, -.5f, 0.f, 0.f, 0.f, 0.f, 1.f, 0.f,
-         .5f, -.5f, 0.f, 100.f, 0.f, 0.f, 1.f, 0.f,
+        -.5f,  .5f, 0.f, 0.f, 100.f, 0.f, 0.f, -1.f,
+        -.5f, -.5f, 0.f, 0.f, 0.f, 0.f, 0.f, -1.f,
+         .5f, -.5f, 0.f, 100.f, 0.f, 0.f, 0.f, -1.f,
     };
 
     glGenBuffers(1, &VBO);

@@ -23,7 +23,7 @@ uniform vec3 viewPos;
 uniform Light light;
 uniform vec4 color;
 
-vec3 CalcDirLight(vec3 normal, vec3 viewDir, vec4 fragPosLightSpace);
+vec3 CalcDirLight(vec3 norm, vec3 viewDir, vec4 fragPosLightSpace);
 
 void main() {
 	vec3 norm = normalize(normal);
@@ -35,7 +35,7 @@ void main() {
 }
 
 // calculates the color when using a directional light.
-vec3 CalcDirLight(vec3 normal, vec3 viewDir, vec4 fragPosLightSpace)
+vec3 CalcDirLight(vec3 norm, vec3 viewDir, vec4 fragPosLightSpace)
 {
     vec3 lightDir = vec3(0.f);
     if (light.direction == vec3(0.f)) {
@@ -44,9 +44,9 @@ vec3 CalcDirLight(vec3 normal, vec3 viewDir, vec4 fragPosLightSpace)
         lightDir = normalize(-light.direction);
     }
     // diffuse shading
-    float diff = max(dot(normal, lightDir), 0.f);
+    float diff = max(dot(norm, lightDir), 0.f);
     // specular shading
-    vec3 reflectDir = reflect(-lightDir, normal);
+    vec3 reflectDir = reflect(-lightDir, norm);
     float spec = pow(max(dot(viewDir, reflectDir), 0.0), 32);
     // combine results
     vec3 ambient = light.ambient;
@@ -58,7 +58,7 @@ vec3 CalcDirLight(vec3 normal, vec3 viewDir, vec4 fragPosLightSpace)
     projCoords = projCoords * 0.5 + 0.5;
     float closestDepth = texture(texture3, projCoords.xy).r; 
     float currentDepth = projCoords.z;
-    float bias = .005f;
+    float bias = .0005f;
     float shadow = 0.0;
     vec2 texelSize = 1.0 / textureSize(texture3, 0);
     for(int x = -1; x <= 1; ++x)
