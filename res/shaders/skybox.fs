@@ -9,7 +9,7 @@ uniform float alpha;
 void main()
 {
     vec4 textureColor = texture(texture0, TexCoords);
-	// textureColor.a = alpha;
-	textureColor = textureColor * alpha;
+	textureColor.a = alpha;
+	// textureColor = textureColor * alpha;
 	FragColor = textureColor;
 }
