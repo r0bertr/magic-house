@@ -231,15 +231,14 @@ void Game::render() {
 
 	renderObjects(camera, resManager->getShader("mesh"));
 
-    // float dayAlpha = light->rotate(glm::vec3(7.f, 0.f, -43.f));
-	// float nightAlpha = 1 - dayAlpha;
+    float dayAlpha = light->rotate(glm::vec3(7.f, 0.f, -43.f));
     resManager->getRenderer("skybox")->draw(projection, view, viewPos,
         glm::vec3(0.f, -100.f, 0.f), glm::vec3(500.f),
-        glm::vec3(1.f), 0.f, glm::vec4(1.f, 1.f, 1.f, 1));
+        glm::vec3(1.f), 0.f, glm::vec4(1.f, 1.f, 1.f, dayAlpha));
 
 	resManager->getRenderer("nightSkybox")->draw(projection, view, viewPos,
 		glm::vec3(0.f, -100.f, 0.f), glm::vec3(500.f),
-        glm::vec3(1.f), 0.f, glm::vec4(1.f, 1.f, 1.f, 0));
+        glm::vec3(1.f), 0.f, glm::vec4(1.f, 1.f, 1.f, 1 - dayAlpha));
 
 }
 
