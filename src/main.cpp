@@ -55,6 +55,7 @@ int main() {
     glfwSetCursorPosCallback(game.getWindow(), mouseCallback);
     glfwSetFramebufferSizeCallback(game.getWindow(), framebuffer_size_callback);
     glEnable(GL_DEPTH_TEST);
+	glEnable(GL_MULTISAMPLE);
 
     // Main Loop
     while (!glfwWindowShouldClose(game.getWindow())) {
