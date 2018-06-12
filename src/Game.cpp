@@ -26,6 +26,7 @@ Game::Game(GLuint width, GLuint height) {
     this->width = width;
     this->height = height;
     resManager = ResourceManager::GetInstance();
+    collisionDetector = CollisionDetector::getInstance();
 }
 
 Game::~Game() {
@@ -150,47 +151,58 @@ void Game::renderObjects(Camera *camera, Shader *shader) {
 	if (shader)
 		resManager->getModel("farmhouse")->setShader(shader);
 	resManager->getModel("farmhouse")->draw(projection, view, viewPos,
-        glm::vec3(7.f, 0.f, -43.f), glm::vec3(.8f),
-        glm::vec3(0.f, 1.f, 0.f), 180.f);
+        glm::vec3(7.f, 0.f, -50.f), glm::vec3(.8f),
+        glm::vec3(0.f, 1.f, 0.f), 180.f, glm::vec4(0.f),
+        glm::vec3(18.f, 50.f, 30.f));
 
 	if (shader)
 		resManager->getModel("tree")->setShader(shader);
 	resManager->getModel("tree")->draw(projection, view, viewPos,
-		glm::vec3(30.f, -2.f, -35.f), glm::vec3(1.f));
+		glm::vec3(30.f, -2.f, -35.f), glm::vec3(1.f),
+        glm::vec3(1.f), 0.f, glm::vec4(0.f),
+        glm::vec3(2.f, 50.f, 2.f));
 
 	if (shader)
 		resManager->getModel("woodenfence")->setShader(shader);
     resManager->getModel("woodenfence")->draw(projection, view, viewPos,
 		glm::vec3(0, 0.f, -20.f), glm::vec3(0.25f, 0.15f, 0.25f),
-		glm::vec3(0.f, 1.f, 0.f), 90.f);
+		glm::vec3(0.f, 1.f, 0.f), 90.f, glm::vec4(1.f),
+        glm::vec3(24.f, 10.f, 3.f));
 
     resManager->getModel("woodenfence")->draw(projection, view, viewPos,
 		glm::vec3(30.f, 0.f, -20.f), glm::vec3(0.25f, 0.15f, 0.25f),
-		glm::vec3(0.f, 1.f, 0.f), 90.f);
+		glm::vec3(0.f, 1.f, 0.f), 90.f, glm::vec4(1.f),
+        glm::vec3(24.f, 20.f, 3.f));
 
     resManager->getModel("woodenfence")->draw(projection, view, viewPos,
 		glm::vec3(0.f, 0.f, -68.f), glm::vec3(0.25f, 0.15f, 0.25f),
-		glm::vec3(0.f, 1.f, 0.f), 90.f);
+		glm::vec3(0.f, 1.f, 0.f), 90.f, glm::vec4(1.f),
+        glm::vec3(24.f, 20.f, 3.f));
 
     resManager->getModel("woodenfence")->draw(projection, view, viewPos,
 		glm::vec3(30.f, 0.f, -68.f), glm::vec3(0.25f, 0.15f, 0.25f),
-		glm::vec3(0.f, 1.f, 0.f), 90.f);
+		glm::vec3(0.f, 1.f, 0.f), 90.f, glm::vec4(1.f),
+        glm::vec3(24.f, 20.f, 3.f));
 
     resManager->getModel("woodenfence")->draw(projection, view, viewPos,
 		glm::vec3(-13.f, 0.f, -33.f), glm::vec3(0.25f, 0.15f, 0.25f),
-		glm::vec3(0.f, 1.f, 0.f), 0.f);
+		glm::vec3(0.f, 1.f, 0.f), 0.f, glm::vec4(1.f),
+        glm::vec3(3.f, 20.f, 24.f));
 
     resManager->getModel("woodenfence")->draw(projection, view, viewPos,
 		glm::vec3(-13.f, 0.f, -57.f), glm::vec3(0.25f, 0.15f, 0.25f),
-		glm::vec3(0.f, 1.f, 0.f), 0.f);
+		glm::vec3(0.f, 1.f, 0.f), 0.f, glm::vec4(1.f),
+        glm::vec3(3.f, 20.f, 24.f));
 
     resManager->getModel("woodenfence")->draw(projection, view, viewPos,
 		glm::vec3(41.f, 0.f, -33.f), glm::vec3(0.25f, 0.15f, 0.25f),
-		glm::vec3(0.f, 1.f, 0.f), 0.f);
+		glm::vec3(0.f, 1.f, 0.f), 0.f, glm::vec4(1.f),
+        glm::vec3(3.f, 20.f, 24.f));
 
     resManager->getModel("woodenfence")->draw(projection, view, viewPos,
 		glm::vec3(41.f, 0.f, -57.f), glm::vec3(0.25f, 0.15f, 0.25f),
-		glm::vec3(0.f, 1.f, 0.f), 0.f);
+		glm::vec3(0.f, 1.f, 0.f), 0.f, glm::vec4(1.f),
+        glm::vec3(3.f, 20.f, 24.f));
 
 }
 
@@ -201,6 +213,10 @@ void Game::render() {
     glm::mat4 view = camera->getView();
     glm::vec3 viewPos = camera->getPos();
     camera->jumpCheck();
+
+    if (collisionDetector->judge(viewPos)) {
+        camera->undoMove();
+    }
 
     glViewport(0, 0, SHADOW_WIDTH, SHADOW_HEIGHT);
 	glBindFramebuffer(GL_FRAMEBUFFER, depthMapFBO);
@@ -214,15 +230,15 @@ void Game::render() {
 
 	renderObjects(camera, resManager->getShader("mesh"));
 
-    float dayAlpha = light->rotate(glm::vec3(7.f, 0.f, -43.f));
-	float nightAlpha = 1 - dayAlpha;
+    // float dayAlpha = light->rotate(glm::vec3(7.f, 0.f, -43.f));
+	// float nightAlpha = 1 - dayAlpha;
     resManager->getRenderer("skybox")->draw(projection, view, viewPos,
         glm::vec3(0.f, -100.f, 0.f), glm::vec3(500.f),
-        glm::vec3(1.f), 0.f, glm::vec4(1.f, 1.f, 1.f, dayAlpha));
+        glm::vec3(1.f), 0.f, glm::vec4(1.f, 1.f, 1.f, 1));
 
 	resManager->getRenderer("nightSkybox")->draw(projection, view, viewPos,
 		glm::vec3(0.f, -100.f, 0.f), glm::vec3(500.f),
-        glm::vec3(1.f), 0.f, glm::vec4(1.f, 1.f, 1.f, nightAlpha));
+        glm::vec3(1.f), 0.f, glm::vec4(1.f, 1.f, 1.f, 0));
 
 }
 

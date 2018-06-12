@@ -1,6 +1,7 @@
 #pragma once
 
 #include "ResourceManager.hpp"
+#include "CollisionDetector.hpp"
 
 #define TITLE "Magic House"
 
@@ -20,6 +21,7 @@ private:
     GLuint width, height;
 	GLuint depthMapFBO;
     ResourceManager *resManager;
+    CollisionDetector *collisionDetector;
 
     void renderObjects(Camera *camera, Shader *shader = NULL);
 };

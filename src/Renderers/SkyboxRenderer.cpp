@@ -72,7 +72,8 @@ void SkyboxRenderer::draw(
         glm::vec3 scale,
         glm::vec3 rotAxis,
         GLfloat rotate,
-        glm::vec4 color
+        glm::vec4 color,
+        glm::vec3 collisionSize
     ) {
     enable();
     glDepthFunc(GL_LEQUAL);

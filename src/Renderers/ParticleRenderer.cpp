@@ -228,7 +228,8 @@ void ParticleRenderer::draw(
         glm::vec3 scale,
         glm::vec3 rotAxis,
         GLfloat rotate,
-        glm::vec4 color
+        glm::vec4 color,
+        glm::vec3 collisionSize
     ) {
 
     enable();    
@@ -270,6 +271,8 @@ void ParticleRenderer::draw(
     for (GLuint i = 0; i < numErased; i++) {
         particles->push_back(generate());
     }
+
+    
 
 }
 

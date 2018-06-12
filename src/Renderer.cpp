@@ -40,16 +40,25 @@ void Renderer::draw(
         glm::vec3 scale,
         glm::vec3 rotAxis,
         GLfloat rotate,
-        glm::vec4 color
+        glm::vec4 color,
+        glm::vec3 collisionSize
     ) {
 	enable();
     
 	glm::mat4 model(1.f);
 	glm::mat4 lightSpaceMatrix(1.f), lightView(1.f);
+    glm::vec4 anchor(0.f, 0.f, 0.f, 1.f);
 
     model = glm::translate(model, pos);
+    anchor = model * anchor;
     model = glm::scale(model, scale);
     model = glm::rotate(model, glm::radians(rotate), rotAxis);
+
+    if (collisionSize != glm::vec3(0.f))
+        CollisionDetector::setValue(
+            std::to_string(anchor.x + anchor.y + anchor.z).c_str(),
+            anchor, collisionSize
+        );
 
     shader->uniformM4("model", model);
     shader->uniformM4("view", view);
@@ -83,6 +92,7 @@ void Renderer::draw(
         glDrawElements(GL_TRIANGLES, numVertices, GL_UNSIGNED_INT, NULL);
     else
         glDrawArrays(GL_TRIANGLES, 0, numVertices);
+
 }
 
 void Renderer::setShader(Shader *shader) {

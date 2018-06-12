@@ -21,10 +21,11 @@ Model::~Model() {
 
 void Model::draw(glm::mat4 projection, glm::mat4 view,
     glm::vec3 viewPos, glm::vec3 pos, glm::vec3 scale,
-    glm::vec3 rotAxis, GLfloat rotate) {
+    glm::vec3 rotAxis, GLfloat rotate, glm::vec4 color,
+    glm::vec3 collisionSize) {
     for (GLuint i = 0; i < renderers->size(); i++) {
         renderers->at(i)->draw(projection, view, viewPos, pos, scale, 
-            rotAxis, rotate);
+            rotAxis, rotate, glm::vec4(1.f), collisionSize);
     }
 }
 
