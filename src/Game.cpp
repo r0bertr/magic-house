@@ -4,8 +4,8 @@
 #include <cstdio>
 #include <GLFW/glfw3.h>
 
-const GLuint SHADOW_WIDTH = 1024;
-const GLuint SHADOW_HEIGHT = 1024;
+const GLuint SHADOW_WIDTH = 2048;
+const GLuint SHADOW_HEIGHT = 2048;
 
 Game::Game(GLuint width, GLuint height) {
     glfwInit();
@@ -80,10 +80,10 @@ void Game::init() {
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
     // Load Lights
-    Light *light = resManager->loadLight("light", LIGHT_POINT,
-        glm::vec3(0.f, 35.f, 50.f), glm::vec3(1.f), 
-        glm::ortho(-50.0f, 50.0f, -50.0f, 50.0f, .1f, 1000.f),
-		.4f, 1.f, .5f, glm::vec3(0.f, 0.f, 0.f));
+    Light *light = resManager->loadLight("light", LIGHT_DIRECT,
+        glm::vec3(0.f, 0.f, 500.f), glm::vec3(1.f), 
+        glm::ortho(-50.0f, 50.0f, -50.0f, 50.0f, .1f, 500.f),
+		.4f, 1.f, .5f, glm::vec3(0.f, 0.f, 1.f));
     // Load Renderers
     Texture *buffer[16] = { NULL };
 	buffer[0] = grass; buffer[3] = depthMap;
@@ -110,11 +110,8 @@ void Game::init() {
 		shader, light, "woodenfence");
     resManager->getModel("woodenfence")->setTexture(3, depthMap);
 
-	// resManager->loadModel("res/models/sun/sun.obj",
-	// 	shader, light, "sun");
-
     // Load Camera
-    resManager->loadCamera(glm::radians(45.f), (float)width / height, .1f, 500.f,
+    resManager->loadCamera(glm::radians(45.f), (float)width / height, .1f, 100.f,
         0.f, 5.f, 0.f, 0.f, 0.f, -1.f, 0.f, 1.f, 0.f, "main");
 }
 
@@ -208,29 +205,25 @@ void Game::render() {
     glViewport(0, 0, SHADOW_WIDTH, SHADOW_HEIGHT);
 	glBindFramebuffer(GL_FRAMEBUFFER, depthMapFBO);
 	glClear(GL_DEPTH_BUFFER_BIT);
-    glCullFace(GL_FRONT);
 
 	renderObjects(camera, resManager->getShader("depth"));
 
-    glCullFace(GL_BACK);
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 	glViewport(0, 0, width * 2, height * 2);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	renderObjects(camera, resManager->getShader("mesh"));
 
-    // float dayAlpha = light->rotate(glm::vec3(7.f, 0.f, -43.f));
-	// float nightAlpha = 1 - dayAlpha;
+    float dayAlpha = light->rotate(glm::vec3(7.f, 0.f, -43.f));
+	float nightAlpha = 1 - dayAlpha;
     resManager->getRenderer("skybox")->draw(projection, view, viewPos,
         glm::vec3(0.f, -100.f, 0.f), glm::vec3(500.f),
-        glm::vec3(1.f), 0.f, glm::vec4(1.f, 1.f, 1.f, 1.f));
+        glm::vec3(1.f), 0.f, glm::vec4(1.f, 1.f, 1.f, dayAlpha));
 
-	// resManager->getRenderer("nightSkybox")->draw(projection, view, viewPos,
-	// 	glm::vec3(0.f, -100.f, 0.f), glm::vec3(500.f),
-    //     glm::vec3(1.f), 0.f, glm::vec4(1.f, 1.f, 1.f, nightAlpha));
+	resManager->getRenderer("nightSkybox")->draw(projection, view, viewPos,
+		glm::vec3(0.f, -100.f, 0.f), glm::vec3(500.f),
+        glm::vec3(1.f), 0.f, glm::vec4(1.f, 1.f, 1.f, nightAlpha));
 
-	//resManager->getModel("sun")->draw(projection, view, viewPos,
-		//glm::vec3(30.f, -5.f, -35.f), glm::vec3(1.f));
 }
 
 GLFWwindow *Game::getWindow() const {

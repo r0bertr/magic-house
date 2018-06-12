@@ -24,7 +24,7 @@ Light::Light(
     specular(specular) {
 
     if (type == LIGHT_POINT) {
-        direction = glm::vec3(0.f);
+        this->direction = glm::vec3(0.f);
     }
 
 }

@@ -54,14 +54,11 @@ int main() {
     glfwSetInputMode(game.getWindow(), GLFW_CURSOR, GLFW_CURSOR_DISABLED);
     glfwSetCursorPosCallback(game.getWindow(), mouseCallback);
     glfwSetFramebufferSizeCallback(game.getWindow(), framebuffer_size_callback);
+    glEnable(GL_DEPTH_TEST);
 
     // Main Loop
     while (!glfwWindowShouldClose(game.getWindow())) {
         glfwPollEvents();
-
-        glEnable(GL_DEPTH_TEST);
-        glClearColor(0.f, 0.f, 0.f, 1.f);
-        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         game.processInput();
         game.render();
