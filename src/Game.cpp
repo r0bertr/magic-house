@@ -226,7 +226,7 @@ void Game::render() {
 	renderObjects(camera, resManager->getShader("depth"));
 
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
-	glViewport(0, 0, width * 2, height * 2);
+	glViewport(0, 0, width, height);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	renderObjects(camera, resManager->getShader("mesh"));
