@@ -19,6 +19,11 @@ Model::~Model() {
     delete renderers;
 }
 
+void Model::setModel(Shader *new_shader) {
+	shader = new_shader;
+	return;
+}
+
 void Model::draw(glm::mat4 projection, glm::mat4 view,
     glm::vec3 viewPos, glm::vec3 pos, glm::vec3 scale,
     glm::vec3 rotAxis, GLfloat rotate) {

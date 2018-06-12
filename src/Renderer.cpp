@@ -32,6 +32,11 @@ Renderer::~Renderer() {
         glDeleteVertexArrays(1, &VAO);
 }
 
+void Renderer::setRenderer(Shader *new_shader) {
+	shader = new_shader;
+	return;
+}
+
 void Renderer::draw(
         glm::mat4 projection,
         glm::mat4 view,
@@ -42,10 +47,11 @@ void Renderer::draw(
         GLfloat rotate,
         glm::vec4 color
     ) {
-
-    enable();
+	enable();
     
-    glm::mat4 model(1.f);
+	glm::mat4 model(1.f);
+	glm::mat4 lightSpaceMatrix(1.f), lightView(1.f);
+
     model = glm::translate(model, pos);
     model = glm::scale(model, scale);
     model = glm::rotate(model, glm::radians(rotate), rotAxis);
@@ -75,8 +81,10 @@ void Renderer::draw(
         shader->uniform3("light.ambient", light->getAmbient() * lightColor);
         shader->uniform3("light.diffuse", light->getDiffuse() * lightColor);
         shader->uniform3("light.specular", light->getSpecular() * lightColor);
+		lightView = glm::lookAt(light->getPosition(), glm::vec3(0.0f), glm::vec3(0.0, 1.0, 0.0));
+		lightSpaceMatrix = light->getProjection() * lightView;
+		shader->uniformM4("lightSpaceMatrix", lightSpaceMatrix);
     }
-
     if (EBO)
         glDrawElements(GL_TRIANGLES, numVertices, GL_UNSIGNED_INT, NULL);
     else

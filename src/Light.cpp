@@ -9,6 +9,7 @@ Light::Light(
     glm::vec3 position,
     glm::vec3 color,
     glm::vec3 direction,
+	glm::mat4 projection,
     GLfloat ambient,
     GLfloat diffuse,
     GLfloat specular
@@ -17,6 +18,7 @@ Light::Light(
     position(position),
     color(color),
     direction(direction),
+	projection(projection),
     ambient(ambient),
     diffuse(diffuse),
     specular(specular) {
@@ -39,6 +41,10 @@ glm::vec3 Light::getColor() const {
 
 glm::vec3 Light::getDirection() const {
     return direction;
+}
+
+glm::mat4 Light::getProjection() const {
+	return projection;
 }
 
 GLfloat Light::getAmbient() const {

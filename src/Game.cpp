@@ -4,7 +4,7 @@
 #include <cstdio>
 #include <GLFW/glfw3.h>
 
-Game::Game(GLuint width, GLuint height) {
+Game::Game(GLuint width, GLuint height, GLuint SHADOW_WIDTH, GLuint SHADOW_HEIGHT) {
     glfwInit();
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
@@ -22,6 +22,8 @@ Game::Game(GLuint width, GLuint height) {
 
     this->width = width;
     this->height = height;
+	this->SHADOW_WIDTH = SHADOW_WIDTH;
+	this->SHADOW_HEIGHT = SHADOW_HEIGHT;
     resManager = ResourceManager::GetInstance();
 }
 
@@ -66,7 +68,7 @@ void Game::init() {
     Texture *smokeTexture = resManager->load2DTexture("res/images/smoke.png",
         "smoke");
 	Texture *nightSkyboxTexture = resManager->loadBoxTexture(nightFaces, "nightSkybox");
-	Texture *depthMap = resManager->loadDepthTexture(1024, 1024, "depth");
+	Texture *depthMap = resManager->loadDepthTexture(SHADOW_WIDTH, SHADOW_HEIGHT, "depth");
 
 	glGenFramebuffers(1, &depthMapFBO);
 	glBindFramebuffer(GL_FRAMEBUFFER, depthMapFBO);
@@ -77,9 +79,8 @@ void Game::init() {
 
     // Load Lights
     Light *light = resManager->loadLight("light", LIGHT_DIRECT,
-        glm::vec3(0.f, 5.f, 0.f), glm::vec3(1.f), .4f, 1.f, .5f,
-        glm::vec3(0.f, 0.f, 1.f));
-
+        glm::vec3(0.f, 5.f, 0.f), glm::vec3(1.f), glm::ortho(-10.0f, 10.0f, -10.0f, 10.0f, 1.0f, 7.5f),
+		.4f, 1.f, .5f, glm::vec3(0.f, 0.f, 1.f));
     // Load Renderers
     Texture *buffer[16] = { NULL };
 	buffer[0] = grass; buffer[3] = depthMap;
@@ -139,6 +140,14 @@ void Game::render() {
     glm::vec3 viewPos = camera->getPos();
     camera->jumpCheck();
 
+	glViewport(0, 0, SHADOW_WIDTH, SHADOW_HEIGHT);
+	glBindFramebuffer(GL_FRAMEBUFFER, depthMapFBO);
+	glClear(GL_DEPTH_BUFFER_BIT);
+	resManager->setRenderer("land", "depth");
+	resManager->setModel("farmhouse", "depth");
+	resManager->setModel("tree", "depth");
+	resManager->setModel("woodenfence", "depth");
+
     resManager->getRenderer("land")->draw(projection, view, viewPos,
         glm::vec3(0.f), glm::vec3(1000.f),
         glm::vec3(1.f, 0.f, 0.f), 90.f);
@@ -181,7 +190,57 @@ void Game::render() {
     resManager->getModel("woodenfence")->draw(projection, view, viewPos,
 		glm::vec3(41.f, 0.f, -57.f), glm::vec3(0.25f, 0.15f, 0.25f),
 		glm::vec3(0.f, 1.f, 0.f), 0.f);
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
+	glViewport(0, 0, width, height);
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	resManager->setRenderer("land", "mesh");
+	resManager->setModel("farmhouse", "mesh");
+	resManager->setModel("tree", "mesh");
+	resManager->setModel("woodenfence", "mesh");
+
+	resManager->getRenderer("land")->draw(projection, view, viewPos,
+		glm::vec3(0.f), glm::vec3(1000.f),
+		glm::vec3(1.f, 0.f, 0.f), 90.f);
+
+	resManager->getModel("farmhouse")->draw(projection, view, viewPos,
+		glm::vec3(7.f, 0.f, -43.f), glm::vec3(.8f),
+		glm::vec3(0.f, 1.f, 0.f), 180.f);
+
+	resManager->getModel("tree")->draw(projection, view, viewPos,
+		glm::vec3(30.f, -2.f, -35.f), glm::vec3(1.f));
+
+	resManager->getModel("woodenfence")->draw(projection, view, viewPos,
+		glm::vec3(0, 0.f, -20.f), glm::vec3(0.25f, 0.15f, 0.25f),
+		glm::vec3(0.f, 1.f, 0.f), 90.f);
+
+	resManager->getModel("woodenfence")->draw(projection, view, viewPos,
+		glm::vec3(30.f, 0.f, -20.f), glm::vec3(0.25f, 0.15f, 0.25f),
+		glm::vec3(0.f, 1.f, 0.f), 90.f);
+
+	resManager->getModel("woodenfence")->draw(projection, view, viewPos,
+		glm::vec3(0.f, 0.f, -68.f), glm::vec3(0.25f, 0.15f, 0.25f),
+		glm::vec3(0.f, 1.f, 0.f), 90.f);
+
+	resManager->getModel("woodenfence")->draw(projection, view, viewPos,
+		glm::vec3(30.f, 0.f, -68.f), glm::vec3(0.25f, 0.15f, 0.25f),
+		glm::vec3(0.f, 1.f, 0.f), 90.f);
+
+	resManager->getModel("woodenfence")->draw(projection, view, viewPos,
+		glm::vec3(-13.f, 0.f, -33.f), glm::vec3(0.25f, 0.15f, 0.25f),
+		glm::vec3(0.f, 1.f, 0.f), 0.f);
+
+	resManager->getModel("woodenfence")->draw(projection, view, viewPos,
+		glm::vec3(-13.f, 0.f, -57.f), glm::vec3(0.25f, 0.15f, 0.25f),
+		glm::vec3(0.f, 1.f, 0.f), 0.f);
+
+	resManager->getModel("woodenfence")->draw(projection, view, viewPos,
+		glm::vec3(41.f, 0.f, -33.f), glm::vec3(0.25f, 0.15f, 0.25f),
+		glm::vec3(0.f, 1.f, 0.f), 0.f);
+
+	resManager->getModel("woodenfence")->draw(projection, view, viewPos,
+		glm::vec3(41.f, 0.f, -57.f), glm::vec3(0.25f, 0.15f, 0.25f),
+		glm::vec3(0.f, 1.f, 0.f), 0.f);
 
     float dayAlpha = light->rotate(glm::vec3(7.f, 0.f, -43.f));
 	float nightAlpha = 1 - dayAlpha;

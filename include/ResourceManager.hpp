@@ -31,9 +31,11 @@ public:
 	Texture *loadDepthTexture(const int SHADOW_WIDTH, const int SHADOW_HEIGHT, const GLchar *name);
 
     Renderer *loadRenderer(const RendererType type, Shader *shader,
-        const GLchar *name, Texture **textures = NULL, Light *light = NULL);
+        const GLchar *name, Texture **textures = NULL, Light *light = NULL); 
+	void setRenderer(const GLchar *name, const GLchar *newShaderName = NULL);
     Renderer *loadParticleRenderer(Shader *shader, Texture *texture,
         const GLchar *config, const GLchar *name, Light *light = NULL);
+	void setModel(const GLchar *name, const GLchar *newShaderName = NULL);
 
     Camera *loadCamera(GLfloat pFov, GLfloat pAspect, GLfloat pNear, GLfloat pFar,
         GLfloat posX, GLfloat posY, GLfloat posZ,
@@ -43,7 +45,7 @@ public:
     Model *loadModel(const GLchar *path, Shader *shader, Light *light, const GLchar *name);
 
     Light *loadLight(const GLchar *name, 
-        LightType type, glm::vec3 position, glm::vec3 color,
+        LightType type, glm::vec3 position, glm::vec3 color, glm::mat4 projection,
         GLfloat ambient, GLfloat diffuse, GLfloat specular,
         glm::vec3 direction = glm::vec3(0.f));
 
