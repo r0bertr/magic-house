@@ -45,7 +45,7 @@ void Game::init() {
 
     // Load Textures
     Texture *grass = resManager->load2DTexture("res/images/grass.jpg",
-        "grass");
+        "grass", true);
 	// Day Skybox
     const GLchar *faces[6] = {
         "res/images/skybox/right.jpg",
@@ -67,7 +67,7 @@ void Game::init() {
 
     Texture *skyboxTexture = resManager->loadBoxTexture(faces, "skybox", true);
     Texture *smokeTexture = resManager->load2DTexture("res/images/smoke.png",
-        "smoke");
+        "smoke", true);
 	Texture *nightSkyboxTexture = resManager->loadBoxTexture(nightFaces, "nightSkybox", true);
 	Texture *depthMap = resManager->loadDepthTexture(SHADOW_WIDTH, SHADOW_HEIGHT, "depth");
 

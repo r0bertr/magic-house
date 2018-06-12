@@ -117,7 +117,7 @@ Shader *ResourceManager::loadShader(const GLchar *vPath, const GLchar *fPath,
 
 }
 
-Texture *ResourceManager::load2DTexture(const GLchar *srcPath, const GLchar *name) {
+Texture *ResourceManager::load2DTexture(const GLchar *srcPath, const GLchar *name, bool gammaCorrection) {
     GLchar *n = new GLchar[BUFFER_LEN];
     strcpy(n, name);
     if (textures[n]) {
@@ -127,16 +127,25 @@ Texture *ResourceManager::load2DTexture(const GLchar *srcPath, const GLchar *nam
 
     GLint width, height, nChannels;
     GLubyte *data = stbi_load(srcPath, &width, &height, &nChannels, 0);
-    GLenum colorModel = GL_RGB;
+	GLenum internalFormat;
+	GLenum dataFormat;
     if (!data) {
         printf("[ERROR]In ResourceManager::load2DTexture\n");
         printf("\tError loading file\n");
         return NULL;
     }
 
-    if (nChannels == 4)
-        colorModel = GL_RGBA;
-    textures[n] = new Texture(GL_TEXTURE_2D, data, colorModel, width, height);
+	if (nChannels == 3)
+	{
+		internalFormat = gammaCorrection ? GL_SRGB : GL_RGB;
+		dataFormat = GL_RGB;
+	}
+	else {
+		internalFormat = gammaCorrection ? GL_SRGB_ALPHA : GL_RGBA;
+		dataFormat = GL_RGBA;
+	}
+
+    textures[n] = new Texture(GL_TEXTURE_2D, data, internalFormat, dataFormat, width, height);
     stbi_image_free(data);
     return textures[n];
 

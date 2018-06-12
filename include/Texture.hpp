@@ -4,8 +4,8 @@
 
 class Texture {
 public:
-    Texture(GLenum type, GLubyte *data, GLenum colorModel,
-        GLint width, GLint height);
+    Texture(GLenum type, GLubyte *data, GLenum internalFormat,
+        GLenum dataFormat, GLint width, GLint height);
 	Texture(GLenum type, GLint SHADOW_WIDTH, GLint SHADOW_HEIGHT);
     Texture(GLenum type, GLubyte *data[6], GLenum internalFormats[6],
 		GLenum dataFormats[6], GLint width[6], GLint height[6]);

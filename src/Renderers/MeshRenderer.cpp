@@ -74,8 +74,12 @@ void MeshRenderer::processTextures(aiMaterial *material, aiTextureType type) {
     texturePath.Append(temp.C_Str());
     printf("[INFO]In MeshRenderer::processTextures\n");
     printf("\tProcessing texture %s\n", texturePath.C_Str());
-    textures[slot] = ResourceManager::GetInstance()->load2DTexture(
-        texturePath.C_Str(), temp.C_Str());
+    if (slot)
+		textures[slot] = ResourceManager::GetInstance()->load2DTexture(
+			texturePath.C_Str(), temp.C_Str(), false);
+	else
+		textures[slot] = ResourceManager::GetInstance()->load2DTexture(
+			texturePath.C_Str(), temp.C_Str(), true);
 }
 
 MeshRenderer::~MeshRenderer() {
