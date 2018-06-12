@@ -12,6 +12,7 @@ Camera::Camera(GLfloat pFov, GLfloat pAspect, GLfloat pNear, GLfloat pFar,
     this->pNear = pNear;
     this->pFar = pFar;
     this->pos = glm::vec3(posX, posY, posZ);
+    this->lastPos = this->pos;
     this->front = glm::normalize(glm::vec3(frontX, frontY, frontZ));
     this->up = glm::vec3(upX, upY, upZ);
     this->right = glm::normalize(glm::cross(this->front, this->up));
@@ -26,34 +27,42 @@ glm::mat4 Camera::getProjection() const {
 }
 
 void Camera::moveForward(const GLfloat &distance) {
+    lastPos = pos;
     pos += distance * front;
 }
 
 void Camera::moveBack(const GLfloat &distance) {
+    lastPos = pos;
     pos -= distance * front;
 }
 
 void Camera::moveLeft(const GLfloat &distance) {
+    lastPos = pos;
     pos -= distance * right;
 }
 
 void Camera::moveRight(const GLfloat &distance) {
+    lastPos = pos;
     pos += distance * right;
 }
 
 void Camera::moveForward2D(const GLfloat &distance) {
+    lastPos = pos;
     pos += distance * glm::vec3(front.x, 0.f, front.z);
 }
 
 void Camera::moveBack2D(const GLfloat &distance) {
+    lastPos = pos;
     pos -= distance * glm::vec3(front.x, 0.f, front.z);
 }
 
 void Camera::moveLeft2D(const GLfloat &distance) {
+    lastPos = pos;
     pos -= distance * glm::vec3(right.x, 0.f, right.z);
 }
 
 void Camera::moveRight2D(const GLfloat &distance) {
+    lastPos = pos;
     pos += distance * glm::vec3(right.x, 0.f, right.z);
 }
 
@@ -84,6 +93,10 @@ void Camera::rotate(const GLfloat pitch, const GLfloat yaw) {
     front.y = sin(pitch);
     front.z = cos(pitch) * sin(yaw);
     right = glm::normalize(glm::cross(front, up));
+}
+
+void Camera::undoMove() {
+    pos = lastPos;
 }
 
 void Camera::jump() {

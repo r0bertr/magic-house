@@ -7,6 +7,7 @@ class Camera {
 private:
     GLfloat pFov, pAspect, pNear, pFar;
     GLfloat pitch, yaw;
+    glm::vec3 lastPos;
     glm::vec3 pos;
     glm::vec3 front;
     glm::vec3 right;
@@ -28,6 +29,8 @@ public:
     void moveBack2D(const GLfloat &distance);
     void moveRight2D(const GLfloat &distance);
     void moveLeft2D(const GLfloat &distance);
+
+    void undoMove();
 
     void rotateLeft(const GLfloat &quantity);
     void rotateRight(const GLfloat &quantity);
