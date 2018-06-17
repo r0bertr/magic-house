@@ -4,6 +4,8 @@
 #include <cstdio>
 #include <GLFW/glfw3.h>
 
+#define __APPLE_RETINA__ false
+
 const GLuint SHADOW_WIDTH = 2048;
 const GLuint SHADOW_HEIGHT = 2048;
 bool hdr = true;
@@ -37,6 +39,11 @@ Game::~Game() {
 }
 
 void Game::initFramebuffer() {
+	if (__APPLE_RETINA__) {
+		width *= 2;
+		height *= 2;
+	}
+
 	// configure floating point framebuffer
 	// ------------------------------------
 	glGenFramebuffers(1, &hdrFBO);
@@ -277,15 +284,14 @@ void Game::render() {
     glm::mat4 projection = camera->getProjection();
     glm::mat4 view = camera->getView();
     glm::vec3 viewPos = camera->getPos();
+	static glm::vec3 lastViewPos = camera->getPos();
     camera->jumpCheck();
-
     if (collisionDetector->judge(viewPos)) {
-        camera->undoMove();
+        camera->setPos(lastViewPos);
     }
+	lastViewPos = camera->getPos();
 	
 	// Shadow rendering
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
 	glViewport(0, 0, SHADOW_WIDTH, SHADOW_HEIGHT);
 	glBindFramebuffer(GL_FRAMEBUFFER, depthMapFBO);
 	glClear(GL_DEPTH_BUFFER_BIT);
@@ -300,20 +306,17 @@ void Game::render() {
 	// 1. render scene into floating point framebuffer
 	// -----------------------------------------------
 	glBindFramebuffer(GL_FRAMEBUFFER, hdrFBO);
-		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-		renderObjects(camera, resManager->getShader("mesh"));
+	renderObjects(camera, resManager->getShader("mesh"));
+	float dayAlpha = light->rotate(glm::vec3(7.f, 0.f, -43.f));
+	resManager->getRenderer("skybox")->draw(projection, view, viewPos,
+		glm::vec3(0.f, -100.f, 0.f), glm::vec3(500.f),
+		glm::vec3(1.f), 0.f, glm::vec4(1.f, 1.f, 1.f, dayAlpha));
+	resManager->getRenderer("nightSkybox")->draw(projection, view, viewPos,
+		glm::vec3(0.f, -100.f, 0.f), glm::vec3(500.f),
+		glm::vec3(1.f), 0.f, glm::vec4(1.f, 1.f, 1.f, 1 - dayAlpha));
 
-		float dayAlpha = light->rotate(glm::vec3(7.f, 0.f, -43.f));
-
-		resManager->getRenderer("skybox")->draw(projection, view, viewPos,
-			glm::vec3(0.f, -100.f, 0.f), glm::vec3(500.f),
-			glm::vec3(1.f), 0.f, glm::vec4(1.f, 1.f, 1.f, dayAlpha));
-
-		resManager->getRenderer("nightSkybox")->draw(projection, view, viewPos,
-			glm::vec3(0.f, -100.f, 0.f), glm::vec3(500.f),
-			glm::vec3(1.f), 0.f, glm::vec4(1.f, 1.f, 1.f, 1 - dayAlpha));
-	
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
 	// 2. now render floating point color buffer to 2D quad and tonemap HDR colors to default framebuffer's (clamped) color range
@@ -326,7 +329,7 @@ void Game::render() {
 	resManager->getShader("hdr")->uniform1("exposure", exposure);
 	renderQuad();
 
-	std::cout << "hdr: " << (hdr ? "on" : "off") << "| exposure: " << exposure << std::endl;
+	// std::cout << "hdr: " << (hdr ? "on" : "off") << "| exposure: " << exposure << std::endl;
 }
 
 GLFWwindow *Game::getWindow() const {
