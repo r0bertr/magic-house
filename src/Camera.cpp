@@ -95,8 +95,8 @@ void Camera::rotate(const GLfloat pitch, const GLfloat yaw) {
     right = glm::normalize(glm::cross(front, up));
 }
 
-void Camera::undoMove() {
-    pos = lastPos;
+void Camera::setPos(const glm::vec3 pos) {
+    this->pos = pos;
 }
 
 void Camera::jump() {

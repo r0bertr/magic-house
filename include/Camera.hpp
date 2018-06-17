@@ -32,7 +32,7 @@ public:
     void moveRight2D(const GLfloat &distance);
     void moveLeft2D(const GLfloat &distance);
 
-    void undoMove();
+    void setPos(const glm::vec3 pos);
 
     void rotateLeft(const GLfloat &quantity);
     void rotateRight(const GLfloat &quantity);
