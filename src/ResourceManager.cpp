@@ -163,7 +163,7 @@ Texture *ResourceManager::loadDepthTexture(const int SHADOW_WIDTH, const int SHA
 
 }
 Renderer *ResourceManager::loadParticleRenderer(Shader *shader,
-    Texture *texture, const GLchar *config, const GLchar *name,
+    const GLchar *config, const GLchar *name,
     Light *light) {
 
     GLchar *n = new GLchar[BUFFER_LEN];
@@ -173,9 +173,7 @@ Renderer *ResourceManager::loadParticleRenderer(Shader *shader,
         delete []n;
     }
 
-    Texture *textures[16] = {NULL};
-    textures[0] = texture;
-    Renderer *renderer = new ParticleRenderer(shader, config, textures, light);
+    Renderer *renderer = new ParticleRenderer(shader, config, light);
     renderers[n] = renderer;
     return renderer;
 

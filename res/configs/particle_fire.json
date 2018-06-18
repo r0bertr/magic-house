@@ -1,20 +1,47 @@
 {
-    "emitterType":1,
-    "shape":0,
-    "life":100,
-    "count":1000,
-    "position":"-5.0,0.0,0.0",
-    "scale":"0.12,0.12,0.12",
-    "direction":"0.0,1.0,0.0",
-    "rotate":0.0,
-    "speed":0.01,
-    "opacity":1.0,
-    "color":"1.0,1.0,1.0",
-    "randPos":"0.5,0.0,0.5",
-    "randScale":"0.05,0.05,0.05",
-    "randDir":"0.8,0.0,0.8",
-    "randRotate":360.0,
-    "randSpeed":0.02,
-    "randOpacity":0.0,
-    "randLife":40
+    "num_particles_mean": 20,
+    "num_particles_variance": 0,
+
+    "init_position_mean_x": 0.0,
+    "init_position_mean_y": 0.0,
+    "init_position_mean_z": 0.0,
+    "init_position_variance_x": 1.0,
+    "init_position_variance_y": 1.0,
+    "init_position_variance_z": 1.0,
+
+    "init_direction_mean_x": 0.0,
+    "init_direction_mean_y": 1.0,
+    "init_direction_mean_z": 0.0,
+    "init_direction_variance_x": 0.0,
+    "init_direction_variance_y": 0.0,
+    "init_direction_variance_z": 0.0,
+
+    "init_speed_mean": 0.005,
+    "init_speed_variance": 0.5,
+
+    "init_size_mean_x": 0,
+    "init_size_mean_y": 0,
+    "init_size_mean_z": 0,
+    "init_size_variance_x": 0.0,
+    "init_size_variance_y": 0.0,
+    "init_size_variance_z": 0.0,
+
+    "init_color_mean_x": 1.0,
+    "init_color_mean_y": 1.0,
+    "init_color_mean_z": 1.0,
+    "init_color_mean_w": 1.0,
+    "init_color_variance_x": 0.0,
+    "init_color_variance_y": 0.0,
+    "init_color_variance_z": 0.0,
+    "init_color_variance_w": 0.0,
+
+    "init_shape": 0,
+
+    "init_life": 100,
+
+    "gravity": 0,
+    "gravity_dir_x": 0.0,
+    "gravity_dir_y": 0.0,
+    "gravity_dir_z": 0.0,
+    "gravity_mag": 0.98
 }

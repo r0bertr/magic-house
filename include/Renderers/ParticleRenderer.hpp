@@ -1,53 +1,74 @@
 #pragma once
 
+#include "lib/cJSON.h"
 #include "Renderer.hpp"
+#include "Model.hpp"
+#include "ResourceManager.hpp"
 #include <vector>
 
-enum ParticleEmitterType {
-    PARTICLE_POINT = 0,
-    PARTICLE_BOX,
-};
-
 enum ParticleShape {
-    PARTICLE_SHAPE_QUAD = 0,
-    PARTICLE_SHAPE_CUBE,
+    PARTICLE_SHAPE_SPHERE = 0,
+    PARTICLE_SHAPE_RECT,
 };
 
-class Particle {
-public:
-    Particle(ParticleShape shape,
-        glm::vec3 position, glm::vec3 scale, glm::vec3 direction,
-        glm::vec3 color, GLfloat rotate,
-        GLfloat speed, GLfloat opacity, GLuint life);
-    ~Particle();
+template<class T>
+struct RandValue {
+    T mean;
+    T variance;
 
-    void bind();
-    void move();
-    bool dead();
-    glm::mat4 getModel() const;
-    glm::vec3 getColor() const;
-    GLfloat getOpacity() const;
-
-private:
-    ParticleShape shape;
-    glm::vec3 position;
-    glm::vec3 scale;
-    glm::vec3 direction;
-    glm::vec3 color;
-    GLfloat rotate;
-    GLfloat speed;
-    GLfloat opacity;
-    GLuint life;
-    GLuint numVertices;
-
-    GLuint VBO, VAO;
+    RandValue();
+    RandValue(T m, T v);
+    T eval() const;
 };
 
 class ParticleRenderer : public Renderer {
 public:
-    ParticleRenderer(Shader *shader, const GLchar *config, 
-    Texture **textures = NULL, Light *light = NULL);
+    ParticleRenderer(Shader *shader, const GLchar *config, Light *light = NULL);
+    ParticleRenderer(const ParticleRenderer &r);
     ~ParticleRenderer();
+
+    virtual void draw(
+        glm::mat4 projection,
+        glm::mat4 view,
+        glm::vec3 viewPos,
+        glm::vec3 pos = glm::vec3(0.f),
+        glm::vec3 scale = glm::vec3(1.f),
+        glm::vec3 rotAxis = glm::vec3(1.f),
+        GLfloat rotate = 0.f,
+        glm::vec4 color = glm::vec4(1.f),
+        glm::vec3 collisionSize = glm::vec3(0.f)
+    );
+    
+    virtual void enable();
+    virtual void setShader(Shader *shader);
+
+    virtual bool dead();
+
+protected:
+    RandValue<GLint> numParticles;
+    RandValue<glm::vec3> initPosition;
+    RandValue<glm::vec3> initDirection;
+    RandValue<GLfloat> initSpeed;
+    RandValue<glm::vec3> initSize;
+    RandValue<glm::vec4> initColor;
+    ParticleShape initShape;
+    GLuint initLife;
+    bool gravity;
+    glm::vec3 gravityDir;
+    GLfloat gravityMag;
+
+private:
+    std::vector<ParticleRenderer *> children;
+
+    virtual void initRenderData();
+    void initAttributes(cJSON *parameters);
+    void spawn();
+};
+
+class Particle : public ParticleRenderer {
+public:
+    Particle(const ParticleRenderer &r);
+    ~Particle();
 
     void draw(
         glm::mat4 projection,
@@ -60,30 +81,17 @@ public:
         glm::vec4 color = glm::vec4(1.f),
         glm::vec3 collisionSize = glm::vec3(0.f)
     );
-    
+    void animate();
     void enable();
+    bool dead();
 
 private:
-    std::vector<Particle *> *particles;
-    ParticleEmitterType type;
-    ParticleShape shape;
-    GLuint life;
-    GLuint count;
+    Model *model;
     glm::vec3 position;
-    glm::vec3 scale;
     glm::vec3 direction;
-    GLfloat rotate;
     GLfloat speed;
-    GLfloat opacity;
-    glm::vec3 color;
-    glm::vec3 randPos;
-    glm::vec3 randScale;
-    glm::vec3 randDir;
-    GLfloat randRotate;
-    GLfloat randSpeed;
-    GLfloat randOpacity;
-    GLuint randLife;
-
+    glm::vec4 color;
+    glm::vec3 size;
+    GLuint life;
     void initRenderData();
-    Particle *generate();
 };

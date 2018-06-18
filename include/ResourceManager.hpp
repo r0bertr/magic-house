@@ -32,7 +32,7 @@ public:
 
     Renderer *loadRenderer(const RendererType type, Shader *shader,
         const GLchar *name, Texture **textures = NULL, Light *light = NULL); 
-    Renderer *loadParticleRenderer(Shader *shader, Texture *texture,
+    Renderer *loadParticleRenderer(Shader *shader,
         const GLchar *config, const GLchar *name, Light *light = NULL);
 
     Camera *loadCamera(GLfloat pFov, GLfloat pAspect, GLfloat pNear, GLfloat pFar,

@@ -4,7 +4,7 @@
 #include <cstdio>
 #include <GLFW/glfw3.h>
 
-#define __APPLE_RETINA__ false
+#define __APPLE_RETINA__ true
 
 const GLuint SHADOW_WIDTH = 2048;
 const GLuint SHADOW_HEIGHT = 2048;
@@ -73,8 +73,6 @@ void Game::init() {
         "res/shaders/mesh.fs", NULL, "mesh");
     Shader *skyboxShader = resManager->loadShader("res/shaders/skybox.vs",
         "res/shaders/skybox.fs", NULL, "skybox");
-	Shader *particleShader = resManager->loadShader("res/shaders/particle.vs",
-		"res/shaders/particle.fs", NULL, "particle");
 	Shader *depthShader = resManager->loadShader("res/shaders/depth.vs",
 		"res/shaders/depth.fs", NULL, "depth");
 	Shader *hdrShader = resManager->loadShader("res/shaders/hdr.vs",
@@ -103,8 +101,6 @@ void Game::init() {
 	};
 
     Texture *skyboxTexture = resManager->loadBoxTexture(faces, "skybox", true);
-    Texture *smokeTexture = resManager->load2DTexture("res/images/smoke.png",
-        "smoke", true);
 	Texture *nightSkyboxTexture = resManager->loadBoxTexture(nightFaces, "nightSkybox", true);
 	Texture *depthMap = resManager->loadDepthTexture(SHADOW_WIDTH, SHADOW_HEIGHT, "depth");
 
@@ -133,7 +129,7 @@ void Game::init() {
 	buffer[0] = skyboxTexture; buffer[3] = NULL;
     resManager->loadRenderer(RENDERER_SKYBOX, skyboxShader,
         "skybox", buffer);
-    resManager->loadParticleRenderer(particleShader, smokeTexture,
+    resManager->loadParticleRenderer(shader,
         "res/configs/particle_fire.json", "particle_fire");
 	buffer[0] = nightSkyboxTexture; buffer[3] = NULL;
 	resManager->loadRenderer(RENDERER_SKYBOX, skyboxShader,
@@ -202,6 +198,12 @@ void Game::renderObjects(Camera *camera, Shader *shader) {
 		glm::vec3(30.f, -2.f, -35.f), glm::vec3(1.f),
         glm::vec3(1.f), 0.f, glm::vec4(0.f),
         glm::vec3(2.f, 50.f, 2.f));
+
+	if (shader)
+		resManager->getRenderer("particle_fire")->setShader(shader);
+	resManager->getRenderer("particle_fire")->draw(projection, view, viewPos,
+		glm::vec3(0.f, 5.f, -3.f), glm::vec3(.025f),
+		glm::vec3(1.f), 0.f, glm::vec4(1.f));
 
 	if (shader)
 		resManager->getModel("woodenfence")->setShader(shader);
@@ -309,7 +311,8 @@ void Game::render() {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	renderObjects(camera, resManager->getShader("mesh"));
-	float dayAlpha = light->rotate(glm::vec3(7.f, 0.f, -43.f));
+	// float dayAlpha = light->rotate(glm::vec3(7.f, 0.f, -43.f));
+	float dayAlpha = 1.f;
 	resManager->getRenderer("skybox")->draw(projection, view, viewPos,
 		glm::vec3(0.f, -100.f, 0.f), glm::vec3(500.f),
 		glm::vec3(1.f), 0.f, glm::vec4(1.f, 1.f, 1.f, dayAlpha));
