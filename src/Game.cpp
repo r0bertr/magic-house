@@ -8,8 +8,47 @@
 
 const GLuint SHADOW_WIDTH = 2048;
 const GLuint SHADOW_HEIGHT = 2048;
+const GLfloat PI = 3.1415926;
 bool hdr = true;
 float exposure = 1.0f;
+
+void mouseCallback(GLFWwindow *window, double xpos, double ypos) {
+    static bool firstMouse = true;
+    static float lastX = 0.f, lastY = 0.f;
+    static float yaw = -90.f, pitch = 0.f;
+    static float lastTime = 0.f;
+
+    if (firstMouse) {
+        lastX = xpos;
+        lastY = ypos;
+        firstMouse = false;
+    }
+
+    float xoffset = xpos - lastX;
+    float yoffset = lastY - ypos;
+    lastX = xpos;
+    lastY = ypos;
+
+    float curTime = (float)glfwGetTime();
+    float sensitivity = .2f * (curTime - lastTime);
+    xoffset *= sensitivity;
+    yoffset *= sensitivity;
+    lastTime = curTime;
+
+    yaw += xoffset;
+    pitch += yoffset;
+
+    if (pitch > PI / 2 - 0.01f)
+        pitch = PI / 2 - 0.01f;
+    if (pitch < -PI / 2 + 0.01f)
+        pitch = -PI / 2 + 0.01f;
+
+    ResourceManager::GetInstance()->getCamera("main")->rotate(pitch, yaw);
+}
+
+void framebuffer_size_callback(GLFWwindow* window, int width, int height) {
+    glViewport(0, 0, width, height);
+}
 
 Game::Game(GLuint width, GLuint height) {
     glfwInit();
@@ -69,6 +108,13 @@ void Game::initFramebuffer() {
 }
 
 void Game::init() {
+
+	glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+    glfwSetCursorPosCallback(window, mouseCallback);
+    glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
+    glEnable(GL_DEPTH_TEST);
+	glEnable(GL_MULTISAMPLE);
+
     // Load Shaders
     Shader *shader = resManager->loadShader("res/shaders/mesh.vs", 
         "res/shaders/mesh.fs", NULL, "mesh");
@@ -174,6 +220,17 @@ void Game::processInput() {
         camera->moveRight2D(moveSpeed);
     if (glfwGetKey(window, GLFW_KEY_SPACE) == GLFW_PRESS)
         camera->jump();
+	if (glfwGetKey(window, GLFW_KEY_GRAVE_ACCENT) == GLFW_PRESS) {
+		if (glfwGetInputMode(window, GLFW_CURSOR) == GLFW_CURSOR_DISABLED) {
+			glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+			glfwSetCursorPosCallback(window, NULL);
+			gui->enable();
+		} else if (glfwGetInputMode(window, GLFW_CURSOR) == GLFW_CURSOR_NORMAL) {
+			glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+			glfwSetCursorPosCallback(window, mouseCallback);
+			gui->disable();
+		}
+	}
 }
 
 void Game::renderObjects(Camera *camera, Shader *shader) {
