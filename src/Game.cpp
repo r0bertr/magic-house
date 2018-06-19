@@ -4,7 +4,7 @@
 #include <cstdio>
 #include <GLFW/glfw3.h>
 
-#define __APPLE_RETINA__ true
+#define __APPLE_RETINA__ false
 
 const GLuint SHADOW_WIDTH = 2048;
 const GLuint SHADOW_HEIGHT = 2048;
@@ -109,12 +109,6 @@ void Game::initFramebuffer() {
 
 void Game::init() {
 
-	glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
-    glfwSetCursorPosCallback(window, mouseCallback);
-    glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
-    glEnable(GL_DEPTH_TEST);
-	glEnable(GL_MULTISAMPLE);
-
     // Load Shaders
     Shader *shader = resManager->loadShader("res/shaders/mesh.vs", 
         "res/shaders/mesh.fs", NULL, "mesh");
@@ -200,6 +194,12 @@ void Game::init() {
         0.f, 5.f, 0.f, 0.f, 0.f, -1.f, 0.f, 1.f, 0.f, "main");
 
 	gui->init();
+
+	glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+    glfwSetCursorPosCallback(window, mouseCallback);
+    glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
+    glEnable(GL_DEPTH_TEST);
+	glEnable(GL_MULTISAMPLE);
 }
 
 void Game::processInput() {
