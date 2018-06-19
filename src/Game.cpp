@@ -188,6 +188,10 @@ void Game::init() {
 	resManager->loadModel("res/models/fence/Fence_White.obj",
 		shader, light, "woodenfence");
     resManager->getModel("woodenfence")->setTexture(3, depthMap);
+	
+	resManager->loadModel("res/models/Frog/Creature.obj",
+		shader, light, "frog");
+	resManager->getModel("frog")->setTexture(3, depthMap);
 
     // Load Camera
     resManager->loadCamera(glm::radians(45.f), (float)width / height, .1f, 100.f,
@@ -307,6 +311,9 @@ void Game::renderObjects(Camera *camera, Shader *shader) {
 		glm::vec3(0.f, 1.f, 0.f), 0.f, glm::vec4(1.f),
         glm::vec3(3.f, 20.f, 24.f));
 
+	resManager->getModel("frog")->draw(projection, view, viewPos,
+		glm::vec3(10.f, 0.5f, -3.f), glm::vec3(3.f),
+		glm::vec3(1.f, 0.f, 0.f), 220.f);
 }
 
 // renderQuad() renders a 1x1 XY quad in NDC
