@@ -10,9 +10,12 @@ public:
 
     void init();
     void render(ParticleAttributes *parAttrs);
+    void enable();
+    void disable();
 
 private:
     GLFWwindow *window;
+    bool enabled;
 
     void renderParticleConsole(ParticleAttributes *parAttrs);
 };

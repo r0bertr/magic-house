@@ -2,7 +2,7 @@
 #include "lib/imgui_impl_glfw_gl3.h"
 
 GUI::GUI(GLFWwindow *window)
-    : window(window) {}
+    : window(window), enabled(false) {}
 
 GUI::~GUI() {
     ImGui_ImplGlfwGL3_Shutdown();
@@ -18,6 +18,9 @@ void GUI::init() {
 
 void GUI::render(ParticleAttributes *parAttrs) {
 
+    if (!enabled)
+        return;
+
     ImGui_ImplGlfwGL3_NewFrame();
 
     renderParticleConsole(parAttrs);
@@ -25,6 +28,14 @@ void GUI::render(ParticleAttributes *parAttrs) {
     ImGui::Render();
     ImGui_ImplGlfwGL3_RenderDrawData(ImGui::GetDrawData());
 
+}
+
+void GUI::enable() {
+    enabled = true;
+}
+
+void GUI::disable() {
+    enabled = false;
 }
 
 void GUI::renderParticleConsole(ParticleAttributes *parAttrs) {
