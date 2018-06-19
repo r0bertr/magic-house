@@ -72,6 +72,7 @@ Game::Game(GLuint width, GLuint height) {
     resManager = ResourceManager::GetInstance();
     collisionDetector = CollisionDetector::getInstance();
 	gui = new GUI(window);
+	frog = new MyFrog();
 }
 
 Game::~Game() {
@@ -312,8 +313,8 @@ void Game::renderObjects(Camera *camera, Shader *shader) {
         glm::vec3(3.f, 20.f, 24.f));
 
 	resManager->getModel("frog")->draw(projection, view, viewPos,
-		glm::vec3(10.f, 0.5f, -3.f), glm::vec3(3.f),
-		glm::vec3(1.f, 0.f, 0.f), 220.f);
+		frog->getPosition(), frog->getScale(),
+		frog->getRotAxis(), frog->getRotate());
 }
 
 // renderQuad() renders a 1x1 XY quad in NDC

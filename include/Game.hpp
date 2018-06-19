@@ -3,6 +3,7 @@
 #include "ResourceManager.hpp"
 #include "CollisionDetector.hpp"
 #include "GUI.hpp"
+#include "Frog.hpp"
 
 #define TITLE "Magic House"
 
@@ -26,6 +27,7 @@ private:
     ResourceManager *resManager;
     CollisionDetector *collisionDetector;
     GUI *gui;
+    MyFrog *frog;
 
     void renderObjects(Camera *camera, Shader *shader = NULL);
 	void initFramebuffer();
