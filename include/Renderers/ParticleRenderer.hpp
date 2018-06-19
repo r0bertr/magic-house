@@ -21,6 +21,27 @@ struct RandValue {
     T eval() const;
 };
 
+struct ParticleAttributes {
+
+    RandValue<GLint> numParticles;
+    RandValue<glm::vec3> initPosition;
+    RandValue<glm::vec3> initDirection;
+    RandValue<GLfloat> initSpeed;
+    RandValue<glm::vec3> initSize;
+    RandValue<glm::vec4> initColor;
+    ParticleShape initShape;
+    GLuint initLife;
+    bool gravity;
+    glm::vec3 gravityDir;
+    GLfloat gravityMag;
+
+    ParticleAttributes();
+    ParticleAttributes(const GLchar *path);
+    void setAttributes(cJSON *parameters);
+    void dump(const GLchar *path);
+
+};
+
 class ParticleRenderer : public Renderer {
 public:
     ParticleRenderer(Shader *shader, const GLchar *config, Light *light = NULL);
@@ -41,27 +62,17 @@ public:
     
     virtual void enable();
     virtual void setShader(Shader *shader);
-
     virtual bool dead();
 
+    ParticleAttributes *getAttributes();
+
 protected:
-    RandValue<GLint> numParticles;
-    RandValue<glm::vec3> initPosition;
-    RandValue<glm::vec3> initDirection;
-    RandValue<GLfloat> initSpeed;
-    RandValue<glm::vec3> initSize;
-    RandValue<glm::vec4> initColor;
-    ParticleShape initShape;
-    GLuint initLife;
-    bool gravity;
-    glm::vec3 gravityDir;
-    GLfloat gravityMag;
+    ParticleAttributes *attributes;
 
 private:
     std::vector<ParticleRenderer *> children;
 
     virtual void initRenderData();
-    void initAttributes(cJSON *parameters);
     void spawn();
 };
 

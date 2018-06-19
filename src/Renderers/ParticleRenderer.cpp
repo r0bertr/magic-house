@@ -37,14 +37,42 @@ Particle::Particle(const ParticleRenderer &r) :
     
     model = NULL;
 
-    position = initPosition.mean;
-    direction = initDirection.mean;
-    speed = initSpeed.mean;
-    color = initColor.mean;
-    size = initSize.mean;
-    life = initLife;
+    position = attributes->initPosition.mean;
+    direction = attributes->initDirection.mean;
+    speed = attributes->initSpeed.mean;
+    color = attributes->initColor.mean;
+    size = attributes->initSize.mean;
+    life = attributes->initLife;
 
     initRenderData();
+
+}
+
+ParticleAttributes *ParticleRenderer::getAttributes() {
+
+    return attributes;
+
+}
+
+ParticleAttributes::ParticleAttributes(const GLchar *path) {
+
+    FILE *configFile = fopen(path, "r");
+    if (!configFile) {
+        printf("\n[ERROR]In ParticleAttributes\n");
+        printf("%s not found\n", path);
+        return;
+    }
+    fseek(configFile, 0, SEEK_END);
+    long n = ftell(configFile);
+    fseek(configFile, 0, SEEK_SET);
+    GLchar *buf = new GLchar[n];
+    fread(buf, 1, n, configFile);
+    fclose(configFile);
+
+    cJSON *parameters = cJSON_Parse(buf);
+    setAttributes(parameters);
+    delete []buf;
+    cJSON_Delete(parameters);
 
 }
 
@@ -98,13 +126,14 @@ bool Particle::dead() {
 void Particle::animate() {
 
     // movement
-    GLfloat t = (GLfloat)(initLife - life);
+    GLfloat t = (GLfloat)(attributes->initLife - life);
     glm::vec3 s1 = t * glm::normalize(direction) * speed;
-    if (gravity) {
-        glm::vec3 s2 = 0.5f * glm::normalize(gravityDir) * gravityMag * t * t;
-        position = initPosition.mean + s1 + s2;
+    if (attributes->gravity) {
+        glm::vec3 s2 = 0.5f * glm::normalize(attributes->gravityDir) * 
+            attributes->gravityMag * t * t;
+        position = attributes->initPosition.mean + s1 + s2;
     } else {
-        position = initPosition.mean + s1;
+        position = attributes->initPosition.mean + s1;
     }
 
     // life
@@ -122,11 +151,11 @@ void Particle::enable() {
 
 void Particle::initRenderData() {
 
-    if (initShape == PARTICLE_SHAPE_SPHERE) {
+    if (attributes->initShape == PARTICLE_SHAPE_SPHERE) {
         model = ResourceManager::GetInstance()->loadModel(
             "res/models/sphere/sphere.obj",
             shader, light, "particle.sphere");
-    } else if (initShape == PARTICLE_SHAPE_RECT) {
+    } else if (attributes->initShape == PARTICLE_SHAPE_RECT) {
         GLfloat vertices[] = {
             -.5f, 0.f, -.5f, 0.f, 0.f, 0.f, 1.f, 0.f,
             -.5f, 0.f,  .5f, 0.f, 1.f, 0.f, 1.f, 0.f,
@@ -158,23 +187,7 @@ ParticleRenderer::ParticleRenderer(Shader *shader, const GLchar *config,
     Light *light) :
     Renderer(shader, NULL, light) {
 
-    FILE *configFile = fopen(config, "r");
-    if (!configFile) {
-        printf("\n[ERROR]In ParticleRenderer\n");
-        printf("%s not found\n", config);
-        return;
-    }
-    fseek(configFile, 0, SEEK_END);
-    long n = ftell(configFile);
-    fseek(configFile, 0, SEEK_SET);
-    GLchar *buf = new GLchar[n];
-    fread(buf, 1, n, configFile);
-    fclose(configFile);
-
-    cJSON *parameters = cJSON_Parse(buf);
-    initAttributes(parameters);
-    delete []buf;
-    cJSON_Delete(parameters);
+    attributes = new ParticleAttributes(config);
 
     initRenderData();
 
@@ -188,26 +201,29 @@ void ParticleRenderer::setShader(Shader *shader) {
 
 }
 
+ParticleAttributes::ParticleAttributes() {}
+
 ParticleRenderer::ParticleRenderer(const ParticleRenderer &r) :
     Renderer(r.shader, NULL, r.light) {
-
-    numParticles.mean = r.numParticles.eval();
-    numParticles.variance = r.numParticles.variance;
-    initPosition.mean = r.initPosition.eval();
-    initPosition.variance = r.initPosition.variance;
-    initDirection.mean = r.initDirection.eval();
-    initDirection.variance = r.initDirection.variance;
-    initSpeed.mean = r.initSpeed.eval();
-    initSpeed.variance = r.initSpeed.variance;
-    initSize.mean = r.initSize.eval();
-    initSize.variance = r.initSize.variance;
-    initColor.mean = r.initColor.eval();
-    initColor.variance = r.initColor.variance;
-    initShape = r.initShape;
-    initLife = r.initLife;
-    gravity = r.gravity;
-    gravityDir = r.gravityDir;
-    gravityMag = r.gravityMag;
+    
+    attributes = new ParticleAttributes();
+    attributes->numParticles.mean = r.attributes->numParticles.eval();
+    attributes->numParticles.variance = r.attributes->numParticles.variance;
+    attributes->initPosition.mean = r.attributes->initPosition.eval();
+    attributes->initPosition.variance = r.attributes->initPosition.variance;
+    attributes->initDirection.mean = r.attributes->initDirection.eval();
+    attributes->initDirection.variance = r.attributes->initDirection.variance;
+    attributes->initSpeed.mean = r.attributes->initSpeed.eval();
+    attributes->initSpeed.variance = r.attributes->initSpeed.variance;
+    attributes->initSize.mean = r.attributes->initSize.eval();
+    attributes->initSize.variance = r.attributes->initSize.variance;
+    attributes->initColor.mean = r.attributes->initColor.eval();
+    attributes->initColor.variance = r.attributes->initColor.variance;
+    attributes->initShape = r.attributes->initShape;
+    attributes->initLife = r.attributes->initLife;
+    attributes->gravity = r.attributes->gravity;
+    attributes->gravityDir = r.attributes->gravityDir;
+    attributes->gravityMag = r.attributes->gravityMag;
     initRenderData();
 
 }
@@ -252,7 +268,7 @@ bool ParticleRenderer::dead() {
 
 void ParticleRenderer::spawn() {
 
-    GLuint num = numParticles.eval();
+    GLuint num = attributes->numParticles.eval();
     for (GLuint i = 0; i < num; i++) {
         ParticleRenderer *r = NULL;
         r = new Particle(*this);
@@ -265,7 +281,7 @@ void ParticleRenderer::enable() {}
 
 void ParticleRenderer::initRenderData() {}
 
-void ParticleRenderer::initAttributes(cJSON *parameters) {
+void ParticleAttributes::setAttributes(cJSON *parameters) {
 
     numParticles.mean = cJSON_GetObjectItem(parameters,
         "num_particles_mean")->valueint;
