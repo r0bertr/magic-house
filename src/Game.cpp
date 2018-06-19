@@ -32,6 +32,7 @@ Game::Game(GLuint width, GLuint height) {
     this->height = height;
     resManager = ResourceManager::GetInstance();
     collisionDetector = CollisionDetector::getInstance();
+	gui = new GUI(window);
 }
 
 Game::~Game() {
@@ -151,6 +152,8 @@ void Game::init() {
     // Load Camera
     resManager->loadCamera(glm::radians(45.f), (float)width / height, .1f, 100.f,
         0.f, 5.f, 0.f, 0.f, 0.f, -1.f, 0.f, 1.f, 0.f, "main");
+
+	gui->init();
 }
 
 void Game::processInput() {
@@ -333,6 +336,10 @@ void Game::render() {
 	renderQuad();
 
 	// std::cout << "hdr: " << (hdr ? "on" : "off") << "| exposure: " << exposure << std::endl;
+
+	// Render GUI
+	gui->render(((ParticleRenderer *)resManager->getRenderer("particle_fire"))->getAttributes());
+
 }
 
 GLFWwindow *Game::getWindow() const {

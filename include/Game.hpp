@@ -2,6 +2,7 @@
 
 #include "ResourceManager.hpp"
 #include "CollisionDetector.hpp"
+#include "GUI.hpp"
 
 #define TITLE "Magic House"
 
@@ -24,6 +25,7 @@ private:
 	GLuint colorBuffer;
     ResourceManager *resManager;
     CollisionDetector *collisionDetector;
+    GUI *gui;
 
     void renderObjects(Camera *camera, Shader *shader = NULL);
 	void initFramebuffer();
