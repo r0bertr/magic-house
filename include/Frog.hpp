@@ -11,6 +11,9 @@ private:
     glm::vec3 rotAxis;
     GLfloat   rotate;
 
+    GLfloat timeSpeed;
+    GLint   weather;
+
 public:
     const static GLfloat distance = 5.0f;
 
