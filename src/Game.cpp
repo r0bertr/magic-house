@@ -72,7 +72,7 @@ Game::Game(GLuint width, GLuint height) {
     resManager = ResourceManager::GetInstance();
     collisionDetector = CollisionDetector::getInstance();
 	gui = new GUI(window);
-	frog = new MyFrog();
+	frog = new MyFrog("res/fonts/Holstein.DDS");
 }
 
 Game::~Game() {
@@ -311,10 +311,13 @@ void Game::renderObjects(Camera *camera, Shader *shader) {
 		glm::vec3(41.f, 0.f, -57.f), glm::vec3(0.25f, 0.15f, 0.25f),
 		glm::vec3(0.f, 1.f, 0.f), 0.f, glm::vec4(1.f),
         glm::vec3(3.f, 20.f, 24.f));
+	
+	frog->printText2D("Hellow world", 40, 500, 20);
 
 	resManager->getModel("frog")->draw(projection, view, viewPos,
 		frog->getPosition(), frog->getScale(),
 		frog->getRotAxis(), frog->getRotate());
+
 }
 
 // renderQuad() renders a 1x1 XY quad in NDC
