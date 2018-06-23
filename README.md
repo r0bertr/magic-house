@@ -12,8 +12,6 @@ A CG Project by OpenGL
 
 - `Assimp` 4.1.0
 
-- `FreeType` 2.9
-
 ### Makefile
 
 You can use `make` to build and run.
