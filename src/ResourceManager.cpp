@@ -1,13 +1,24 @@
 #define STB_IMAGE_IMPLEMENTATION
 #include "lib/stb_image.h"
-#include "lib/glad.h"
 #include "ResourceManager.hpp"
+#include "Renderers/ParticleRenderer.hpp"
+#include "Renderers/LandRenderer.hpp"
+#include "Renderers/SkyboxRenderer.hpp"
 
-#include <GLFW/glfw3.h>
+#include <cstdio>
+#include <cstring>
 #include <assimp/Importer.hpp>
+#include <assimp/scene.h>
 #include <assimp/postprocess.h>
 
 #define BUFFER_LEN 32
+
+char *const2var(const char *c) {
+	int n = strlen(c);
+	char *var = new char[n + 1];
+	strcpy(var, c);
+	return var;
+}
 
 char *readAll(FILE *file) {
     char *result = new char[4096];
@@ -286,28 +297,46 @@ Light *ResourceManager::loadLight(const GLchar *name,
     return lights[n];
 }
 
-Shader *ResourceManager::getShader(GLchar *name) {
-    return shaders[name];
+Shader *ResourceManager::getShader(const GLchar *name) {
+	GLchar *nameStr = const2var(name);
+	Shader *shader = shaders[nameStr];
+	delete nameStr;
+	return shader;
 }
 
-Texture *ResourceManager::getTexture(GLchar *name) {
-    return textures[name];
+Texture *ResourceManager::getTexture(const GLchar *name) {
+	GLchar *nameStr = const2var(name);
+	Texture *texture = textures[nameStr];
+	delete []nameStr;
+	return texture;
 }
 
-Renderer *ResourceManager::getRenderer(GLchar *name) {
-    return renderers[name];
+Renderer *ResourceManager::getRenderer(const GLchar *name) {
+	GLchar *nameStr = const2var(name);
+	Renderer *renderer = renderers[nameStr];
+	delete []nameStr;
+	return renderer;
 }
 
-Camera *ResourceManager::getCamera(GLchar *name) {
-    return cameras[name];
+Camera *ResourceManager::getCamera(const GLchar *name) {
+	GLchar *nameStr = const2var(name);
+	Camera *camera = cameras[nameStr];
+	delete []nameStr;
+    return camera;
 }
 
-Light *ResourceManager::getLight(GLchar *name) {
-	return lights[name];
+Light *ResourceManager::getLight(const GLchar *name) {
+	GLchar *nameStr = const2var(name);
+	Light *light = lights[nameStr];
+	delete []nameStr;
+	return light;
 }
 
-Model *ResourceManager::getModel(GLchar *name) {
-    return models[name];
+Model *ResourceManager::getModel(const GLchar *name) {
+	GLchar *nameStr = const2var(name);
+	Model *model = models[nameStr];
+	delete []nameStr;
+	return model;
 }
 
 ResourceManager::ResourceManager() {}

@@ -1,7 +1,8 @@
 #pragma once
 
+#include "lib/glad.h"
+#include "lib/imgui_impl_glfw_gl3.h"
 #include "Renderers/ParticleRenderer.hpp"
-#include <GLFW/glfw3.h>
 
 class GUI {
 public:

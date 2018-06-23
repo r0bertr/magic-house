@@ -1,4 +1,3 @@
-#include "lib/glad.h"
 #include "Texture.hpp"
 
 Texture::Texture(GLenum type, GLubyte *data, GLenum internalFormat,

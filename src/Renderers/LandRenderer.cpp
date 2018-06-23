@@ -1,7 +1,4 @@
-#include "lib/glad.h"
 #include "Renderers/LandRenderer.hpp"
-
-#include <cstdio>
 
 LandRenderer::LandRenderer(Shader *shader, Texture **textures,
     Light *light) : Renderer(shader, textures, light) {

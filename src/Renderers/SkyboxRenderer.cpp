@@ -1,6 +1,6 @@
-#include "lib/glad.h"
+#include "Renderer.hpp"
 #include "Renderers/SkyboxRenderer.hpp"
-#include "lib/stb_image.h"
+
 using namespace std;
 
 SkyboxRenderer::SkyboxRenderer(Shader *shader, Texture **textures,

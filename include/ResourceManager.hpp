@@ -1,16 +1,17 @@
 #pragma once
 
+#include "lib/glad.h"
 #include "Shader.hpp"
-#include "Renderer.hpp"
 #include "Texture.hpp"
-#include "Camera.hpp"
-#include "Model.hpp"
+#include "Renderer.hpp"
 #include "Light.hpp"
-#include "Renderers/LandRenderer.hpp"
-#include "Renderers/SkyboxRenderer.hpp"
-#include "Renderers/ParticleRenderer.hpp"
+#include "Model.hpp"
+#include "Camera.hpp"
 
+#include <string>
 #include <map>
+
+char *const2var(const char *c);
 
 struct MapCMP {
     bool operator()(const GLchar *keyX, const GLchar *keyY) const {
@@ -47,12 +48,12 @@ public:
         GLfloat ambient, GLfloat diffuse, GLfloat specular,
         glm::vec3 direction = glm::vec3(0.f));
 
-    Shader *getShader(GLchar *name);
-    Texture *getTexture(GLchar *name);
-    Renderer *getRenderer(GLchar *name);
-    Camera *getCamera(GLchar *name);
-    Model *getModel(GLchar *name);
-	Light *getLight(GLchar *name);
+    Shader *getShader(const GLchar *name);
+    Texture *getTexture(const GLchar *name);
+    Renderer *getRenderer(const GLchar *name);
+    Camera *getCamera(const GLchar *name);
+    Model *getModel(const GLchar *name);
+	Light *getLight(const GLchar *name);
 private:
     std::map<GLchar*, Shader*, MapCMP> shaders;
     std::map<GLchar*, Texture*, MapCMP> textures;

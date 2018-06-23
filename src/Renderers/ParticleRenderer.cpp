@@ -1,9 +1,5 @@
-#include "lib/glad.h"
 #include "Renderers/ParticleRenderer.hpp"
-
-#include <glm/gtx/transform.hpp>
-#include <cstdlib>
-#include <string>
+#include "ResourceManager.hpp"
 
 template<class T>
 RandValue<T>::RandValue() {}

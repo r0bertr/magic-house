@@ -1,8 +1,8 @@
 #define _USE_MATH_DEFINES
+
 #include "Light.hpp"
 
-#include <cstdio>
-#include <math.h>
+#include <GLFW/glfw3.h>
 
 Light::Light(
     LightType type,

@@ -1,9 +1,11 @@
 #pragma once
 
-#include <GLFW/glfw3.h>
-#include <glm/glm.hpp>
-#include <map>
+#include "lib/glad.h"
+
+#include <utility>
 #include <string>
+#include <map>
+#include <glm/glm.hpp>
 
 typedef std::pair<glm::vec3, glm::vec3> CollisionSize;
 

@@ -1,8 +1,8 @@
-#include "lib/glad.h"
 #include "Game.hpp"
 
-#include <cstdio>
 #include <GLFW/glfw3.h>
+#include <glm/gtc/matrix_transform.hpp>
+#include <iostream>
 
 #define __APPLE_RETINA__ false
 

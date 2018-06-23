@@ -1,9 +1,11 @@
 #pragma once
-#include <vector>
-#include <string>
-#include <iostream>  
-#include <fstream>
+
 #include "Renderer.hpp"
+#include "Shader.hpp"
+#include "Texture.hpp"
+#include "Light.hpp"
+
+#include <glm/glm.hpp>
 
 using namespace std;
 

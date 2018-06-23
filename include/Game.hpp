@@ -1,11 +1,12 @@
 #pragma once
 
+#define TITLE "Magic House"
+
+#include "lib/glad.h"
 #include "ResourceManager.hpp"
 #include "CollisionDetector.hpp"
 #include "GUI.hpp"
 #include "Frog.hpp"
-
-#define TITLE "Magic House"
 
 class Game {
 public:

@@ -1,8 +1,11 @@
 #include "Frog.hpp"
-#include "ResourceManager.hpp"
 #include "Shader.hpp"
+#include "ResourceManager.hpp"
 
-MyFrog::MyFrog(char *texturePath, glm::vec3 tempPos, glm::vec3 tempScale, glm::vec3 tempRotAxis, GLfloat tempRotate) {
+const GLfloat MyFrog::distance = 5.f;
+
+MyFrog::MyFrog(const char *texturePath_, glm::vec3 tempPos, glm::vec3 tempScale, glm::vec3 tempRotAxis, GLfloat tempRotate) {
+	char *texturePath = const2var(texturePath_);
     frog_position = tempPos;
     scale         = tempScale;
     rotAxis       = tempRotAxis;
@@ -20,6 +23,7 @@ MyFrog::MyFrog(char *texturePath, glm::vec3 tempPos, glm::vec3 tempScale, glm::v
     Text2DShaderID = shader->getID();
 	// Initialize uniforms' IDs
 	Text2DUniformID = glGetUniformLocation( Text2DShaderID, "myTextureSampler" );
+	delete[]texturePath;
 }
 
 MyFrog::~MyFrog() {

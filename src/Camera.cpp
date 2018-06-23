@@ -1,7 +1,5 @@
 #include "Camera.hpp"
 
-#include <glm/gtc/matrix_transform.hpp>
-
 Camera::Camera(GLfloat pFov, GLfloat pAspect, GLfloat pNear, GLfloat pFar,
         GLfloat posX, GLfloat posY, GLfloat posZ,
         GLfloat frontX, GLfloat frontY, GLfloat frontZ,

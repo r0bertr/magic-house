@@ -1,9 +1,8 @@
-#include "lib/glad.h"
 #include "Renderer.hpp"
+#include "CollisionDetector.hpp"
 
-#include <glm/gtx/transform.hpp>
-#include <cstdio>
 #include <string>
+#include <glm/gtc/matrix_transform.hpp>
 
 Renderer::Renderer(Shader *shader, Texture **textures, Light *light) {
     this->shader = shader;

@@ -1,5 +1,6 @@
 #include "GUI.hpp"
-#include "lib/imgui_impl_glfw_gl3.h"
+
+#include <glm/gtc/type_ptr.hpp>
 
 GUI::GUI(GLFWwindow *window)
     : window(window), enabled(false) {}

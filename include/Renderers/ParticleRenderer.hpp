@@ -1,10 +1,12 @@
 #pragma once
 
 #include "lib/cJSON.h"
+#include "lib/glad.h"
 #include "Renderer.hpp"
 #include "Model.hpp"
-#include "ResourceManager.hpp"
+
 #include <vector>
+#include <glm/glm.hpp>
 
 enum ParticleShape {
     PARTICLE_SHAPE_SPHERE = 0,

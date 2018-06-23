@@ -1,13 +1,12 @@
 #pragma once
 
-#include "Renderers/MeshRenderer.hpp"
 #include "Shader.hpp"
+#include "Texture.hpp"
+#include "Light.hpp"
+#include "Renderers/MeshRenderer.hpp"
 
 #include <glm/glm.hpp>
-#include <glm/gtc/matrix_transform.hpp>
-#include <glm/gtc/type_ptr.hpp>
 #include <assimp/scene.h>
-#include <GLFW/glfw3.h>
 #include <vector>
 
 class Model {

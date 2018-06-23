@@ -1,10 +1,9 @@
 #pragma once
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <glm/glm.hpp>
+
 #include "lib/glad.h"
-#include <GLFW/glfw3.h>
+
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
 
 #define FOURCC_DXT1 0x31545844 // Equivalent to "DXT1" in ASCII
 #define FOURCC_DXT3 0x33545844 // Equivalent to "DXT3" in ASCII
@@ -33,9 +32,9 @@ private:
     GLuint loadDDS(const char * imagepath);
 
 public:
-    const static GLfloat distance = 5.0f;
+	const static GLfloat distance;
 
-    MyFrog(char *texturePath,
+    MyFrog(const char *texturePath,
     glm::vec3 tempPos = glm::vec3(15.f, 0.5f, 10.f),
     glm::vec3 tempScale    = glm::vec3(3.f),
     glm::vec3 tempRotAxis  = glm::vec3(1.0f, 0.f, 0.f),

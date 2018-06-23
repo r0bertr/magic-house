@@ -1,9 +1,11 @@
 #pragma once
 
 #include "Renderer.hpp"
+#include "Shader.hpp"
+#include "Light.hpp"
 
-#include <assimp/scene.h>
 #include <vector>
+#include <assimp/scene.h>
 
 class MeshRenderer : public Renderer {
 public:

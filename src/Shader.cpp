@@ -1,9 +1,7 @@
-#include "lib/glad.h"
 #include "Shader.hpp"
 
-#include <GLFW/glfw3.h>
+#include <glm/glm.hpp>
 #include <glm/gtc/type_ptr.hpp>
-#include <cstdio>
 
 Shader::Shader(const GLuint id) {
     this->id = id;

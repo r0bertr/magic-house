@@ -1,12 +1,5 @@
-#include "lib/glad.h"
-#include "ResourceManager.hpp"
 #include "Renderers/MeshRenderer.hpp"
-#include "Model.hpp"
-
-#include <assimp/scene.h>
-#include <cstring>
-#include <string>
-#include <glm/gtc/matrix_transform.hpp>
+#include "ResourceManager.hpp"
 
 MeshRenderer::MeshRenderer(Shader *shader, const aiMesh *mesh,
     const aiScene *scene, const GLchar *rootDir, Light *light) :
