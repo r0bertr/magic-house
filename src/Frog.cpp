@@ -8,6 +8,11 @@ MyFrog::MyFrog(char *texturePath, glm::vec3 tempPos, glm::vec3 tempScale, glm::v
     rotAxis       = tempRotAxis;
     rotate        = tempRotate;
 
+	timeSpeed = 1.0f;
+	sunRotateSpeed = glm::vec3(7.f, 0.f, -43.f);
+
+	ifRender = false;
+
     // Initialize texture
 	Text2DTextureID = loadDDS(texturePath);
 
@@ -38,8 +43,20 @@ void MyFrog::changeWeather() {
 
 }
 
-void MyFrog::changeTimeSpeed() {
-    
+void MyFrog::changeTimeSpeed(GLfloat speed) {
+    timeSpeed = speed;
+}
+
+void MyFrog::setIfRender(bool flag) {
+	ifRender = flag;
+}
+
+void MyFrog::speedUp() {
+	timeSpeed += 1.0f;
+}
+
+void MyFrog::slowDown() {
+	timeSpeed -= 1.0f;
 }
 
 glm::vec3 MyFrog::getPosition() {
@@ -54,8 +71,16 @@ glm::vec3 MyFrog::getRotAxis() {
     return rotAxis;
 }
 
+glm::vec3 MyFrog::getSunRotSpeed() {
+	return timeSpeed * sunRotateSpeed;
+}
+
 GLfloat MyFrog::getRotate() {
     return rotate;
+}
+
+bool MyFrog::getIfRender() {
+	return ifRender;
 }
 
 GLuint MyFrog::loadDDS(const char * imagepath) {

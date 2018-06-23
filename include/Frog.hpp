@@ -22,7 +22,9 @@ private:
 
     GLfloat timeSpeed;
     GLint   weather;
+    glm::vec3 sunRotateSpeed;
 
+    bool ifRender;
     // Text renderer variable;
     unsigned int Text2DTextureID;
     unsigned int Text2DVertexBufferID;
@@ -33,7 +35,8 @@ private:
     GLuint loadDDS(const char * imagepath);
 
 public:
-    const static GLfloat distance = 5.0f;
+    // 青蛙可交互距离
+    const static GLfloat distance = 10.0f;
 
     MyFrog(char *texturePath,
     glm::vec3 tempPos = glm::vec3(15.f, 0.5f, 10.f),
@@ -43,12 +46,18 @@ public:
     ~MyFrog();
 
     void changeWeather();
-    void changeTimeSpeed();
+    void changeTimeSpeed(GLfloat speed);
+    void setIfRender(bool flag);
+    // 加减速时间
+    void speedUp();
+    void slowDown();
 
     glm::vec3 getPosition();
     glm::vec3 getScale();
     glm::vec3 getRotAxis();
+    glm::vec3 getSunRotSpeed();
     GLfloat   getRotate();
+    bool      getIfRender();
 
     void printText2D(const char * text, int x, int y, int size);
     void cleanupText2D();
