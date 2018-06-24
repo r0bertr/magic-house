@@ -9,6 +9,7 @@
 enum RendererType {
     RENDERER_MESH,
     RENDERER_LAND,
+	RENDERER_WATER,
     RENDERER_SKYBOX,
 };
 

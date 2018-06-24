@@ -46,7 +46,7 @@ public:
     void changeWeather();
     void changeTimeSpeed(GLfloat speed);
     void setIfRender(bool flag);
-    // 加减速时间
+    //Adjust Speed
     void speedUp();
     void slowDown();
 
