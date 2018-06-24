@@ -123,6 +123,8 @@ void Game::init() {
     // Load Textures
     Texture *grass = resManager->load2DTexture("res/images/grass.jpg",
         "grass", true);
+	Texture *water = resManager->load2DTexture("res/images/water.jpg",
+		"water", true);
 	// Day Skybox
     const GLchar *faces[6] = {
         "res/images/skybox/right.jpg",
@@ -168,6 +170,8 @@ void Game::init() {
     Texture *buffer[16] = { NULL };
 	buffer[0] = grass; buffer[3] = depthMap;
     resManager->loadRenderer(RENDERER_LAND, shader, "land", buffer, light);
+	buffer[0] = water;
+	resManager->loadRenderer(RENDERER_WATER, shader, "water", buffer, light);
 	buffer[0] = skyboxTexture; buffer[3] = NULL;
     resManager->loadRenderer(RENDERER_SKYBOX, skyboxShader,
         "skybox", buffer);
@@ -258,6 +262,11 @@ void Game::renderObjects(Camera *camera, Shader *shader) {
         resManager->getRenderer("land")->setShader(shader);
     resManager->getRenderer("land")->draw(projection, view, viewPos,
 		glm::vec3(0.f), glm::vec3(1000.f),
+		glm::vec3(1.f, 0.f, 0.f), 90.f);
+	if (shader)
+		resManager->getRenderer("water")->setShader(shader);
+	resManager->getRenderer("water")->draw(projection, view, viewPos,
+		glm::vec3(-200.f, 0.f, 30.f), glm::vec3(1.f),
 		glm::vec3(1.f, 0.f, 0.f), 90.f);
 
 	if (shader)

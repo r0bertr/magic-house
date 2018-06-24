@@ -4,6 +4,7 @@
 #include "Renderers/ParticleRenderer.hpp"
 #include "Renderers/LandRenderer.hpp"
 #include "Renderers/SkyboxRenderer.hpp"
+#include "Renderers/WaterRenderer.hpp"
 
 #include <cstdio>
 #include <cstring>
@@ -240,6 +241,9 @@ Renderer *ResourceManager::loadRenderer(const RendererType type, Shader *shader,
     case RENDERER_LAND:
         renderers[n] = new LandRenderer(shader, textures, light);
         break;
+	case RENDERER_WATER:
+		renderers[n] = new WaterRenderer(shader, textures, light);
+		break;
     case RENDERER_SKYBOX:
         renderers[n] = new SkyboxRenderer(shader, textures, light);
         break;
