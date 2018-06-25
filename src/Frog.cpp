@@ -44,7 +44,7 @@ MyFrog::~MyFrog() {
 }
 
 void MyFrog::changeWeather() {
-
+	ifWeather = !ifWeather;
 }
 
 void MyFrog::setIfRender(bool flag) {
@@ -86,6 +86,10 @@ GLfloat MyFrog::getRotate() {
 
 bool MyFrog::getIfRender() {
 	return ifRender;
+}
+
+bool MyFrog::getIfWeather() {
+	return ifWeather;
 }
 
 GLuint MyFrog::loadDDS(const char * imagepath) {

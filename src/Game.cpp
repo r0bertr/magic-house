@@ -250,6 +250,9 @@ void Game::processInput() {
 			frog->speedUp();
 			printf("Speed = %d\n", frog->getSunRotSpeed());
 		}
+		if (glfwGetKey(window, GLFW_KEY_T) == GLFW_PRESS) {
+			frog->changeWeather();
+		}
 	} else {
 		frog->setIfRender(false);
 	}

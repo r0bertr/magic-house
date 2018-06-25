@@ -24,6 +24,7 @@ private:
     GLint   sunRotateSpeed;
 
     bool ifRender;
+    bool ifWeather;
     // Text renderer variable;
     unsigned int Text2DTextureID;
     unsigned int Text2DVertexBufferID;
@@ -56,6 +57,7 @@ public:
     GLint     getSunRotSpeed();
     GLfloat   getRotate();
     bool      getIfRender();
+    bool      getIfWeather();
 
     void printText2D(const char * text, int x, int y, int size);
     void cleanupText2D();
