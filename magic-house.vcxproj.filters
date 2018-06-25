@@ -167,5 +167,8 @@
     <ClCompile Include="src\lib\imgui_impl_glfw_gl3.cpp">
       <Filter>Source Files\lib</Filter>
     </ClCompile>
+    <ClCompile Include="src\Renderers\WaterRenderer.cpp">
+      <Filter>Source Files\Renderers</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>

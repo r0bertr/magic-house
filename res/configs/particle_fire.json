@@ -1,13 +1,13 @@
 {
-    "num_particles_mean": 20,
+    "num_particles_mean": 80,
     "num_particles_variance": 0,
 
     "init_position_mean_x": 0.0,
     "init_position_mean_y": 0.0,
     "init_position_mean_z": 0.0,
-    "init_position_variance_x": 1.0,
-    "init_position_variance_y": 1.0,
-    "init_position_variance_z": 1.0,
+    "init_position_variance_x": 100.0,
+    "init_position_variance_y": 100.0,
+    "init_position_variance_z": 100.0,
 
     "init_direction_mean_x": 0.0,
     "init_direction_mean_y": 1.0,
@@ -16,8 +16,8 @@
     "init_direction_variance_y": 0.0,
     "init_direction_variance_z": 0.0,
 
-    "init_speed_mean": 0.005,
-    "init_speed_variance": 0.5,
+    "init_speed_mean": -0.08,
+    "init_speed_variance": 0.0,
 
     "init_size_mean_x": 0,
     "init_size_mean_y": 0,
