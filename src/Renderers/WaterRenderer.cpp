@@ -2,7 +2,7 @@
 #include "Renderers/WaterRenderer.hpp"
 
 #include <cstdio>
-#include <cstring>
+#include <vector>
 
 WaterRenderer::WaterRenderer(Shader *shader, Texture **textures,
 	Light *light) : Renderer(shader, textures, light) {
@@ -11,11 +11,46 @@ WaterRenderer::WaterRenderer(Shader *shader, Texture **textures,
 
 WaterRenderer::~WaterRenderer() {
 	if (data != NULL) delete[] data;
+	if (pre != NULL) delete[] pre;
+}
+
+void koch(std::vector<glm::vec2> &offset, glm::vec2 begin, glm::vec2 end, int iteration,int pos) {
+	if (iteration < 0) return;
+	float angle = 3.141592653 / 3;
+	glm::vec2 diff = 0.125f * (end - begin);
+	glm::vec2 temp;
+	glm::vec2 first = begin + 2.0f * diff;
+	temp.x = diff.x*cos(angle) - diff.y*sin(angle);
+	temp.y = diff.x*sin(angle) + diff.y*cos(angle);
+	glm::vec2 second = first + 2.0f * temp;
+	temp.x = diff.x*cos(angle) + diff.y*sin(angle);
+	temp.y = -diff.x*sin(angle) + diff.y*cos(angle);
+	glm::vec2 third = second + 4.0f*temp;
+	temp.x = diff.x*cos(angle) - diff.y*sin(angle);
+	temp.y = diff.x*sin(angle) + diff.y*cos(angle);
+	glm::vec2 forth = third + 2.0f*temp;
+	int step = pow(5, iteration);
+	offset[pos] = begin;
+	offset[pos + 1 * step] = first;
+	offset[pos + 2 * step] = second;
+	offset[pos + 3 * step] = third;
+	offset[pos + 4 * step] = forth;
+	offset[pos + 5 * step] = end;
+	koch(offset, begin, first, iteration - 1, pos);
+	koch(offset, first, second, iteration - 1, pos + step);
+	koch(offset, second, third, iteration - 1, pos + 2 * step);
+	koch(offset, third, forth, iteration - 1, pos + 3 * step);
+	koch(offset, forth, end, iteration - 1, pos + 4 * step);
 }
 
 void WaterRenderer::initRenderData() {
-	n = 20; m = 400;
-	float d = 1.f, t = 0.5f, c = 0.01f, mu = 0.01f;
+	n = 200; m = 626;
+	std::vector<glm::vec2> offset(m);
+	for (int i = 0; i < m; i++) {
+		offset[i] = glm::vec2(i, 0);
+	}
+	koch(offset, glm::vec2(0, 0), glm::vec2(m-1, 0), 3, 0);
+	float d = 1.0f, t = 0.1f, c = 0.02f, mu = 0.f;
 	int count = n*m;
 	float f1 = c * c * t * t / (d * d);
 	float f2 = 1.0f / (mu * t + 2);
@@ -29,8 +64,8 @@ void WaterRenderer::initRenderData() {
 	indices = new GLint[numVertices];
 	for (int i = 0; i < m; i++) {
 		for (int j = 0; j < n; j++) {
-			data[(i*n + j) * 8] = i*d;
-			data[(i*n + j) * 8 + 1] = j*d;
+			data[(i*n + j) * 8] = (i + offset[i].x) * d;
+			data[(i*n + j) * 8 + 1] = (j + offset[i].y) * d;
 			if (i == 0 || j == 0 || i == m - 1 || j == n - 1) {
 				data[(i*n + j) * 8 + 2] = 0.f;
 			}
@@ -43,8 +78,8 @@ void WaterRenderer::initRenderData() {
 					data[(i*n + j) * 8 + 2] = 0.f;
 				}
 			}
-			data[(i*n + j) * 8 + 3] = 100 * (i % 2);
-			data[(i*n + j) * 8 + 4] = 100 * (1 - j % 2);
+			data[(i*n + j) * 8 + 3] = 1.f * (i % 2);
+			data[(i*n + j) * 8 + 4] = 1.f * (1 - j % 2);
 			data[(i*n + j) * 8 + 5] = 0.f;
 			data[(i*n + j) * 8 + 6] = 0.f;
 			data[(i*n + j) * 8 + 7] = -1.f;
@@ -102,6 +137,13 @@ void WaterRenderer::draw(
 				k3 * (data[(i*n + j + 1) * 8 + 2] + data[(i*n + j - 1) * 8 + 2] +
 					data[((i + 1)*n + j + 1) * 8 + 2] + data[((i - 1)*n + j + 1) * 8 + 2]);
 			if (temp[(i*n + j) * 8 + 2] > 0) temp[(i*n + j) * 8 + 2] = 0;
+			if (temp[(i*n + j) * 8 + 2] < -5) temp[(i*n + j) * 8 + 2] = -5.f;
+		}
+	}
+	for (int i = 1; i < m - 1; i++) {
+		for (int j = 1; j < n - 1; j++) {
+			temp[(i*n + j) * 8 + 5] = temp[(i*n + j + 1) * 8 + 2] - temp[(i*n + j - 1) * 8 + 2];
+			temp[(i*n + j) * 8 + 6] = temp[((i + 1)*n + j) * 8 + 2] - temp[((i - 1)*n + j) * 8 + 2];
 		}
 	}
 	memcpy(pre, data, sizeof(GLfloat) * 8 * n*m);
