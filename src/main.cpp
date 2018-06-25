@@ -17,7 +17,7 @@ int main() {
         game.processInput();
         game.render();
 
-		// glEnable(GL_FRAMEBUFFER_SRGB);
+		glEnable(GL_FRAMEBUFFER_SRGB);
         glfwSwapBuffers(game.getWindow());
     }
 
