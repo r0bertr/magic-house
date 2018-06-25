@@ -2,6 +2,7 @@
 #include "Renderers/WaterRenderer.hpp"
 
 #include <cstdio>
+#include <cstring>
 
 WaterRenderer::WaterRenderer(Shader *shader, Texture **textures,
 	Light *light) : Renderer(shader, textures, light) {

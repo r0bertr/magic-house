@@ -2,7 +2,7 @@
 #include "Shader.hpp"
 #include "ResourceManager.hpp"
 
-const GLfloat MyFrog::distance = 5.f;
+const GLfloat MyFrog::distance = 15.f;
 
 MyFrog::MyFrog(const char *texturePath_, glm::vec3 tempPos, glm::vec3 tempScale, glm::vec3 tempRotAxis, GLfloat tempRotate) {
 	char *texturePath = const2var(texturePath_);
@@ -11,8 +11,8 @@ MyFrog::MyFrog(const char *texturePath_, glm::vec3 tempPos, glm::vec3 tempScale,
     rotAxis       = tempRotAxis;
     rotate        = tempRotate;
 
-	timeSpeed = 1.0f;
-	sunRotateSpeed = glm::vec3(7.f, 0.f, -43.f);
+	sunRotateCenter = glm::vec3(7.f, 0.f, -43.f);
+	sunRotateSpeed  = 30;
 
 	ifRender = false;
 
@@ -47,20 +47,17 @@ void MyFrog::changeWeather() {
 
 }
 
-void MyFrog::changeTimeSpeed(GLfloat speed) {
-    timeSpeed = speed;
-}
-
 void MyFrog::setIfRender(bool flag) {
 	ifRender = flag;
 }
 
 void MyFrog::speedUp() {
-	timeSpeed += 1.0f;
+	if (sunRotateSpeed - 1 >= 0)
+		sunRotateSpeed -= 1;
 }
 
 void MyFrog::slowDown() {
-	timeSpeed -= 1.0f;
+	sunRotateSpeed += 1;
 }
 
 glm::vec3 MyFrog::getPosition() {
@@ -75,8 +72,12 @@ glm::vec3 MyFrog::getRotAxis() {
     return rotAxis;
 }
 
-glm::vec3 MyFrog::getSunRotSpeed() {
-	return timeSpeed * sunRotateSpeed;
+glm::vec3 MyFrog::getRotCenter() {
+	return sunRotateCenter;
+}
+
+GLint MyFrog::getSunRotSpeed() {
+	return sunRotateSpeed;
 }
 
 GLfloat MyFrog::getRotate() {

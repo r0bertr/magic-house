@@ -60,12 +60,12 @@ GLfloat Light::getSpecular() const {
 }
 
 // house position as center
-float Light::rotate(glm::vec3 center) {
+float Light::rotate(glm::vec3 center, int period) {
 	float time = glfwGetTime();
 	float maxR = 500.f;
 	float minR = 350.f;
 	float alpha;
-	int period = 30; // 30seconds
+	// int period = 30; // 30seconds
 
 	position.x = center.x;
 	position.y = minR * sin(2 * M_PI*time / period);

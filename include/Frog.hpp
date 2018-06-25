@@ -19,9 +19,9 @@ private:
     glm::vec3 rotAxis;
     GLfloat   rotate;
 
-    GLfloat timeSpeed;
     GLint   weather;
-    glm::vec3 sunRotateSpeed;
+    glm::vec3 sunRotateCenter;
+    GLint   sunRotateSpeed;
 
     bool ifRender;
     // Text renderer variable;
@@ -37,14 +37,13 @@ public:
 	const static GLfloat distance;
 
     MyFrog(const char *texturePath,
-    glm::vec3 tempPos = glm::vec3(15.f, 0.5f, 10.f),
+    glm::vec3 tempPos      = glm::vec3(15.f, 0.5f, 10.f),
     glm::vec3 tempScale    = glm::vec3(3.f),
     glm::vec3 tempRotAxis  = glm::vec3(1.0f, 0.f, 0.f),
     GLfloat tempRotate     = 215.0f);
     ~MyFrog();
 
     void changeWeather();
-    void changeTimeSpeed(GLfloat speed);
     void setIfRender(bool flag);
     //Adjust Speed
     void speedUp();
@@ -53,7 +52,8 @@ public:
     glm::vec3 getPosition();
     glm::vec3 getScale();
     glm::vec3 getRotAxis();
-    glm::vec3 getSunRotSpeed();
+    glm::vec3 getRotCenter();
+    GLint     getSunRotSpeed();
     GLfloat   getRotate();
     bool      getIfRender();
 

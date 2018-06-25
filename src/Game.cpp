@@ -242,10 +242,13 @@ void Game::processInput() {
 	}
 	if (glm::distance(frog->getPosition(), camera->getPos()) <= frog->distance) {
 		frog->setIfRender(true);
+		if (glfwGetKey(window, GLFW_KEY_R) == GLFW_PRESS) {
+			frog->slowDown();
+			printf("Speed = %d\n", frog->getSunRotSpeed());
+		} 
 		if (glfwGetKey(window, GLFW_KEY_E) == GLFW_PRESS) {
 			frog->speedUp();
-		} else if (glfwGetKey(window, GLFW_KEY_R == GLFW_PRESS)) {
-			frog->slowDown();
+			printf("Speed = %d\n", frog->getSunRotSpeed());
 		}
 	} else {
 		frog->setIfRender(false);
@@ -331,7 +334,7 @@ void Game::renderObjects(Camera *camera, Shader *shader) {
 		glm::vec3(0.f, 1.f, 0.f), 0.f, glm::vec4(1.f),
         glm::vec3(3.f, 20.f, 24.f));
 	if (frog->getIfRender()) {
-		frog->printText2D("Press E to excite, R to slow", 40, 500, 20);
+		frog->printText2D("Press E to excite, R to slow", 40, 500, 25);
 	}
 	// glm::vec3 temp = frog->getSunRotSpeed();
 	// printf("Time Speed:(%f,%f,%f)\n", temp.x, temp.y, temp.z);
@@ -404,7 +407,7 @@ void Game::render() {
 
 	renderObjects(camera, resManager->getShader("mesh"));
 	// float dayAlpha = light->rotate(glm::vec3(7.f, 0.f, -43.f));
-	float dayAlpha = light->rotate(frog->getSunRotSpeed());
+	float dayAlpha = light->rotate(frog->getRotCenter(), frog->getSunRotSpeed());
 	// float dayAlpha = 1.f;
 	resManager->getRenderer("skybox")->draw(projection, view, viewPos,
 		glm::vec3(0.f, -100.f, 0.f), glm::vec3(500.f),
