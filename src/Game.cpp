@@ -199,7 +199,7 @@ void Game::init() {
 	resManager->getModel("frog")->setTexture(3, depthMap);
 
     // Load Camera
-    resManager->loadCamera(glm::radians(45.f), (float)width / height, .1f, 100.f,
+    resManager->loadCamera(glm::radians(45.f), (float)width / height, .1f, 1000.f,
         0.f, 5.f, 0.f, 0.f, 0.f, -1.f, 0.f, 1.f, 0.f, "main");
 
 	gui->init();
