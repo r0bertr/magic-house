@@ -44,7 +44,9 @@ uniform sampler2D texture2;  // shininess
 ### Gamma矫正
 
 由于显示器有一个物理特性就是两倍的输入电压产生的不是两倍的亮度。输入电压产生约为输入电压的2.2次幂的亮度，所以实际显示出来的总会比预期暗，所以我们便会对偏暗的显示效果做到矫正。
+
 ![gamma矫正](./assets/gamma_correction_gamma_curves.png)
+
 如上图，显示器显示出来的亮度即下面这条曲线显示出来的比较暗的效果。于是我们就通过在最终颜色输出上应用监视器Gamma的倒数从而将颜色翻转到线性的颜色。
 ```
 fragColor.rgb = pow(fragColor.rgb, vec3(1.0/gamma));
