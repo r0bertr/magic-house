@@ -1,5 +1,5 @@
 {
-    "num_particles_mean": 80,
+    "num_particles_mean": 20,
     "num_particles_variance": 0,
 
     "init_position_mean_x": 0.0,
