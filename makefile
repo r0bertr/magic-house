@@ -17,7 +17,7 @@ SPRITES_OBJ := $(patsubst $(SPRITES_SRC)/%.cpp, $(SPRITES_BUILD)/%.o, $(wildcard
 
 OBJ := $(ROOT_OBJ) $(LIB_OBJ) $(SPRITES_OBJ)
 
-LINK_FLAGS = -lglfw -lassimp
+LINK_FLAGS = -lglfw3 -lassimp
 MACOSX_FLAGS = -framework Cocoa -framework OpenGL -framework IOKit -framework CoreVideo
 
 run: $(EXE)
