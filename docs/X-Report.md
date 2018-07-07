@@ -21,22 +21,22 @@ MagicHouse是基于C++开发的本地程序，通过[GLFW](http://www.glfw.org/)
 
 ### Basic
 
-- [Camera Roaming](#Camera%20Roaming)
-- [Simple Lighting and Shading(Phong)](#Simple%20Lighting%20and%20Shading)
-- [Texture Mapping](#Texture$20Mapping)
-- [Shadow Mapping](#Shadow%20Mapping)
-- [Model Import and Mesh Viewing](#Model%20Import%20and%20Mesh%20Viewing)
+- [Camera Roaming](#camera-roaming)
+- [Simple Lighting and Shading(Phong)](#simple-lighting-and-shading)
+- [Texture Mapping](#texture-mapping)
+- [Shadow Mapping](#shadow-mapping)
+- [Model Import and Mesh Viewing](#model-import-and-mesh-viewing)
 
 ### Bonus
 
-- [Sky Box](#Sky%20Box)
-- [Complex Lighting](#Complex%20Lighting)
-- [Display Text](#Display%20Text)
-- [Gravity System](#Gravity%20System)
-- [Collision Detection](#Collision%20Detection)
-- [Particle System](#Particle%20System)
-- [Anti-Aliasing](#Anti-Aliasing)
-- [Fluid Simulation](#Fluid%20Simulation)
+- [Sky Box](#sky-box)
+- [Complex Lighting](#complex-lighting)
+- [Display Text](#display-text)
+- [Gravity System](#gravity-system)
+- [Collision Detection](#collision-detection)
+- [Particle System](#particle-system)
+- [Anti-Aliasing](#anti-aliasing)
+- [Fluid Simulation](#fluid-simulation)
 
 ### [Camera Roaming](#实现功能)
 
