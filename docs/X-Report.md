@@ -110,7 +110,10 @@ uniform sampler2D texture3;  // depth
 
 #### 昼夜变化
 
-昼夜变化主要包括一下内容： - 太阳位置按照椭圆轨迹变化以及其他属性相应的变化（position,direction,ambient,diffuse,specular） - 导入了一个夜晚天空盒，天空盒使用两个进行平滑切换，通过apha进行控制 - 这些apha,光照分量等等都是时间t的三角函数。通过确定这些不同量的变化区间（最大和最小值）以及变化趋势，计算得到关于时间t的三角函数。这些变化都是通过经验以及多次尝试筛选出的最好的效果。
+昼夜变化主要包括一下内容： 
+- 太阳位置按照椭圆轨迹变化以及其他属性相应的变化（position,direction,ambient,diffuse,specular） 
+- 导入了一个夜晚天空盒，天空盒使用两个进行平滑切换，通过apha进行控制 
+- 这些apha,光照分量等等都是时间t的三角函数。通过确定这些不同量的变化区间（最大和最小值）以及变化趋势，计算得到关于时间t的三角函数。这些变化都是通过经验以及多次尝试筛选出的最好的效果。
 
 ![](assets/day_night.png)
 
@@ -213,12 +216,13 @@ MagicHouse中，通过拉大初始位置的波动范围，能够让粒子在以�
 - Particle System
 - 报告撰写
 
-### 蓓()
+### 蓓(15331324)
 
 - Simple Lighting and Shading(Phong)
 - Complex Lighting
 - 实现昼夜变化效果，搜索夜晚天空盒材质
 - 搜索并导入了模型树、栅栏
+- report上述实现功能的部分
 - 制作了期末展示PPT
 
 ### 桥()
