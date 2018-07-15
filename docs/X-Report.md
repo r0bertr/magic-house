@@ -192,8 +192,36 @@ HDR(High Dynamic Range,高动态范围)是一种图像后处理技术，是一�
 
 ### [Display Text](#实现功能)
 
-显示文字
+文字渲染功能，我们利用的是基于纹理的渲染。就是将一张字体库的纹理，根据所需将对应的字体截取下来，然后显示即可，基本流程如下：
 
+#### 纹理
+这里的纹理由CBFG生成，这是一种字体生成纹理的工具。
+
+#### 绘制
+对于绘制，就是生成一个矩形纹理，然后正确计算出该矩形的屏幕位置和纹理坐标，对应截取并显示，就想从报纸上剪纸一样。计算矩形截取的正确位置如下：
+```c++
+for ( unsigned int i=0 ; i<length ; i++ ){
+
+    glm::vec2 vertex_up_left    = glm::vec2( x+i*size     , y+size );
+    glm::vec2 vertex_up_right   = glm::vec2( x+i*size+size, y+size );
+    glm::vec2 vertex_down_right = glm::vec2( x+i*size+size, y      );
+    glm::vec2 vertex_down_left  = glm::vec2( x+i*size     , y      );
+
+    vertices.push_back(vertex_up_left   );
+    vertices.push_back(vertex_down_left );
+    vertices.push_back(vertex_up_right  );
+
+    vertices.push_back(vertex_down_right);
+    vertices.push_back(vertex_up_right);
+    vertices.push_back(vertex_down_left);
+}
+```
+然后，设置好显示的屏幕位置后，就可以传入片段着色器进行显示
+```c++
+void main(){
+    color = texture( myTextureSampler, UV );
+}
+```
 ### [Gravity System](#实现功能)
 
 重力系统本质是物体的移动，只要通过速度公式计算出物体的位置，即可模拟重力系统。在MagicHouse的粒子系统中实现了简单的重力系统，可以给粒子一个特定方向的加速度。
