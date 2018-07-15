@@ -96,7 +96,33 @@ uniform sampler2D texture3;  // depth
 
 ### [Shadow Mapping](#实现功能)
 
-阴影映射。
+#### 阴影实现
+阴影映射的实现方法与课堂上教的方式一样，首先把空间转换到光源空间中，然后对场景中所有物品进行深度计算，将深度放到帧缓冲中，根据深度来判断物品是否在阴影中，然后判断是否要进行阴影贴图。
+
+#### 阴影改进
+- 为了处理阴影失真(Shadow Acne)的现象，我们引入了阴影偏移（shadow bias）的技巧来解决这些问题。  
+- 为了处理做悬浮(Peter Panning)的现象，我们使用了正面剔除（front face culling）的方法来解决这些问题。  
+- 为了解决阴影的锯齿失真，我们使用了PCF。
+做完了以上的优化之后，我们得到我们的阴影渲染。  
+
+```c++
+    vec3 projCoords = fragPosLightSpace.xyz / fragPosLightSpace.w;
+    projCoords = projCoords * 0.5 + 0.5;
+    float closestDepth = texture(texture3, projCoords.xy).r; 
+    float currentDepth = projCoords.z;
+    float bias = .0005f;
+    float shadow = 0.0;
+    vec2 texelSize = 1.0 / textureSize(texture3, 0);
+    for(int x = -1; x <= 1; ++x)
+    {
+        for(int y = -1; y <= 1; ++y)
+        {
+            float pcfDepth = texture(texture3, projCoords.xy + vec2(x, y) * texelSize).r; 
+            shadow += currentDepth - bias > pcfDepth ? 1.0 : 0.0;        
+        }    
+    }
+    shadow /= 9.0;
+```
 
 ### [Model Import and Mesh Viewing](#实现功能)
 
@@ -254,7 +280,23 @@ MagicHouse中，通过拉大初始位置的波动范围，能够让粒子在以�
 
 ### [Anti-Aliasing](#实现功能)
 
+假如我们只使用在课堂上学的知识进行渲染的时候，会发生走样，也就是产生锯齿边缘，这些锯齿边缘的产生和光栅器将顶点数据转化为片段的方式有关。为了缓解这些现象，我们引入了反走样的技术来帮助我们缓解这种现象，从而产生更平滑的边缘。  
+我们使用多重采样抗锯齿(Multisample Anti-aliasing, MSAA)这项技术来进行反走样。  
+我们一开始使用光栅器进行渲染的时候，对于每个像素的中心只有一个采样点，它会被用来决定这个三角形是否遮盖了某个像素。图中红色的采样点被三角形所遮盖，在每一个遮住的像素处都会生成一个片段。虽然三角形边缘的一些部分也遮住了某些屏幕像素，但是这些像素的采样点并没有被三角形内部所遮盖，所以它们不会受到片段着色器的影响。但这样会导致走样。
+如图：  
+![](assets\anti_aliasing_rasterization.png)  
+![](assets\anti_aliasing_rasterization_filled.png)  
+这个就是锯齿产生的原因，为了减缓这种现象，我们可以对一个像素设置多个取样点，对于三角形的内部的像素，片段着色器只会运行一次，颜色输出会被存储到全部的4个子样本中。而在三角形的边缘，并不是所有的子采样点都被遮盖，所以片段着色器的结果将只会储存到部分的子样本中。根据被遮盖的子样本的数量，最终的像素颜色将由三角形的颜色与其它子样本中所储存的颜色来决定。  
+![](assets\anti_aliasing_rasterization_samples.png) 
+![](assets\anti_aliasing_rasterization_samples_filled.png) 
+这就是MSAA的操作原理，我们可以看出，引入可多采样技术之后，锯齿效应减缓了许多。  
+但相对的，这种方式会使得内存占用会更加的多。
+
 ### [Fluid Simulation](#实现功能)
+
+河流模拟由河岸生成和流体模拟组合而成。
+#### 流体模拟
+
 
 ## 遇到的问题和解决方案
 
@@ -289,7 +331,14 @@ MagicHouse中，通过拉大初始位置的波动范围，能够让粒子在以�
 - 导入模型青蛙
 - 添加时间控制功能
 
-### 良()
+### 良(15331385)
+
+- Shadow
+- 阴影优化
+- Fluid Simulation
+- Anti-Aliasing
+- 期中展示
+- 期末展示
 
 ### 飞()
 
