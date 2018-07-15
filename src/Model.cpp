@@ -24,7 +24,7 @@ void Model::draw(glm::mat4 projection, glm::mat4 view,
     glm::vec3 collisionSize) {
     for (GLuint i = 0; i < renderers->size(); i++) {
         renderers->at(i)->draw(projection, view, viewPos, pos, scale, 
-            rotAxis, rotate, color, collisionSize);
+            rotAxis, rotate, glm::vec4(1.f), collisionSize);
     }
 }
 

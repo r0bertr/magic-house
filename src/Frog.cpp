@@ -12,7 +12,7 @@ MyFrog::MyFrog(const char *texturePath_, glm::vec3 tempPos, glm::vec3 tempScale,
     rotate        = tempRotate;
 
 	sunRotateCenter = glm::vec3(7.f, 0.f, -43.f);
-	sunRotateSpeed  = 30;
+	sunRotateSpeed  = 0.05f;
 
 	ifRender = false;
 
@@ -52,12 +52,14 @@ void MyFrog::setIfRender(bool flag) {
 }
 
 void MyFrog::speedUp() {
-	if (sunRotateSpeed - 1 >= 0)
-		sunRotateSpeed -= 1;
+	if (sunRotateSpeed >= 0.5) {
+		sunRotateSpeed = 0.49;
+	}
+	sunRotateSpeed = 1.f / (1.f / sunRotateSpeed - 1.f);
 }
 
 void MyFrog::slowDown() {
-	sunRotateSpeed += 1;
+	sunRotateSpeed = 1.f / (1.f / sunRotateSpeed + 1.f);
 }
 
 glm::vec3 MyFrog::getPosition() {
@@ -76,7 +78,7 @@ glm::vec3 MyFrog::getRotCenter() {
 	return sunRotateCenter;
 }
 
-GLint MyFrog::getSunRotSpeed() {
+float MyFrog::getSunRotSpeed() {
 	return sunRotateSpeed;
 }
 
