@@ -20,8 +20,8 @@ public:
 
 private:
 	void initRenderData();
-	float k1, k2, k3;
+	float d, t, c, mu;
 	int n, m;
-	GLfloat *data, *pre;
+	GLfloat *data, *pre, *height;
 	GLint *indices;
 };

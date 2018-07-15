@@ -30,7 +30,7 @@ public:
     GLfloat getAmbient() const;
     GLfloat getDiffuse() const;
     GLfloat getSpecular() const;
-	float rotate(glm::vec3 center, int period = 30);
+	float rotate(glm::vec3 center, float period);
 
 private:
     LightType type;

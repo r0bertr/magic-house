@@ -21,7 +21,7 @@ private:
 
     GLint   weather;
     glm::vec3 sunRotateCenter;
-    GLint   sunRotateSpeed;
+    GLfloat   sunRotateSpeed;
 
     bool ifRender;
     bool ifWeather;
@@ -54,7 +54,7 @@ public:
     glm::vec3 getScale();
     glm::vec3 getRotAxis();
     glm::vec3 getRotCenter();
-    GLint     getSunRotSpeed();
+    float     getSunRotSpeed();
     GLfloat   getRotate();
     bool      getIfRender();
     bool      getIfWeather();
