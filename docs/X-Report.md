@@ -104,8 +104,37 @@ uniform sampler2D texture3;  // depth
 
 ### [Sky Box](#实现功能)
 
-天空盒。
+天空盒的实现主要基于纹理贴图中的立方体贴图技术。对于立方体贴图，其实就是将多个2D纹理组合起来映射到一张纹理的一种纹理类型。基本流程如下：
 
+```c++
+unsigned int textureID;
+glGenTextures(1, &textureID);
+glBindTexture(GL_TEXTURE_CUBE_MAP, textureID);
+```
+立方体有6个纹理，需要调用glTexImage2D函数6次。
+```c++
+int width, height, nrChannels;
+unsigned char *data;  
+for(unsigned int i = 0; i < textures_faces.size(); i++)
+{
+    data = stbi_load(textures_faces[i].c_str(), &width, &height, &nrChannels, 0);
+    glTexImage2D(
+        GL_TEXTURE_CUBE_MAP_POSITIVE_X + i, 
+        0, GL_RGB, width, height, 0, GL_RGB, GL_UNSIGNED_BYTE, data
+    );
+}
+```
+对应的，在片段着色器中，需要用到samplerCube，利用texture函数进行采样。
+```c++
+in vec3 textureDir; // 代表3D纹理坐标的方向向量
+uniform samplerCube cubemap; // 立方体贴图的纹理采样器
+
+void main()
+{             
+    FragColor = texture(cubemap, textureDir);
+}
+```
+对立方体贴图设置加载完毕后，只需在渲染循环中将天空盒渲染即可
 ### [Complex Lighting](#实现功能)
 
 #### 昼夜变化
@@ -225,7 +254,12 @@ MagicHouse中，通过拉大初始位置的波动范围，能够让粒子在以�
 - report上述实现功能的部分
 - 制作了期末展示PPT
 
-### 桥()
+### 侨(15331390)
+
+- 文字渲染
+- 天空盒
+- 导入模型青蛙
+- 添加时间控制功能
 
 ### 良()
 
