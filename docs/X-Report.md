@@ -284,11 +284,11 @@ MagicHouse中，通过拉大初始位置的波动范围，能够让粒子在以�
 我们使用多重采样抗锯齿(Multisample Anti-aliasing, MSAA)这项技术来进行反走样。  
 我们一开始使用光栅器进行渲染的时候，对于每个像素的中心只有一个采样点，它会被用来决定这个三角形是否遮盖了某个像素。图中红色的采样点被三角形所遮盖，在每一个遮住的像素处都会生成一个片段。虽然三角形边缘的一些部分也遮住了某些屏幕像素，但是这些像素的采样点并没有被三角形内部所遮盖，所以它们不会受到片段着色器的影响。但这样会导致走样。
 如图：  
-![](assets\anti_aliasing_rasterization.png)  
-![](assets\anti_aliasing_rasterization_filled.png)  
+![](assets/anti_aliasing_rasterization.png)  
+![](assets/anti_aliasing_rasterization_filled.png)  
 这个就是锯齿产生的原因，为了减缓这种现象，我们可以对一个像素设置多个取样点，对于三角形的内部的像素，片段着色器只会运行一次，颜色输出会被存储到全部的4个子样本中。而在三角形的边缘，并不是所有的子采样点都被遮盖，所以片段着色器的结果将只会储存到部分的子样本中。根据被遮盖的子样本的数量，最终的像素颜色将由三角形的颜色与其它子样本中所储存的颜色来决定。  
-![](assets\anti_aliasing_rasterization_samples.png) 
-![](assets\anti_aliasing_rasterization_samples_filled.png) 
+![](assets/anti_aliasing_rasterization_samples.png) 
+![](assets/anti_aliasing_rasterization_samples_filled.png) 
 这就是MSAA的操作原理，我们可以看出，引入可多采样技术之后，锯齿效应减缓了许多。  
 但相对的，这种方式会使得内存占用会更加的多。
 
