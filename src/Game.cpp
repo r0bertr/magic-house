@@ -30,7 +30,7 @@ void mouseCallback(GLFWwindow *window, double xpos, double ypos) {
     lastY = ypos;
 
     float curTime = (float)glfwGetTime();
-    float sensitivity = .2f * (curTime - lastTime);
+    float sensitivity = .1f * (curTime - lastTime);
     xoffset *= sensitivity;
     yoffset *= sensitivity;
     lastTime = curTime;
@@ -176,7 +176,7 @@ void Game::init() {
     resManager->loadRenderer(RENDERER_SKYBOX, skyboxShader,
         "skybox", buffer);
     resManager->loadParticleRenderer(shader,
-        "res/configs/particle_fire.json", "particle_fire");
+        "res/configs/particle_snow.json", "particle_snow");
 	buffer[0] = nightSkyboxTexture; buffer[3] = NULL;
 	resManager->loadRenderer(RENDERER_SKYBOX, skyboxShader,
 		"nightSkybox", buffer);
@@ -244,11 +244,9 @@ void Game::processInput() {
 		frog->setIfRender(true);
 		if (glfwGetKey(window, GLFW_KEY_R) == GLFW_PRESS) {
 			frog->slowDown();
-			printf("Speed = %f\n", frog->getSunRotSpeed());
 		} 
 		if (glfwGetKey(window, GLFW_KEY_E) == GLFW_PRESS) {
 			frog->speedUp();
-			printf("Speed = %f\n", frog->getSunRotSpeed());
 		}
 		if (glfwGetKey(window, GLFW_KEY_T) == GLFW_PRESS) {
 			frog->changeWeather();
@@ -279,19 +277,19 @@ void Game::renderObjects(Camera *camera, Shader *shader) {
 		resManager->getModel("farmhouse")->setShader(shader);
 	resManager->getModel("farmhouse")->draw(projection, view, viewPos,
         glm::vec3(7.f, 0.f, -50.f), glm::vec3(.8f),
-        glm::vec3(0.f, 1.f, 0.f), 180.f, glm::vec4(0.f),
+        glm::vec3(0.f, 1.f, 0.f), 180.f, glm::vec4(1.f),
         glm::vec3(18.f, 50.f, 30.f));
 
 	if (shader)
 		resManager->getModel("tree")->setShader(shader);
 	resManager->getModel("tree")->draw(projection, view, viewPos,
 		glm::vec3(30.f, -2.f, -35.f), glm::vec3(1.f),
-        glm::vec3(1.f), 0.f, glm::vec4(0.f),
+        glm::vec3(1.f), 0.f, glm::vec4(1.f),
         glm::vec3(2.f, 50.f, 2.f));
 
 	if (shader)
-		resManager->getRenderer("particle_fire")->setShader(shader);
-	resManager->getRenderer("particle_fire")->draw(projection, view, viewPos,
+		resManager->getRenderer("particle_snow")->setShader(shader);
+	resManager->getRenderer("particle_snow")->draw(projection, view, viewPos,
 		glm::vec3(0.f, 5.f, -3.f), glm::vec3(.025f),
 		glm::vec3(1.f), 0.f, glm::vec4(1.f));
 
@@ -434,7 +432,7 @@ void Game::render() {
 	// std::cout << "hdr: " << (hdr ? "on" : "off") << "| exposure: " << exposure << std::endl;
 
 	// Render GUI
-	gui->render(((ParticleRenderer *)resManager->getRenderer("particle_fire"))->getAttributes());
+	gui->render(((ParticleRenderer *)resManager->getRenderer("particle_snow"))->getAttributes());
 
 }
 
