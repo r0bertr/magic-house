@@ -4,7 +4,13 @@
 
 ## 一些截图
 
-下方是一些成品截图，本项目的视频演示您可以在同一目录下找到。
+![](assets/ss1.png)
+
+![](assets/ss2.png)
+
+![](assets/ss3.png)
+
+![](assets/ss4.png)
 
 ## 开发环境
 
@@ -323,32 +329,31 @@ MagicHouse中，通过拉大初始位置的波动范围，能够让粒子在以�
 
 ## 小组成员分工
 
-### 玮(15331389)
+### 玮
 
 - 项目框架搭建
 - 面向对象设计
 - Model Import and Mesh Viewing
-- Gravity System and Collision Detection
 - Particle System
 - 报告撰写
 
-### 蓓(15331324)
+### 蓓
 
 - Simple Lighting and Shading(Phong)
 - Complex Lighting
 - 实现昼夜变化效果，搜索夜晚天空盒材质
 - 搜索并导入了模型树、栅栏
 - report上述实现功能的部分
-- 制作了期末展示PPT
+- PPT制作
 
-### 侨(15331390)
+### 侨
 
 - 文字渲染
 - 天空盒
 - 导入模型青蛙
 - 添加时间控制功能
 
-### 良(15331385)
+### 良
 
 - Shadow
 - 阴影优化
@@ -356,7 +361,11 @@ MagicHouse中，通过拉大初始位置的波动范围，能够让粒子在以�
 - Anti-Aliasing
 - 期中展示
 - 期末展示
+- PPT制作与更新
 
-### 飞()
+### 飞
 
-- 导入合适数量模型
+- Camera Roaming
+- Texture Mapping
+- Gravity System and Collision Detection
+- 检索模型

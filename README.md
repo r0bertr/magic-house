@@ -1,41 +1,12 @@
-# Magic House
+# How To Run
 
-A CG Project by OpenGL
+相关资源文件和动态链接库已放在bin文件夹中，请在bin目录下执行程序。
 
-## Usage
+- **Windows** 运行bin下的`MagicHouse.exe`。
+- **MacOSX** 运行bin下的`MagicHouse`。
 
-### Prerequisites
+报告参见`docs/report.pdf`。
 
-- `GLFW3` Library
+您可以在我们的[Github仓库](https://github.com/HinanawiTenshi/magic-house)找到此项目，此Release位于`release`分支中。
 
-- `GLM` 0.9.8-5
-
-- `Assimp` 4.1.0
-
-### Makefile
-
-You can use `make` to build and run.
-
-```bash
-$ git clone https://github.com/HinanawiTenshi/magic-house.git
-$ cd magic-house
-$ make
-```
-
-Other `make` commands are:
-
-- `clean` clean
-
-- `build` build
-
-- `all` clean, build and run
-
-- `rebuild` clean and build
-
-## For Contributors
-
-You **SHOULDN'T** commit a change on source codes only in order to make it compatible with your OpenGL enviroment.
-
-If you are not sure a change is suitable or not, make a new branch and create pull requests is always a good choice.
-
-Implementation as well as design details are avaliable in `docs`.
+手动编译请参考`master`分支。
