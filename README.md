@@ -10,3 +10,5 @@
 您可以在我们的[Github仓库](https://github.com/HinanawiTenshi/magic-house)找到此项目，此Release位于`release`分支中。
 
 手动编译请参考`master`分支。
+
+按`可呼出粒子系统控制台。
